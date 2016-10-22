@@ -1,0 +1,41 @@
+e-mail: baratorch@yandex.ru
+
+[HOMM3 HD LAUNCHER CRASH LOG]
+
+
+
+HOMM3 HD version: 4202204
+
+
+
+Time
+{
+   02.10.2016	04:03:23
+}
+
+Exception
+{
+   Module: 	HD_Launcher.exe
+   Adress:      0x008F6AFA
+   Code:        EXCEPTION_ACCESS_VIOLATION
+   Flags:       0x00000000
+   Information: read of address: 0x00000000
+}
+
+Call stack
+{
+                      ? called from before 0x00000001
+                      ? called from before 0x00000061
+}
+
+Modules
+{
+}
+
+Command Line
+{
+   "E:\Games\Heroes of Might and Magic III Complete\HD_Launcher.exe" 
+}
+
+}
+
