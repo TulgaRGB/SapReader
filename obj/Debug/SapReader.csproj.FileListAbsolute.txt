@@ -10,3 +10,4 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.pdb
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.About.resources
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.Crypy.resources
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.Plugy.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.Props.resources

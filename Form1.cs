@@ -169,6 +169,10 @@ namespace SapReader
                         }
                         break;
                     #endregion
+                    case "Props":
+                        new Props();
+                        break;
+
                 }
             }
             // try { }

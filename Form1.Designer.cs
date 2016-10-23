@@ -96,7 +96,7 @@
             this.помощьToolStripMenuItem});
             this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(379, 24);
+            this.mm.Size = new System.Drawing.Size(471, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -357,10 +357,11 @@
             // 
             // настройкиToolStripMenuItem
             // 
-            this.настройкиToolStripMenuItem.Enabled = false;
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.настройкиToolStripMenuItem.Tag = "Props";
             this.настройкиToolStripMenuItem.Text = "Настройки";
+            this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // помощьToolStripMenuItem
             // 
