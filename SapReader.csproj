@@ -61,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\LS\LSFB.cs">
+      <Link>LSFB.cs</Link>
+    </Compile>
     <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +95,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\LS\Sapphire.cs">
       <Link>Sapphire.cs</Link>
+    </Compile>
+    <Compile Include="Props.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Props.Designer.cs">
+      <DependentUpon>Props.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
