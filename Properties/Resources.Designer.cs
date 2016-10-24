@@ -71,16 +71,14 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM name=&quot;Добро пожаловать!&quot; noparse=&quot;&quot;&gt;
-        ///	&lt;label location=&quot;12,12&quot; font=&quot;18&quot;&gt;Добро пожаловать!&lt;/label&gt;
-        ///	&lt;hi&gt;Дарова ёпта!&lt;/hi&gt;
-        ///	&lt;bye&gt;Пока ёпта!&lt;/bye&gt;
-        ///	&lt;combobox readonly=&quot;&quot; change=&quot;${show} = ?(#{list},lel,#{hi},#{bye});#{field} = ${show};&quot; location=&quot;12,50&quot; size=&quot;134,20&quot; name=&quot;list&quot;&gt;
-        ///		&lt;option&gt;lel&lt;/option&gt;
-        ///		&lt;option&gt;ses&lt;/option&gt;
-        ///	&lt;/combobox&gt;
-        ///	&lt;richtextbox readonly=&quot;&quot; location=&quot;12,80&quot; size=&quot;420,134&quot; name=&quot;field&quot;&gt;&lt;/richtextbox&gt;
-        ///&lt;/FORM&gt;.
+        ///   Looks up a localized string similar to &lt;FORM name=&quot;Добро пожаловать!&quot; author=&quot;LIENKO SOFT&quot;&gt; 
+        ///&lt;label location=&quot;12,12&quot; font=&quot;18&quot;&gt;SapReader&lt;/label&gt; 
+        ///&lt;button location=&quot;12,50&quot; click=&quot;clickStart:&quot;&gt;Начало работы&lt;/button&gt; 
+        ///&lt;button location=&quot;112,50&quot; click=&quot;clickAbout:&quot;&gt;О программе&lt;/button&gt; 
+        ///&lt;button location=&quot;203,50&quot; click=&quot;clickSap:&quot;&gt;О Sapphire™&lt;/button&gt; 
+        ///
+        ///&lt;label location=&quot;12,80&quot; name=&quot;mainLabel&quot;&gt;Добро пожаловать в SapReader.&lt;/label&gt;
+        ///&lt;labelStart&gt;Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы.&lt;/labelStar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string HOME {
             get {

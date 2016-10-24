@@ -36,7 +36,7 @@ namespace SapReader
                 };                
                 Items.Add(t);
                 }
-            main = new LSFB(this, 0, 68, false);
+            main = new LSFB(this, 0, 68, 0, false);
             Height = Items.Last().Top < Screen.PrimaryScreen.WorkingArea.Height/2 - 130? Items.Last().Top + 133 : Screen.PrimaryScreen.WorkingArea.Height / 2;
             pb.ForeColor = BackColor;
             main.work.AutoScroll = true;

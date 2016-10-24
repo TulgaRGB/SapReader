@@ -17,7 +17,8 @@ namespace SapReader
         public Props()
         {
             InitializeComponent();
-            main = new LS.LSFB(this, 1, 0, false );
+            mm.Renderer = new MyRenderer();
+            main = new LS.LSFB(this, 1, 0, 80, false );
             Image image = new Bitmap(201,201);
             using (Graphics g = Graphics.FromImage(image))
             {
@@ -30,19 +31,81 @@ namespace SapReader
                         if (c.A > 0)
                         {
                             Point pol = DecToPol(x, y);
-                            Color rgb = HSV(pol.Y, pol.X);
+                            Color rgb = HSV(pol.Y, pol.X,100);
                             g.FillRectangle(new SolidBrush(rgb), x + 100, y + 100, 1, 1);
                         }
                     }
                 }
             }
+            Image r = new Bitmap(201, 21);
+            using (Graphics g = Graphics.FromImage(r))
+            {
+                for (int i = 0; i < 202; i++)
+                {
+                    g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(255, (int)(i / 201D * 255), 0, 0))), i, 0, i, 20);
+                }
+            }
+            Image gc = new Bitmap(201, 21);
+            using (Graphics e = Graphics.FromImage(gc))
+            {
+                for (int i = 0; i < 202; i++)
+                {
+                    e.DrawLine(new Pen(new SolidBrush(Color.FromArgb(255, 0, (int)(i / 201D * 255), 0))), i, 0, i, 20);
+                }
+            }
+            Image b = new Bitmap(201, 21);
+            using (Graphics g = Graphics.FromImage(b))
+            {
+                for (int i = 0; i < 202; i++)
+                {
+                    g.DrawLine(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, (int)(i / 201D * 255)))), i, 0, i, 20);
+                }
+            }
+            rb.Paint += (object sender, PaintEventArgs e) =>
+            {
+                int u = (int)(BackColor.R / 255D * 201);
+                int d = (int)(ForeColor.R / 255D * 201);
+                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u-5, 20), new PointF(u+5, 20) };
+                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255,255,255)),up);
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+            };
+            gb.Paint += (object sender, PaintEventArgs e) =>
+            {
+                int u = (int)(BackColor.G / 255D * 201);
+                int d = (int)(ForeColor.G / 255D * 201);
+                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u - 5, 20), new PointF(u + 5, 20) };
+                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), up);
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+            };
+            bb.Paint += (object sender, PaintEventArgs e) =>
+            {
+                int u = (int)(BackColor.B / 255D * 201);
+                int d = (int)(ForeColor.B / 255D * 201);
+                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u - 5, 20), new PointF(u + 5, 20) };
+                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), up);
+                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+            };
             pictureBox1.Image = image;
+            rb.Image = r;
+            gb.Image = gc;
+            bb.Image = b;
+            rb.MouseClick += RGB;
+            gb.MouseClick += RGB;
+            bb.MouseClick += RGB;
+            rb.MouseMove += RGB;
+            gb.MouseMove += RGB;
+            bb.MouseMove += RGB;
             pictureBox1.MouseMove += pick;
             pictureBox1.MouseClick += pick;
-            pictureBox1.Paint += (object sender, PaintEventArgs e) =>
-            {
-               
-            };
             ShowDialog();
         }        
         void pick(object sender, MouseEventArgs e)
@@ -51,16 +114,54 @@ namespace SapReader
                 if (pxl.A == 255)
                     if (e.Button == MouseButtons.Left)
                     {
-                        LSFB.MainForm.BackColor = Color.FromArgb(255, pxl.R, pxl.G, pxl.B);
+                        LSFB.MainForm.BackColor = pxl;
                         Color tmp = LSFB.MainForm.ForeColor;
                         LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
                         LSFB.MainForm.ForeColor = tmp;
                     }
                     else
                         if (e.Button == MouseButtons.Right)
-                        LSFB.MainForm.ForeColor = Color.FromArgb(255, pxl.R, pxl.G, pxl.B);
+                        LSFB.MainForm.ForeColor = pxl;
+                
         }
-        static Color HSV(int deg, int rad)
+        void RGB(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+            {
+                string name = ((PictureBox)sender).Name;
+                int[] p = {-1,-1,-1 };
+                switch (name)
+                {
+                    case "rb":
+                        p[0] = (int)(e.X/201D*255) > 255? 255: (int)(e.X / 201D * 255) < 0? 0: (int)(e.X / 201D * 255);
+                        break;
+                    case "gb":
+                        p[1] = (int)(e.X / 201D * 255) > 255 ? 255 : (int)(e.X / 201D * 255) < 0 ? 0 : (int)(e.X / 201D * 255);
+                        break;
+                    case "bb":
+                        p[2] = (int)(e.X / 201D * 255) > 255 ? 255 : (int)(e.X / 201D * 255) < 0 ? 0 : (int)(e.X / 201D * 255);
+                        break;
+                }
+                if (e.Button == MouseButtons.Left)
+                {
+                    for (int i = 0; i < 3; i++)
+                        if (p[i] == -1)
+                            p[i] = i < 1 ? LSFB.MainForm.BackColor.R : i > 1 ? LSFB.MainForm.BackColor.B : LSFB.MainForm.BackColor.G;
+                    LSFB.MainForm.BackColor = Color.FromArgb(255,p[0],p[1],p[2]);
+                    Color tmp = LSFB.MainForm.ForeColor;
+                    LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
+                    LSFB.MainForm.ForeColor = tmp;
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                        if (p[i] == -1)
+                            p[i] = i < 1 ? LSFB.MainForm.ForeColor.R : i > 1 ? LSFB.MainForm.ForeColor.B : LSFB.MainForm.ForeColor.G;
+                    LSFB.MainForm.ForeColor = Color.FromArgb(255, p[0], p[1], p[2]);
+                }
+            }
+        }
+        static Color HSV(int deg, int rad, int val)
         {
             if (rad == 101)
                 rad = 100;

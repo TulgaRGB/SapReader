@@ -295,7 +295,7 @@
             // проводникToolStripMenuItem1
             // 
             this.проводникToolStripMenuItem1.Name = "проводникToolStripMenuItem1";
-            this.проводникToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
+            this.проводникToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.проводникToolStripMenuItem1.Tag = "Brow";
             this.проводникToolStripMenuItem1.Text = "Проводник";
             this.проводникToolStripMenuItem1.Click += new System.EventHandler(this.MenuHandler);
@@ -303,12 +303,12 @@
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(149, 6);
             // 
             // lSsecLiteToolStripMenuItem
             // 
             this.lSsecLiteToolStripMenuItem.Name = "lSsecLiteToolStripMenuItem";
-            this.lSsecLiteToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.lSsecLiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.lSsecLiteToolStripMenuItem.Tag = "LSsl";
             this.lSsecLiteToolStripMenuItem.Text = "LSsec lite";
             this.lSsecLiteToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
@@ -316,14 +316,14 @@
             // lSMToolStripMenuItem
             // 
             this.lSMToolStripMenuItem.Name = "lSMToolStripMenuItem";
-            this.lSMToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.lSMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.lSMToolStripMenuItem.Text = "LSM";
             this.lSMToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // плагиныToolStripMenuItem
             // 
@@ -332,7 +332,7 @@
             this.toolStripSeparator7,
             this.пустоToolStripMenuItem});
             this.плагиныToolStripMenuItem.Name = "плагиныToolStripMenuItem";
-            this.плагиныToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.плагиныToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.плагиныToolStripMenuItem.Text = "Плагины";
             // 
             // добавитьToolStripMenuItem
