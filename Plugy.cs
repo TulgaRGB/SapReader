@@ -21,13 +21,17 @@ namespace SapReader
         {
             InitializeComponent();
             this.xml = xml;
-            menuStrip1.Renderer = new MyRenderer();
+            menuStrip1.Renderer = new LSFB.MyRenderer();
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
             main = new LSFB(this, 0, 24);
-            name = doc.SelectSingleNode("/FORM").Attributes.GetNamedItem("name").InnerText;
-            Text = name + " от " + doc.SelectSingleNode("/FORM").Attributes.GetNamedItem("author").InnerText;
-            LSFB.drawForm(main.work, xml, MessageBox.Show("Запустить плагин со скриптами?", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes);
+            Dictionary<string,string> tmp = LSFB.drawForm(splitContainer1.Panel2, xml, MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes);
+            name = tmp["name"];
+            Text = name + " от " + tmp["author"];
+            richTextBox1.BackColor = main.work.BackColor;
+            richTextBox1.ForeColor = ForeColor;
+            richTextBox1.Text = tmp["script"];
+            LSFB.AddCms(richTextBox1);
             ShowDialog();
         }
 

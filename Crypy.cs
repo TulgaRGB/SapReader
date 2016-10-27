@@ -35,13 +35,14 @@ namespace SapReader
                     AutoSize = true
                 };                
                 Items.Add(t);
-                }
+            }
             main = new LSFB(this, 0, 68, 0, false);
             Height = Items.Last().Top < Screen.PrimaryScreen.WorkingArea.Height/2 - 130? Items.Last().Top + 133 : Screen.PrimaryScreen.WorkingArea.Height / 2;
             pb.ForeColor = BackColor;
             main.work.AutoScroll = true;
             foreach (ReadOnlyCheckBox c in Items)
                 main.work.Controls.Add(c);
+            Width -= 24;
         }
         delegate void CreateErrorDel(int i, string text);
         void CreateError(int i, string text)

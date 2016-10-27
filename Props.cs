@@ -17,8 +17,17 @@ namespace SapReader
         public Props()
         {
             InitializeComponent();
-            mm.Renderer = new MyRenderer();
-            main = new LS.LSFB(this, 2, 0, 80, false, true );
+            tabControl.Appearance = TabAppearance.FlatButtons;
+            tabControl.ItemSize = new Size(0, 1);
+            tabControl.SizeMode = TabSizeMode.Fixed;
+            mm.Renderer = new LSFB.MyRenderer();            
+            main = new LS.LSFB(this, 2, 0, 80, false );
+            foreach (TabPage p in tabControl.TabPages)
+            {
+                main.MakeControlLikeWork(p);
+                p.AutoScroll = true;
+            }
+            tabControl.Dock = DockStyle.Fill;
             Image image = new Bitmap(201,201);
             using (Graphics g = Graphics.FromImage(image))
             {
@@ -199,6 +208,13 @@ namespace SapReader
             point.X = (int)Math.Sqrt(x * x + y * y);
             point.Y =(int)(Math.Atan2(y, x) * 180 / Math.PI);
             return point;
+        }
+
+        private void tabSelect(object sender, EventArgs e)
+        {
+            ToolStripMenuItem th = (ToolStripMenuItem)sender;
+            if(mm.Items.IndexOf(th) < tabControl.TabCount)
+            tabControl.SelectTab(mm.Items.IndexOf(th));
         }
     }
 }

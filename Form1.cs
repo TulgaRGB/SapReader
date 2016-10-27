@@ -25,17 +25,22 @@ namespace SapReader
         public Form1()
         {
             InitializeComponent();
+            #region loadParams
+            Dictionary<string, string> tmp = LSFB.LoadReg("SapReader");
+            #endregion
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
-            BackColor = Color.FromArgb(255, 45,45,48);
-            ForeColor = Color.White;
+            if (tmp.ContainsKey("Colors.BackColor"))
+                BackColor = LSFB.FromHex(tmp["Colors.BackColor"]);
+            if (tmp.ContainsKey("Colors.ForeColor"))
+                ForeColor = LSFB.FromHex(tmp["Colors.ForeColor"]);
             LSFB.MainForm = this;
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
-            lsfb = new LS.LSFB(this,4, 24, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
+            lsfb = new LS.LSFB(this,4, 24, autoscroll:true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
             lsfb.customtext[0] = nazvanie + " - ";
             Text = "Добро пожаловать!";
-            mm.Renderer = new MyRenderer();
-            cms.Renderer = new MyRenderer();
+            mm.Renderer = new LSFB.MyRenderer();
+            cms.Renderer = new LSFB.MyRenderer();
             browser.ContextMenuStrip = cms;
             browser.ForeColor = ForeColor;
             lsfb.MakeControlLikeWork(browser);
@@ -107,8 +112,14 @@ namespace SapReader
         {
             try
             {
-                ToolStripMenuItem s = (ToolStripMenuItem)sender;
-                switch (s.Tag + "")
+                ToolStripMenuItem s = null;
+                ContextMenuStrip s2 = null;
+                try
+                {
+                    s = (ToolStripMenuItem)sender;
+                }
+                catch { s2 = (ContextMenuStrip)sender; }
+                switch (s != null? s.Tag + "" : s2.Tag+"")
                 {
                     #region Проводник
                     case "MainScr":
@@ -152,7 +163,8 @@ namespace SapReader
                         break;
                     case "LSsl":
                         browser.Hide();
-                        LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
+                        Dictionary<string,string> tmp = LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
+                        Text = tmp["name"];
                         break;
                     case "Add":
                         OpenFileDialog od = new OpenFileDialog { Filter = "*.dll|*.dll" };
@@ -203,27 +215,5 @@ namespace SapReader
                 catch { SystemSounds.Exclamation.Play(); }
             }
         }
-    }
-    public class MyRenderer : System.Windows.Forms.ToolStripRenderer
-    {
-        protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
-        {
-            e.Graphics.DrawLine(new Pen(new SolidBrush(LSFB.MainForm.ForeColor)), 32, e.Item.Height/2, e.Item.Width, e.Item.Height/2);
-            base.OnRenderSeparator(e);
-        }
-        protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
-        {
-            e.ArrowColor = LSFB.MainForm.ForeColor;
-            base.OnRenderArrow(e);
-        }
-        protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
-        {
-            e.Item.ForeColor = LSFB.MainForm.ForeColor;
-            e.ToolStrip.BackColor = LSFB.MainForm.BackColor;
-            if (e.Item.Selected)
-            {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, LSFB.MainForm.BackColor.R + 9 < 255? LSFB.MainForm.BackColor.R + 9 : LSFB.MainForm.BackColor.R - 9, LSFB.MainForm.BackColor.G + 9 < 255? LSFB.MainForm.BackColor.G + 9 : LSFB.MainForm.BackColor.G - 9, LSFB.MainForm.BackColor.B + 9 < 255? LSFB.MainForm.BackColor.B + 9 : LSFB.MainForm.BackColor.B - 9)), e.Item.ContentRectangle);
-            }
-        }
-    }
+    }    
 }
