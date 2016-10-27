@@ -25,12 +25,6 @@ namespace SapReader
         public Form1()
         {
             InitializeComponent();
-            LSAS lsas = new LS.LSAS("SapReader", FirstTwo(Application.ProductVersion));
-            if (!lsas.secured)
-            {
-                Load += (s, e) => Close();
-                return;
-            }        
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
             BackColor = Color.FromArgb(255, 45,45,48);

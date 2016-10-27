@@ -18,7 +18,7 @@ namespace SapReader
         {
             InitializeComponent();
             mm.Renderer = new MyRenderer();
-            main = new LS.LSFB(this, 1, 0, 80, false );
+            main = new LS.LSFB(this, 2, 0, 80, false, true );
             Image image = new Bitmap(201,201);
             using (Graphics g = Graphics.FromImage(image))
             {
@@ -65,34 +65,37 @@ namespace SapReader
             {
                 int u = (int)(BackColor.R / 255D * 201);
                 int d = (int)(ForeColor.R / 255D * 201);
-                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u-5, 20), new PointF(u+5, 20) };
-                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255,255,255)),up);
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                string text = BackColor.R+" " + ForeColor.R;
+                SizeF textSize = e.Graphics.MeasureString(text, LSFB.sizer(8));
+                PointF locationToDraw = new PointF();
+                locationToDraw.X = (rb.Width / 2) - (textSize.Width / 2);
+                locationToDraw.Y = (rb.Height/ 2) - (textSize.Height / 2);
+                e.Graphics.DrawString(text, LSFB.sizer(8), Brushes.White, locationToDraw);
             };
             gb.Paint += (object sender, PaintEventArgs e) =>
             {
                 int u = (int)(BackColor.G / 255D * 201);
                 int d = (int)(ForeColor.G / 255D * 201);
-                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u - 5, 20), new PointF(u + 5, 20) };
-                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), up);
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                string text = BackColor.G + " " + ForeColor.G;
+                SizeF textSize = e.Graphics.MeasureString(text, LSFB.sizer(8));
+                PointF locationToDraw = new PointF();
+                locationToDraw.X = (rb.Width / 2) - (textSize.Width / 2);
+                locationToDraw.Y = (rb.Height / 2) - (textSize.Height / 2);
+                e.Graphics.DrawString(text, LSFB.sizer(8), Brushes.White, locationToDraw);
             };
             bb.Paint += (object sender, PaintEventArgs e) =>
             {
                 int u = (int)(BackColor.B / 255D * 201);
                 int d = (int)(ForeColor.B / 255D * 201);
-                PointF[] up = new PointF[] { new PointF(u, 0), new PointF(u - 5, 20), new PointF(u + 5, 20) };
-                PointF[] down = new PointF[] { new PointF(d, 20), new PointF(d - 5, 0), new PointF(d + 5, 0) };
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), up);
-                e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(255, 255, 255, 255)), down);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), up);
-                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0))), down);
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                string text = BackColor.B + " " + ForeColor.B;
+                SizeF textSize = e.Graphics.MeasureString(text, LSFB.sizer(8));
+                PointF locationToDraw = new PointF();
+                locationToDraw.X = (rb.Width / 2) - (textSize.Width / 2);
+                locationToDraw.Y = (rb.Height / 2) - (textSize.Height / 2);
+                e.Graphics.DrawString(text, LSFB.sizer(8), Brushes.White, locationToDraw);
             };
             pictureBox1.Image = image;
             rb.Image = r;
@@ -106,7 +109,7 @@ namespace SapReader
             bb.MouseMove += RGB;
             pictureBox1.MouseMove += pick;
             pictureBox1.MouseClick += pick;
-            ShowDialog();
+            Show();
         }        
         void pick(object sender, MouseEventArgs e)
         {
