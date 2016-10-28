@@ -123,17 +123,21 @@ namespace SapReader
         void pick(object sender, MouseEventArgs e)
         {
                 Color pxl = ((Bitmap)(pictureBox1.Image)).GetPixel(e.X > 200? 200: e.X < 0? 0 : e.X, e.Y > 200? 200: e.Y < 0? 0 : e.Y);
-                if (pxl.A == 255)
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        LSFB.MainForm.BackColor = pxl;
-                        Color tmp = LSFB.MainForm.ForeColor;
-                        LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
-                        LSFB.MainForm.ForeColor = tmp;
-                    }
-                    else
-                        if (e.Button == MouseButtons.Right)
-                        LSFB.MainForm.ForeColor = pxl;
+            if (pxl.A == 255)
+                if (e.Button == MouseButtons.Left)
+                {
+                    LSFB.MainForm.BackColor = pxl;
+                    Color tmp = LSFB.MainForm.ForeColor;
+                    LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
+                    LSFB.MainForm.ForeColor = tmp;
+                    Form1.parames["Colors.BackColor"] = LSFB.ToHex(pxl);
+                }
+                else
+                    if (e.Button == MouseButtons.Right)
+                {
+                    LSFB.MainForm.ForeColor = pxl;
+                    Form1.parames["Colors.ForeColor"] = LSFB.ToHex(pxl);
+                }
                 
         }
         void RGB(object sender, MouseEventArgs e)
@@ -163,6 +167,7 @@ namespace SapReader
                     Color tmp = LSFB.MainForm.ForeColor;
                     LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
                     LSFB.MainForm.ForeColor = tmp;
+                    Form1.parames["Colors.BackColor"] = LSFB.ToHex(LSFB.MainForm.BackColor);
                 }
                 else
                 {
@@ -170,6 +175,7 @@ namespace SapReader
                         if (p[i] == -1)
                             p[i] = i < 1 ? LSFB.MainForm.ForeColor.R : i > 1 ? LSFB.MainForm.ForeColor.B : LSFB.MainForm.ForeColor.G;
                     LSFB.MainForm.ForeColor = Color.FromArgb(255, p[0], p[1], p[2]);
+                    Form1.parames["Colors.ForeColor"] = LSFB.ToHex(LSFB.MainForm.ForeColor);
                 }
             }
         }
@@ -215,6 +221,23 @@ namespace SapReader
             ToolStripMenuItem th = (ToolStripMenuItem)sender;
             if(mm.Items.IndexOf(th) < tabControl.TabCount)
             tabControl.SelectTab(mm.Items.IndexOf(th));
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ((Form1)LSFB.MainForm).ReloadAllParams();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!LSFB.SaveParams("SapReader", Form1.parames)) MessageBox.Show("Pizda");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            label2.Visible = !label2.Visible;
+            if (label2.Visible)
+                LSFB.ResetParams("SapReader");
         }
     }
 }

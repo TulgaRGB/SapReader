@@ -36,6 +36,12 @@
             this.proToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.Настройки = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.Цвета = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -44,14 +50,11 @@
             this.rb = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.Темы = new System.Windows.Forms.TabPage();
             this.Проводник = new System.Windows.Forms.TabPage();
             this.Pro = new System.Windows.Forms.TabPage();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.мойВыборToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Мойвыбор = new System.Windows.Forms.TabPage();
             this.mm.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
@@ -70,11 +73,12 @@
             this.цветаToolStripMenuItem,
             this.темыToolStripMenuItem,
             this.проводникToolStripMenuItem,
+            this.мойВыборToolStripMenuItem,
             this.proToolStripMenuItem});
             this.mm.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.mm.Location = new System.Drawing.Point(-6, 9);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(87, 101);
+            this.mm.Size = new System.Drawing.Size(89, 120);
             this.mm.TabIndex = 3;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -82,35 +86,35 @@
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(80, 19);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // цветаToolStripMenuItem
             // 
             this.цветаToolStripMenuItem.Name = "цветаToolStripMenuItem";
-            this.цветаToolStripMenuItem.Size = new System.Drawing.Size(80, 19);
+            this.цветаToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.цветаToolStripMenuItem.Text = "Цвета";
             this.цветаToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // темыToolStripMenuItem
             // 
             this.темыToolStripMenuItem.Name = "темыToolStripMenuItem";
-            this.темыToolStripMenuItem.Size = new System.Drawing.Size(80, 19);
+            this.темыToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.темыToolStripMenuItem.Text = "Темы";
             this.темыToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // проводникToolStripMenuItem
             // 
             this.проводникToolStripMenuItem.Name = "проводникToolStripMenuItem";
-            this.проводникToolStripMenuItem.Size = new System.Drawing.Size(80, 19);
+            this.проводникToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.проводникToolStripMenuItem.Text = "Проводник";
             this.проводникToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // proToolStripMenuItem
             // 
             this.proToolStripMenuItem.Name = "proToolStripMenuItem";
-            this.proToolStripMenuItem.Size = new System.Drawing.Size(80, 19);
+            this.proToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.proToolStripMenuItem.Text = "Pro";
             this.proToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
@@ -120,6 +124,7 @@
             this.tabControl.Controls.Add(this.Цвета);
             this.tabControl.Controls.Add(this.Темы);
             this.tabControl.Controls.Add(this.Проводник);
+            this.tabControl.Controls.Add(this.Мойвыбор);
             this.tabControl.Controls.Add(this.Pro);
             this.tabControl.Location = new System.Drawing.Point(84, 9);
             this.tabControl.Name = "tabControl";
@@ -129,6 +134,7 @@
             // 
             // Настройки
             // 
+            this.Настройки.Controls.Add(this.label2);
             this.Настройки.Controls.Add(this.button6);
             this.Настройки.Controls.Add(this.button4);
             this.Настройки.Controls.Add(this.button5);
@@ -139,8 +145,86 @@
             this.Настройки.Padding = new System.Windows.Forms.Padding(3);
             this.Настройки.Size = new System.Drawing.Size(220, 394);
             this.Настройки.TabIndex = 0;
-            this.Настройки.Text = "tabPage1";
+            this.Настройки.Text = "Настройки";
             this.Настройки.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(60, 370);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Подтвердите";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.Visible = false;
+            // 
+            // button6
+            // 
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button6.Location = new System.Drawing.Point(3, 174);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(211, 50);
+            this.button6.TabIndex = 0;
+            this.button6.Text = "Импорт";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button4.Location = new System.Drawing.Point(3, 62);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(211, 50);
+            this.button4.TabIndex = 0;
+            this.button4.Text = "Загрузить";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button5.Location = new System.Drawing.Point(3, 118);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(211, 50);
+            this.button5.TabIndex = 0;
+            this.button5.Text = "Экспорт";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.Location = new System.Drawing.Point(3, 6);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(211, 50);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "Сохранить";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Location = new System.Drawing.Point(139, 365);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "Сбросить";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Цвета
             // 
@@ -157,7 +241,7 @@
             this.Цвета.Padding = new System.Windows.Forms.Padding(3);
             this.Цвета.Size = new System.Drawing.Size(220, 394);
             this.Цвета.TabIndex = 1;
-            this.Цвета.Text = "tabPage2";
+            this.Цвета.Text = "Цвета";
             // 
             // textBox1
             // 
@@ -217,50 +301,13 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Выьрать цвета:\r\nЛКМ - Фон\r\nПКМ - Текст";
             // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(139, 365);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Сбросить";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button3.Location = new System.Drawing.Point(3, 6);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(211, 50);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "Сохранить";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(3, 62);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(211, 50);
-            this.button4.TabIndex = 0;
-            this.button4.Text = "Загрузить";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
             // Темы
             // 
             this.Темы.Location = new System.Drawing.Point(4, 22);
             this.Темы.Name = "Темы";
             this.Темы.Size = new System.Drawing.Size(220, 394);
             this.Темы.TabIndex = 2;
-            this.Темы.Text = "tabPage3";
+            this.Темы.Text = "Темы";
             this.Темы.UseVisualStyleBackColor = true;
             // 
             // Проводник
@@ -269,7 +316,7 @@
             this.Проводник.Name = "Проводник";
             this.Проводник.Size = new System.Drawing.Size(220, 394);
             this.Проводник.TabIndex = 3;
-            this.Проводник.Text = "tabPage4";
+            this.Проводник.Text = "Проводник";
             this.Проводник.UseVisualStyleBackColor = true;
             // 
             // Pro
@@ -278,34 +325,23 @@
             this.Pro.Name = "Pro";
             this.Pro.Size = new System.Drawing.Size(220, 394);
             this.Pro.TabIndex = 4;
-            this.Pro.Text = "tabPage5";
+            this.Pro.Text = "Pro";
             this.Pro.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // мойВыборToolStripMenuItem
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(3, 118);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(211, 50);
-            this.button5.TabIndex = 0;
-            this.button5.Text = "Экспорт";
-            this.button5.UseVisualStyleBackColor = true;
+            this.мойВыборToolStripMenuItem.Name = "мойВыборToolStripMenuItem";
+            this.мойВыборToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
+            this.мойВыборToolStripMenuItem.Text = "Мой выбор";
             // 
-            // button6
+            // Мойвыбор
             // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button6.Location = new System.Drawing.Point(3, 174);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(211, 50);
-            this.button6.TabIndex = 0;
-            this.button6.Text = "Импорт";
-            this.button6.UseVisualStyleBackColor = true;
+            this.Мойвыбор.Location = new System.Drawing.Point(4, 22);
+            this.Мойвыбор.Name = "Мойвыбор";
+            this.Мойвыбор.Size = new System.Drawing.Size(220, 394);
+            this.Мойвыбор.TabIndex = 5;
+            this.Мойвыбор.Text = "Мой выбор";
+            this.Мойвыбор.UseVisualStyleBackColor = true;
             // 
             // Props
             // 
@@ -322,6 +358,7 @@
             this.mm.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.Настройки.ResumeLayout(false);
+            this.Настройки.PerformLayout();
             this.Цвета.ResumeLayout(false);
             this.Цвета.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bb)).EndInit();
@@ -358,5 +395,8 @@
         private System.Windows.Forms.TabPage Pro;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem мойВыборToolStripMenuItem;
+        private System.Windows.Forms.TabPage Мойвыбор;
     }
 }

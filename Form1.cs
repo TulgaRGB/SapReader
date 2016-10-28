@@ -20,20 +20,15 @@ namespace SapReader
     public partial class Form1 : Form
     {
         public static string owner = Environment.UserName;
+        public static Dictionary<string, string> parames;
         public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
         public Form1()
         {
             InitializeComponent();
-            #region loadParams
-            Dictionary<string, string> tmp = LSFB.LoadReg("SapReader");
-            #endregion
+            ReloadAllParams();
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
-            if (tmp.ContainsKey("Colors.BackColor"))
-                BackColor = LSFB.FromHex(tmp["Colors.BackColor"]);
-            if (tmp.ContainsKey("Colors.ForeColor"))
-                ForeColor = LSFB.FromHex(tmp["Colors.ForeColor"]);
             LSFB.MainForm = this;
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
             lsfb = new LS.LSFB(this,4, 24, autoscroll:true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
@@ -46,6 +41,14 @@ namespace SapReader
             lsfb.MakeControlLikeWork(browser);
             browser.Hide();
             LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
+        }
+        public void ReloadAllParams()
+        {
+            parames = LSFB.LoadParams("SapReader");
+            if (parames.ContainsKey("Colors.BackColor"))
+                BackColor = LSFB.FromHex(parames["Colors.BackColor"]);
+            if (parames.ContainsKey("Colors.ForeColor"))
+                ForeColor = LSFB.FromHex(parames["Colors.ForeColor"]);
         }
         #region menu options
         public void MainScr()
