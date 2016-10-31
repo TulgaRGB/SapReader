@@ -25,7 +25,12 @@ namespace SapReader
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
             main = new LSFB(this, 0, 24);
-            Dictionary<string,string> tmp = LSFB.drawForm(splitContainer1.Panel2, xml, MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes);
+            bool scrpt;
+            if (Form1.parames.ContainsKey("Bool.DontAskForScript") ? !Convert.ToBoolean(Form1.parames["Bool.DontAskForScript"]) : false)
+                scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
+            else
+                scrpt = Form1.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Form1.parames["Bool.AllowScript"]) : true;
+            Dictionary <string,string> tmp = LSFB.drawForm(splitContainer1.Panel2, xml, scrpt);
             name = tmp["name"];
             Text = name + " от " + tmp["author"];
             richTextBox1.BackColor = main.work.BackColor;

@@ -33,6 +33,7 @@
             this.цветаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.темыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.проводникToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.мойВыборToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.proToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.Настройки = new System.Windows.Forms.TabPage();
@@ -52,9 +53,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Темы = new System.Windows.Forms.TabPage();
             this.Проводник = new System.Windows.Forms.TabPage();
-            this.Pro = new System.Windows.Forms.TabPage();
-            this.мойВыборToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Мойвыбор = new System.Windows.Forms.TabPage();
+            this.Pro = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.login = new System.Windows.Forms.TextBox();
+            this.pass = new System.Windows.Forms.TextBox();
+            this.ip = new System.Windows.Forms.TextBox();
             this.mm.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
@@ -63,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.Pro.SuspendLayout();
             this.SuspendLayout();
             // 
             // mm
@@ -110,6 +115,13 @@
             this.проводникToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
             this.проводникToolStripMenuItem.Text = "Проводник";
             this.проводникToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
+            // 
+            // мойВыборToolStripMenuItem
+            // 
+            this.мойВыборToolStripMenuItem.Name = "мойВыборToolStripMenuItem";
+            this.мойВыборToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
+            this.мойВыборToolStripMenuItem.Text = "Мой выбор";
+            this.мойВыборToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // proToolStripMenuItem
             // 
@@ -319,21 +331,6 @@
             this.Проводник.Text = "Проводник";
             this.Проводник.UseVisualStyleBackColor = true;
             // 
-            // Pro
-            // 
-            this.Pro.Location = new System.Drawing.Point(4, 22);
-            this.Pro.Name = "Pro";
-            this.Pro.Size = new System.Drawing.Size(220, 394);
-            this.Pro.TabIndex = 4;
-            this.Pro.Text = "Pro";
-            this.Pro.UseVisualStyleBackColor = true;
-            // 
-            // мойВыборToolStripMenuItem
-            // 
-            this.мойВыборToolStripMenuItem.Name = "мойВыборToolStripMenuItem";
-            this.мойВыборToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.мойВыборToolStripMenuItem.Text = "Мой выбор";
-            // 
             // Мойвыбор
             // 
             this.Мойвыбор.Location = new System.Drawing.Point(4, 22);
@@ -342,6 +339,50 @@
             this.Мойвыбор.TabIndex = 5;
             this.Мойвыбор.Text = "Мой выбор";
             this.Мойвыбор.UseVisualStyleBackColor = true;
+            // 
+            // Pro
+            // 
+            this.Pro.Controls.Add(this.ip);
+            this.Pro.Controls.Add(this.pass);
+            this.Pro.Controls.Add(this.login);
+            this.Pro.Controls.Add(this.label3);
+            this.Pro.Location = new System.Drawing.Point(4, 22);
+            this.Pro.Name = "Pro";
+            this.Pro.Size = new System.Drawing.Size(220, 394);
+            this.Pro.TabIndex = 4;
+            this.Pro.Text = "Pro";
+            this.Pro.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(194, 104);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
+            // 
+            // login
+            // 
+            this.login.Location = new System.Drawing.Point(6, 31);
+            this.login.Name = "login";
+            this.login.Size = new System.Drawing.Size(191, 20);
+            this.login.TabIndex = 1;
+            // 
+            // pass
+            // 
+            this.pass.Location = new System.Drawing.Point(6, 68);
+            this.pass.Name = "pass";
+            this.pass.PasswordChar = '•';
+            this.pass.Size = new System.Drawing.Size(191, 20);
+            this.pass.TabIndex = 1;
+            // 
+            // ip
+            // 
+            this.ip.Location = new System.Drawing.Point(6, 107);
+            this.ip.Name = "ip";
+            this.ip.Size = new System.Drawing.Size(191, 20);
+            this.ip.TabIndex = 1;
             // 
             // Props
             // 
@@ -365,6 +406,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.gb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Pro.ResumeLayout(false);
+            this.Pro.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -398,5 +441,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem мойВыборToolStripMenuItem;
         private System.Windows.Forms.TabPage Мойвыбор;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox ip;
+        private System.Windows.Forms.TextBox pass;
+        private System.Windows.Forms.TextBox login;
     }
 }

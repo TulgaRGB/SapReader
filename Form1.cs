@@ -41,14 +41,16 @@ namespace SapReader
             lsfb.MakeControlLikeWork(browser);
             browser.Hide();
             LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
+            if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
+                WindowState = FormWindowState.Maximized;
         }
         public void ReloadAllParams()
         {
             parames = LSFB.LoadParams("SapReader");
-            if (parames.ContainsKey("Colors.BackColor"))
-                BackColor = LSFB.FromHex(parames["Colors.BackColor"]);
-            if (parames.ContainsKey("Colors.ForeColor"))
-                ForeColor = LSFB.FromHex(parames["Colors.ForeColor"]);
+            if (parames.ContainsKey("Color.BackColor"))
+                BackColor = LSFB.FromHex(parames["Color.BackColor"]);            
+            if (parames.ContainsKey("Color.ForeColor"))
+                ForeColor = LSFB.FromHex(parames["Color.ForeColor"]);
         }
         #region menu options
         public void MainScr()
