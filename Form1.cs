@@ -70,6 +70,30 @@ namespace SapReader
                 foreach (ToolStripItem i in proToolStripMenuItem.DropDownItems)
                     i.Enabled = true;
         }
+        delegate void parseresponseDel(XmlDocument _response);
+        public void ParseResponse(XmlDocument _response)
+        {
+            if(InvokeRequired)
+                Invoke(new parseresponseDel(ParseResponse), _response);
+                else
+                {
+                XmlNode response = _response.SelectSingleNode("/RESPONSE");
+                                switch (response.Attributes.GetNamedItem("type").InnerText)
+                                {
+                                    case "forms":
+                                         Dictionary<string, string> tmp = LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
+                                        break;
+                                    case "login":
+                                        if (response.Attributes.GetNamedItem("result").InnerText == "succ")
+                                                login = true;
+                                        else
+                                                DebugMessage(response.InnerText);
+                                        break;
+                                }
+                }
+                
+        }
+        #region connection
         void Con()
         {
             new Task(() =>
@@ -96,19 +120,7 @@ namespace SapReader
                             {
                             XmlDocument _response = new XmlDocument();
                             _response.LoadXml(UnicodeEncoding.Unicode.GetString(Sapphire.GetTextBytes(b, key)));
-                                XmlNode response = _response.SelectSingleNode("/RESPONSE");
-                                switch (response.Attributes.GetNamedItem("type").InnerText)
-                                {
-                                    case "forms":
-                                         Dictionary<string, string> tmp = LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
-                                        break;
-                                    case "login":
-                                        if (response.Attributes.GetNamedItem("result").InnerText == "succ")
-                                                login = true;
-                                        else
-                                                DebugMessage(response.InnerText);
-                                        break;
-                                }
+                                ParseResponse(_response);
                             }
                             else
                             {
@@ -128,6 +140,7 @@ namespace SapReader
                 }
             }).Start();
         }
+        #endregion
         public void ReloadAllParams()
         {
             parames = LSFB.LoadParams("SapReader");
