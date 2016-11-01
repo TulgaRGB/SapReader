@@ -54,7 +54,7 @@ namespace SapReader
             LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
-            if (parames["Bool.ProOnStart"] == "True")            
+            if (parames.ContainsKey("Bool.ProOnStart")? parames["Bool.ProOnStart"] == "True" : false)            
                 Con();                
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
