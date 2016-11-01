@@ -50,6 +50,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +80,7 @@
     <Compile Include="..\..\LS\LSAS.cs">
       <Link>LSAS.cs</Link>
     </Compile>
+    <Compile Include="NetConnection.cs" />
     <Compile Include="Plugy.cs">
       <SubType>Form</SubType>
     </Compile>

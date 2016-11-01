@@ -141,7 +141,8 @@ namespace SapReader
             { "Запускать плагины со скриптами", "AllowScript" },
             { "Не спрашивать при запуске скриптов", "DontAskForScript" },
             { "Разворачивать окно при старте", "MaximizeOnStart" },
-            { "Соединение с Pro при старте", "ProOnStart" }
+            { "Соединение с Pro при старте", "ProOnStart" },
+            { "Вход в Pro при старте","LoginToPro" }
         };
         void pick(object sender, MouseEventArgs e)
         {
