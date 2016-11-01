@@ -55,7 +55,7 @@ namespace SapReader
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
             if (parames.ContainsKey("Bool.ProOnStart")? parames["Bool.ProOnStart"] == "True" : false)            
-                Con();                
+                Con();
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
@@ -75,22 +75,59 @@ namespace SapReader
         {
             if(InvokeRequired)
                 Invoke(new parseresponseDel(ParseResponse), _response);
-                else
-                {
+            else
+            {
                 XmlNode response = _response.SelectSingleNode("/RESPONSE");
-                                switch (response.Attributes.GetNamedItem("type").InnerText)
-                                {
-                                    case "forms":
-                                         Dictionary<string, string> tmp = LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
-                                        break;
-                                    case "login":
-                                        if (response.Attributes.GetNamedItem("result").InnerText == "succ")
-                                                login = true;
-                                        else
-                                                DebugMessage(response.InnerText);
-                                        break;
-                                }
+                switch (response.Attributes.GetNamedItem("type").InnerText)
+                {
+                    case "form":
+                        new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
+                        break;
+                    case "forms":
+                        ListView temp = new ListView();
+                        temp.Resize += (object sender, EventArgs e) =>
+                        {
+                            foreach(ColumnHeader c in temp.Columns)
+                            {
+                                c.Width = temp.Width / 4;
+                            }
+                        };
+                        temp.MouseDoubleClick += (object sender, MouseEventArgs e) =>
+                        {
+                            if(e.Button == MouseButtons.Left)
+                            {
+                                client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>"), key));
+                            }
+                        };
+                        temp.View = View.Details;
+                        temp.Anchor = browser.Anchor;
+                        temp.Size = lsfb.work.Size;
+                        lsfb.work.Controls.Add(temp);
+                        temp.Columns.Add("ID", temp.Width/4);
+                        temp.Columns.Add("Название", temp.Width / 4);
+                        temp.Columns.Add("Автор", temp.Width / 4);
+                        temp.Columns.Add("Проверенно", temp.Width / 4);
+                        foreach (XmlNode f in response.ChildNodes)
+                        {
+                            ListViewItem item = new ListViewItem(new[] 
+                            {
+                                f.Attributes.GetNamedItem("id").InnerText,
+                                f.Attributes.GetNamedItem("name").InnerText,
+                                f.Attributes.GetNamedItem("author").InnerText,
+                                f.Attributes.GetNamedItem("validated").InnerText == "True"? "ДА" : "НЕТ"
+                            });
+                            temp.Items.Add(item);
+                            
+                        }
+                        break;
+                    case "login":
+                        if (response.Attributes.GetNamedItem("result").InnerText == "succ")
+                            login = true;
+                        else
+                            DebugMessage(response.InnerText);
+                        break;
                 }
+            }
                 
         }
         #region connection
@@ -290,6 +327,7 @@ namespace SapReader
                         #region Pro
                         case "Plugins":
                             client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"forms\" />"), key));
+                            Text = "Библиотека плагинов";
                             browser.Hide();
                             lsfb.work.Controls.Clear();
                             break;
