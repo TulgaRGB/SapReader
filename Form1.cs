@@ -194,11 +194,11 @@ namespace SapReader
                             else
                             {
                                     client.Send(UnicodeEncoding.Unicode.GetBytes(exp + ""));
-                                    key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");
-                                    ProCon(true);                               
+                                    key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");                          
                             }
                         };
                     DebugMessage("Есть соединение с сервером", "ИНФО");
+                    ProCon(true);
                 }
                 //try{ }
                 catch (Exception ex)
