@@ -268,5 +268,12 @@ namespace SapReader
                 LSFB.ResetParams("SapReader");
             label2.Visible = !label2.Visible;
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Form1.parames["Pro.Login"] = login.Text;
+            Form1.parames["Pro.Pass"] = pass.Text;
+            Form1.parames["Pro.Ip"] = ip.Text;
+        }
     }
 }

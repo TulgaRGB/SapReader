@@ -78,10 +78,18 @@ namespace SapReader
             else
             {
                 XmlNode response = _response.SelectSingleNode("/RESPONSE");
+                if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                        case "exit":
+                            if (response.Attributes.GetNamedItem("result").InnerText == "succ")
+                            {
+                                login = false;
+                                DebugMessage("Вы вышли из своей учётной записи", "ИНФО");
+                            }
+                                break;
                     case "form":
-                      //  new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
+                        new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
                         break;
                     case "forms":
                         ListView temp = new ListView();
@@ -124,7 +132,7 @@ namespace SapReader
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
                             login = true;
-                            DebugMessage("Вы успешно вошли на сервер","Успех!");
+                            DebugMessage("Вы успешно вошли в учётную запись","Успех!");
                         }
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "query")
@@ -190,6 +198,7 @@ namespace SapReader
                                     ProCon(true);                               
                             }
                         };
+                    DebugMessage("Есть соединение с сервером", "ИНФО");
                 }
                 //try{ }
                 catch (Exception ex)
@@ -279,13 +288,10 @@ namespace SapReader
                     s = (ToolStripMenuItem)sender;
                 }
                 catch { s2 = (ContextMenuStrip)sender; }
-                if (proToolStripMenuItem.DropDownItems.Contains(s) && client == null) ;
-                else
                 if (proToolStripMenuItem.DropDownItems.Contains(s) && login == false)
                 {
                     ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                 }
-                else
                     switch (s != null ? s.Tag + "" : s2.Tag + "")
                     {
                         #region Проводник
@@ -352,6 +358,9 @@ namespace SapReader
                             browser.Hide();
                             lsfb.work.Controls.Clear();
                             break;
+                    case "ProExit":
+                        ClientSend("<QUERY type=\"exit\" />");
+                        break;
                             #endregion
                     }
             }
