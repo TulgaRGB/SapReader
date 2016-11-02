@@ -166,7 +166,7 @@ namespace SapReader
             {
                 try
                 {
-                    client = new NetConnection();
+                    client = new NetConnection { BufferSize= 1 };
                     key = null;
                     lsfb.work.Enabled = true;
                     try
@@ -181,7 +181,7 @@ namespace SapReader
                             login = false;
                             client = null;
                             ProCon(false);
-                            DebugMessage("Потеряно соединение с сервером!");
+                            DebugMessage("Потеряно соединение с сервером!");                           
                         };
                     client.OnDataReceived += (object sender1, NetConnection c, byte[] b) =>
                         {
