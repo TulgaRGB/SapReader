@@ -81,6 +81,17 @@ namespace SapReader
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                        case "sum":
+                            string myHash = Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location));
+                            foreach (XmlElement v in response.ChildNodes)
+                                if (myHash == v.InnerText)
+                                {
+                                    DebugMessage("Вы используете официальную сборку программы", "ИНФО");
+                                    myHash = null;
+                                }
+                            if (myHash != null)
+                                DebugMessage("К сожалению, вы используете неофициальную сборку, будте осторожны!", "ВНИМАНИЕ");
+                            break;
                         case "exit":
                             if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                             {
@@ -361,7 +372,14 @@ namespace SapReader
                     case "ProExit":
                         ClientSend("<QUERY type=\"exit\" />");
                         break;
-                            #endregion
+                    case "CheckSum":
+                        ClientSend("<QUERY type=\"sum\"/>");
+                        break;
+                    #endregion
+                    case "InfoSum":
+                        Clipboard.SetText(Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)));
+                        DebugMessage("Хэш Сумма " + Clipboard.GetText() + " в буфере обмена","Успешно!");
+                        break;
                     }
             }
             // try { }
