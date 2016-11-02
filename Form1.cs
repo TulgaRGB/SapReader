@@ -61,14 +61,14 @@ namespace SapReader
         {
             return !second ? BigInteger.Pow(inp, step) % mosn : BigInteger.Pow((BigInteger.Pow(inp, step) % mosn), (int)osn) % mosn2;
         }
-        delegate void proconDel();
-        public void ProCon()
+        delegate void proconDel(bool enabled);
+        public void ProCon(bool enabled)
         {
             if (InvokeRequired)
-                Invoke(new proconDel(ProCon));
+                Invoke(new proconDel(ProCon),enabled);
             else
                 foreach (ToolStripItem i in proToolStripMenuItem.DropDownItems)
-                    i.Enabled = true;
+                    i.Enabled = enabled;
         }
         delegate void parseresponseDel(XmlDocument _response);
         public void ParseResponse(XmlDocument _response)
@@ -81,7 +81,7 @@ namespace SapReader
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
                     case "form":
-                        new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
+                      //  new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
                         break;
                     case "forms":
                         ListView temp = new ListView();
@@ -96,7 +96,7 @@ namespace SapReader
                         {
                             if(e.Button == MouseButtons.Left)
                             {
-                                client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>"), key));
+                                ClientSend("<QUERY type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
                             }
                         };
                         temp.View = View.Details;
@@ -122,13 +122,34 @@ namespace SapReader
                         break;
                     case "login":
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
+                        {
                             login = true;
+                            DebugMessage("Вы успешно вошли на сервер","Успех!");
+                        }
+                        else
+                            if (response.Attributes.GetNamedItem("result").InnerText == "query")
+                        {
+                            if (parames["Bool.LoginToPro"] == "True")
+                                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                        }
                         else
                             DebugMessage(response.InnerText);
                         break;
                 }
+                lsfb.work.Enabled = true;
             }
                 
+        }
+        public void ClientSend(string query)
+        {
+            try
+            {
+                lsfb.work.Enabled = false;
+                client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes(query), key));
+            }
+            catch(Exception ex) { DebugMessage("Запрос не был отправлен:\n"+ex.Message);
+                lsfb.work.Enabled = true;
+            }
         }
         #region connection
         void Con()
@@ -139,6 +160,7 @@ namespace SapReader
                 {
                     client = new NetConnection();
                     key = null;
+                    lsfb.work.Enabled = true;
                     try
                     {
                         client.Connect(IPAddress.Parse(parames["Pro.Ip"]), 228);
@@ -150,6 +172,8 @@ namespace SapReader
                             key = null;
                             login = false;
                             client = null;
+                            ProCon(false);
+                            DebugMessage("Потеряно соединение с сервером!");
                         };
                     client.OnDataReceived += (object sender1, NetConnection c, byte[] b) =>
                         {
@@ -163,10 +187,7 @@ namespace SapReader
                             {
                                     client.Send(UnicodeEncoding.Unicode.GetBytes(exp + ""));
                                     key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");
-                                    ProCon();
-                                if (parames["Bool.ProOnStart"] == "True")
-                                    client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />"), key));
-
+                                    ProCon(true);                               
                             }
                         };
                 }
@@ -262,7 +283,7 @@ namespace SapReader
                 else
                 if (proToolStripMenuItem.DropDownItems.Contains(s) && login == false)
                 {
-                    client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />"), key));
+                    ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                 }
                 else
                     switch (s != null ? s.Tag + "" : s2.Tag + "")
@@ -326,7 +347,7 @@ namespace SapReader
                             break;
                         #region Pro
                         case "Plugins":
-                            client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes("<QUERY type=\"forms\" />"), key));
+                            ClientSend("<QUERY type=\"forms\" />");
                             Text = "Библиотека плагинов";
                             browser.Hide();
                             lsfb.work.Controls.Clear();
@@ -337,9 +358,9 @@ namespace SapReader
             // try { }
             catch (Exception ex) { DebugMessage(ex.Message + "");}
         }
-        public void DebugMessage(string text)
+        public void DebugMessage(string text,string header = "Ошибка!")
         {
-          tray.ShowBalloonTip(1000, "Ошибка!", text + "", ToolTipIcon.None);
+          tray.ShowBalloonTip(1000, header, text + "", ToolTipIcon.None);
         }
         public void Encrypt(ListView.SelectedListViewItemCollection files, bool encrypt)
         {
