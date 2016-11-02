@@ -37,6 +37,7 @@ namespace SapReader
             richTextBox1.ForeColor = ForeColor;
             richTextBox1.Text = tmp["script"];
             LSFB.AddCms(richTextBox1);
+            Size = LSFB.MainForm.Size;            
             ShowDialog();
         }
 
