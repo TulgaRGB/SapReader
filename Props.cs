@@ -274,6 +274,7 @@ namespace SapReader
             Form1.parames["Pro.Login"] = login.Text;
             Form1.parames["Pro.Pass"] = pass.Text;
             Form1.parames["Pro.Ip"] = ip.Text;
+            Close();
         }
     }
 }
