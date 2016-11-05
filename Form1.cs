@@ -21,7 +21,6 @@ namespace SapReader
 {
     public partial class Form1 : Form
     {
-        public bool login = false;
         public static Random RNG = new Random();
         static public BigInteger exp;
         static public BigInteger osn = Convert.ToInt32("3");
@@ -33,7 +32,7 @@ namespace SapReader
         public static Dictionary<string, string> parames;
         public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
-        public static NetConnection client = null;
+        public static NetConnection client = new NetConnection { BufferSize = 8192 };
         public Form1()
         {
             InitializeComponent(); exp = Diff(osn, mysec, false);
@@ -54,52 +53,40 @@ namespace SapReader
             LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
-            if (parames.ContainsKey("Bool.ProOnStart")? parames["Bool.ProOnStart"] == "True" : false)            
-                Con();
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
             return !second ? BigInteger.Pow(inp, step) % mosn : BigInteger.Pow((BigInteger.Pow(inp, step) % mosn), (int)osn) % mosn2;
         }
-        delegate void proconDel(bool enabled);
-        public void ProCon(bool enabled)
-        {
-            if (InvokeRequired)
-                Invoke(new proconDel(ProCon),enabled);
-            else
-                foreach (ToolStripItem i in proToolStripMenuItem.DropDownItems)
-                    i.Enabled = enabled;
-        }
-        delegate void parseresponseDel(XmlDocument _response);
         public void ParseResponse(XmlDocument _response)
         {
-            if(InvokeRequired)
-                Invoke(new parseresponseDel(ParseResponse), _response);
-            else
-            {
                 XmlNode response = _response.SelectSingleNode("/RESPONSE");
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
-                        case "sum":
-                            string myHash = Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location));
-                            foreach (XmlElement v in response.ChildNodes)
-                                if (myHash == v.InnerText)
-                                {
-                                    DebugMessage("Вы используете официальную сборку программы", "ИНФО");
-                                    myHash = null;
-                                }
-                            if (myHash != null)
-                                DebugMessage("К сожалению, вы используете неофициальную сборку, будте осторожны!", "ВНИМАНИЕ");
-                            break;
+                    case "error":
+                        DebugMessage(response.InnerText);
+                        break;
+                    case "message":
+                        DebugMessage(response.InnerText,"Pro");
+                        break;
                         case "exit":
                             if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                             {
-                                login = false;
-                                DebugMessage("Вы вышли из своей учётной записи", "ИНФО");
+                                conLabel.Text = "Вход не выполнен";
+                                lsfb.work.Controls.Clear();
+                                Dictionary<string,string> tmp = LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
+                            Text = tmp["name"];
                             }
                                 break;
                     case "form":
+                        if(response.Attributes.GetNamedItem("pro")!=null)
+                        {
+                            browser.Hide();
+                            lsfb.work.Controls.Clear();
+                            LSFB.drawForm(lsfb.work, response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
+                        }
+                        else
                         new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
                         break;
                     case "forms":
@@ -142,63 +129,77 @@ namespace SapReader
                     case "login":
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
-                            login = true;
-                            DebugMessage("Вы успешно вошли в учётную запись","Успех!");
+                            Text = "Pro";
+                            conLabel.Text = response.Attributes.GetNamedItem("login").InnerText;
+                            browser.Hide();
+                            LSFB.drawForm(lsfb.work, Properties.Resources.PRO, true);
+                            LSFB.CbyName(lsfb.work.Controls, "hi").Text+=", " + conLabel.Text + "!";
+                            LSFB.CbyName(lsfb.work.Controls, "libPlugin").Click += (object sender, EventArgs e) =>
+                            {
+                                lsfb.work.Controls.Clear();
+                                ClientSend("<QUERY type=\"forms\"/>");
+                            };
+                            LSFB.CbyName(lsfb.work.Controls, "checkApp").Click += (object sender, EventArgs e) =>
+                            {
+                                ClientSend("<QUERY type=\"sum\" hash=\""+ Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) +"\"/>");
+                            };
+                            LSFB.CbyName(lsfb.work.Controls, "exitButton").Click += (object sender, EventArgs e) =>
+                            {
+                                ClientSend("<QUERY type=\"exit\"/>");
+                            };
                         }
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "query")
                         {
-                            if (parames["Bool.LoginToPro"] == "True")
-                                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                            ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
                         else
-                            DebugMessage(response.InnerText);
+                        {
+                            Login tmp = new Login(parames["Pro.Login"],parames["Pro.Pass"]);
+                            if(!tmp.cancel)
+                            ClientSend("<QUERY type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
+                        }
                         break;
                 }
-                lsfb.work.Enabled = true;
-            }
                 
         }
         public void ClientSend(string query)
         {
+            if(key != null)
             try
             {
-                lsfb.work.Enabled = false;
                 client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes(query), key));
             }
             catch(Exception ex) { DebugMessage("Запрос не был отправлен:\n"+ex.Message);
-                lsfb.work.Enabled = true;
             }
         }
         #region connection
         void Con()
         {
-            new Task(() =>
-            {
                 try
                 {
-                    client = new NetConnection { BufferSize= 1 };
-                    key = null;
-                    lsfb.work.Enabled = true;
                     try
                     {
-                        client.Connect(IPAddress.Parse(parames["Pro.Ip"]), 228);
+                        client.Disconnect();
                     }
-                    catch { client.Connect(parames["Pro.Ip"], 228); }
-
+                    catch { }
+                IPAddress ip;
+                    bool _ip =  IPAddress.TryParse(parames["Pro.Ip"], out ip);
+                if (_ip)
+                    client.Connect(ip, 228);
+                else
+                    client.Connect(parames["Pro.Ip"], 228);
                     client.OnDisconnect += (object sender1, NetConnection c) =>
                         {
                             key = null;
-                            login = false;
-                            client = null;
-                            ProCon(false);
+                            conLabel.Text = "";
                             DebugMessage("Потеряно соединение с сервером!");                           
                         };
                     client.OnDataReceived += (object sender1, NetConnection c, byte[] b) =>
                         {
                             if (key != null)
                             {
-                            XmlDocument _response = new XmlDocument();
+                                XmlDocument _response = new XmlDocument();
                             _response.LoadXml(UnicodeEncoding.Unicode.GetString(Sapphire.GetTextBytes(b, key)));
                                 ParseResponse(_response);
                             }
@@ -208,15 +209,12 @@ namespace SapReader
                                     key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");                          
                             }
                         };
-                    DebugMessage("Есть соединение с сервером", "ИНФО");
-                    ProCon(true);
                 }
                 //try{ }
                 catch (Exception ex)
                 {
                     DebugMessage(ex.Message + "");
                 }
-            }).Start();
         }
         #endregion
         public void ReloadAllParams()
@@ -299,10 +297,6 @@ namespace SapReader
                     s = (ToolStripMenuItem)sender;
                 }
                 catch { s2 = (ContextMenuStrip)sender; }
-                if (proToolStripMenuItem.DropDownItems.Contains(s) && login == false)
-                {
-                    ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
-                }
                     switch (s != null ? s.Tag + "" : s2.Tag + "")
                     {
                         #region Проводник
@@ -363,18 +357,6 @@ namespace SapReader
                             new Props();
                             break;
                         #region Pro
-                        case "Plugins":
-                            ClientSend("<QUERY type=\"forms\" />");
-                            Text = "Библиотека плагинов";
-                            browser.Hide();
-                            lsfb.work.Controls.Clear();
-                            break;
-                    case "ProExit":
-                        ClientSend("<QUERY type=\"exit\" />");
-                        break;
-                    case "CheckSum":
-                        ClientSend("<QUERY type=\"sum\"/>");
-                        break;
                     #endregion
                     case "InfoSum":
                         Clipboard.SetText(Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)));
@@ -417,12 +399,17 @@ namespace SapReader
             }
         }
 
-        private void proToolStripMenuItem_DropDownOpened(object sender, EventArgs e)
+        private void proToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (client == null)
+            if (key == null)
             {
-                Con();
+                    client = new NetConnection { BufferSize = 8192 };
+                    Con();
+                    conLabel.Text = "Вход не выполнен";
             }
+            else
+                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + parames["Pro.Pass"] + "\" />");
         }
+        
     }    
 }

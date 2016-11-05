@@ -59,7 +59,6 @@
             this.pass = new System.Windows.Forms.TextBox();
             this.login = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
             this.mm.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
@@ -343,7 +342,6 @@
             // 
             // Pro
             // 
-            this.Pro.Controls.Add(this.button7);
             this.Pro.Controls.Add(this.ip);
             this.Pro.Controls.Add(this.pass);
             this.Pro.Controls.Add(this.login);
@@ -357,6 +355,7 @@
             // 
             // ip
             // 
+            this.ip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ip.Location = new System.Drawing.Point(6, 107);
             this.ip.Name = "ip";
             this.ip.Size = new System.Drawing.Size(191, 20);
@@ -364,6 +363,7 @@
             // 
             // pass
             // 
+            this.pass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pass.Location = new System.Drawing.Point(6, 68);
             this.pass.Name = "pass";
             this.pass.PasswordChar = '•';
@@ -372,6 +372,7 @@
             // 
             // login
             // 
+            this.login.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.login.Location = new System.Drawing.Point(6, 31);
             this.login.Name = "login";
             this.login.Size = new System.Drawing.Size(191, 20);
@@ -385,17 +386,6 @@
             this.label3.Size = new System.Drawing.Size(194, 104);
             this.label3.TabIndex = 0;
             this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
-            // 
-            // button7
-            // 
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Location = new System.Drawing.Point(65, 133);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(132, 23);
-            this.button7.TabIndex = 2;
-            this.button7.Text = "Использовать сейчас";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Props
             // 
@@ -458,6 +448,5 @@
         private System.Windows.Forms.TextBox ip;
         private System.Windows.Forms.TextBox pass;
         private System.Windows.Forms.TextBox login;
-        private System.Windows.Forms.Button button7;
     }
 }

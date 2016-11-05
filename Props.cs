@@ -14,12 +14,13 @@ namespace SapReader
     public partial class Props : Form
     {
         LSFB main;
-        public Props()
+        public Props(int page = 0)
         {
             InitializeComponent();
             tabControl.Appearance = TabAppearance.FlatButtons;
             tabControl.ItemSize = new Size(0, 1);
             tabControl.SizeMode = TabSizeMode.Fixed;
+            tabControl.SelectTab(page);
             mm.Renderer = new LSFB.MyRenderer();            
             main = new LS.LSFB(this, 2, 0, 80, false );
             foreach (TabPage p in tabControl.TabPages)
@@ -140,9 +141,7 @@ namespace SapReader
         {
             { "Запускать плагины со скриптами", "AllowScript" },
             { "Не спрашивать при запуске скриптов", "DontAskForScript" },
-            { "Разворачивать окно при старте", "MaximizeOnStart" },
-            { "Соединение с Pro при старте", "ProOnStart" },
-            { "Вход в Pro при старте","LoginToPro" }
+            { "Разворачивать окно при старте", "MaximizeOnStart" }
         };
         void pick(object sender, MouseEventArgs e)
         {
@@ -245,6 +244,7 @@ namespace SapReader
             ToolStripMenuItem th = (ToolStripMenuItem)sender;
             if(mm.Items.IndexOf(th) < tabControl.TabCount)
             tabControl.SelectTab(mm.Items.IndexOf(th));
+            Text = "Настройки" + (th.Text != "Настройки"? " - " + th.Text:"");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -255,10 +255,10 @@ namespace SapReader
         private void button3_Click(object sender, EventArgs e)
         {
             Form1.parames["Pro.Login"] = login.Text;
-            Form1.parames["Pro.Pass"] = pass.Text;
             Form1.parames["Pro.Ip"] = ip.Text;
             foreach (CheckBox c in Мойвыбор.Controls)
                 Form1.parames["Bool." + Bools[c.Text]] = c.Checked + "";
+                Form1.parames["Pro.Pass"] = pass.Text;
             if (!LSFB.SaveParams("SapReader", Form1.parames))((Form1)LSFB.MainForm).DebugMessage("Настройки не были сохранены!");
         }
 
@@ -267,14 +267,6 @@ namespace SapReader
             if (label2.Visible)
                 LSFB.ResetParams("SapReader");
             label2.Visible = !label2.Visible;
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            Form1.parames["Pro.Login"] = login.Text;
-            Form1.parames["Pro.Pass"] = pass.Text;
-            Form1.parames["Pro.Ip"] = ip.Text;
-            Close();
         }
     }
 }
