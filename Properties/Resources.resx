@@ -190,6 +190,27 @@ Compare($var,false)
 	&lt;/script&gt;
 &lt;/FORM&gt;</value>
   </data>
+  <data name="DATA" xml:space="preserve">
+    <value>&lt;FORM&gt; 
+&lt;label location="12,12" font="12" &gt;Поменять имя&lt;/label&gt; 
+&lt;label location="222,42" font="10" &gt;Новое имя&lt;/label&gt; 
+
+&lt;textbox location="12,42" size="200,20" name="newName"&gt;&lt;/textbox&gt; 
+
+&lt;label location="12,72" font="12" &gt;Поменять пароль&lt;/label&gt; 
+
+&lt;label location="222,102" font="10" &gt;Старый пароль&lt;/label&gt; 
+&lt;textbox location="12,102" size="200,20" name="oldPass" secured=""&gt;&lt;/textbox&gt; 
+&lt;label location="222,132" font="10" &gt;Новый пароль&lt;/label&gt; 
+&lt;textbox location="12,132" size="200,20" name="newPass" secured=""&gt;&lt;/textbox&gt; 
+&lt;label location="222,162" font="10" &gt;Повтор пароля&lt;/label&gt; 
+&lt;textbox location="12,162" size="200,20" name="checkPass" secured=""&gt;&lt;/textbox&gt; 
+
+&lt;button location="12,192" name="save"&gt;Сохранить изменения&lt;/button&gt; 
+
+&lt;label location="12,230" font="7" name="error"&gt;&lt;/label&gt; 
+&lt;/FORM&gt;</value>
+  </data>
   <data name="PRO" xml:space="preserve">
     <value>&lt;FORM name="Pro" author="LISENKO SOFT"&gt;
 &lt;label location="12,12" font="18" name="hi"&gt;Добро пожаловать&lt;/label&gt;
@@ -207,7 +228,7 @@ Compare($var,false)
 
 
 &lt;label location="300,50" font="12" name="secLabel"&gt;Безопасность&lt;/label&gt;
-&lt;button location="300,80" name="changePass"&gt;Сменить пароль&lt;/button&gt;
+&lt;button location="300,80" name="persData"&gt;Смена данных&lt;/button&gt;
 &lt;button location="300,110" name="checkApp"&gt;Проверить приложение&lt;/button&gt;
 
 &lt;label location="300,200" font="12" name="chatLabel"&gt;Чат&lt;/label&gt;

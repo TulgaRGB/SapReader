@@ -65,6 +65,41 @@ namespace SapReader
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                    case "persData":
+                        Text = "Смена данных";
+                        browser.Hide();
+                        LSFB.drawForm(lsfb.work, Properties.Resources.DATA, true);
+                        LSFB.CbyName(lsfb.work.Controls, "error").Text = response.InnerText;
+                        LSFB.CbyName(lsfb.work.Controls, "newName").Text = conLabel.Text;
+                        string oldpass = null;
+                        string newpass = null;
+                        LSFB.CbyName(lsfb.work.Controls, "save").Click += (object sender, EventArgs e) =>
+                        {
+                            LSFB.CbyName(lsfb.work.Controls, "error").Text = "";
+                            if (LSFB.CbyName(lsfb.work.Controls, "newPass").Text != "")
+                            {
+                                if (LSFB.CbyName(lsfb.work.Controls, "oldPass").Text != LSFB.CbyName(lsfb.work.Controls, "newPass").Text)
+                                {
+                                    if (LSFB.CbyName(lsfb.work.Controls, "checkPass").Text == LSFB.CbyName(lsfb.work.Controls, "newPass").Text)
+                                    {
+                                        oldpass = " oldPass =\"" + Sapphire.GetMd5Hash(LSFB.CbyName(lsfb.work.Controls, "oldPass").Text) + "\" ";
+                                        newpass = "newPass=\"" + Sapphire.GetMd5Hash(LSFB.CbyName(lsfb.work.Controls, "newPass").Text) + "\"";
+                                    }
+                                    else
+                                        LSFB.CbyName(lsfb.work.Controls, "error").Text = "Новые пароли должны совпадать!";
+                                }
+                                else
+                                    LSFB.CbyName(lsfb.work.Controls, "error").Text = "Новый пароль должен отличаться от старого!";
+                            }
+                            if (LSFB.CbyName(lsfb.work.Controls, "error").Text == "")
+                            {
+                                ClientSend("<QUERY type=\"persData\" newName=\"" + LSFB.CbyName(lsfb.work.Controls, "newName").Text + "\"" + oldpass + newpass + "/>");
+                                lsfb.work.Controls.Clear();
+                            }
+                        };
+                        if (response.Attributes.GetNamedItem("newName") != null)
+                            conLabel.Text = response.Attributes.GetNamedItem("newName").InnerText;
+                        break;
                     case "error":
                         DebugMessage(response.InnerText);
                         break;
@@ -148,6 +183,11 @@ namespace SapReader
                             {
                                 ClientSend("<QUERY type=\"exit\"/>");
                             };
+                            LSFB.CbyName(lsfb.work.Controls, "persData").Click += (object sender, EventArgs e) =>
+                            {
+                                lsfb.work.Controls.Clear();
+                                ClientSend("<QUERY type=\"persData\"/>");
+                            };
                         }
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "query")
@@ -156,7 +196,7 @@ namespace SapReader
                         }
                         else
                         {
-                            Login tmp = new Login(parames["Pro.Login"],parames["Pro.Pass"]);
+                            Login tmp = new Login(parames["Pro.Login"],parames["Pro.Pass"], response.InnerText);
                             if(!tmp.cancel)
                             ClientSend("<QUERY type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
                         }
@@ -409,7 +449,7 @@ namespace SapReader
                     conLabel.Text = "Вход не выполнен";
             }
             else
-                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
         }
         
     }    

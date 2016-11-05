@@ -61,6 +61,26 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;FORM&gt; 
+        ///&lt;label location=&quot;12,12&quot; font=&quot;12&quot; &gt;Поменять имя&lt;/label&gt; 
+        ///&lt;label location=&quot;222,42&quot; font=&quot;10&quot; &gt;Новое имя&lt;/label&gt; 
+        ///
+        ///&lt;textbox location=&quot;12,42&quot; size=&quot;200,20&quot; name=&quot;newName&quot;&gt;&lt;/textbox&gt; 
+        ///
+        ///&lt;label location=&quot;12,72&quot; font=&quot;12&quot; &gt;Поменять пароль&lt;/label&gt; 
+        ///
+        ///&lt;label location=&quot;222,102&quot; font=&quot;10&quot; &gt;Старый пароль&lt;/label&gt; 
+        ///&lt;textbox location=&quot;12,102&quot; size=&quot;200,20&quot; name=&quot;oldPass&quot; secured=&quot;&quot;&gt;&lt;/textbox&gt; 
+        ///&lt;label location=&quot;222,132&quot; font=&quot;10&quot; &gt;Новый пароль&lt;/label&gt; 
+        ///&lt;textbox location=&quot;12,132&quot; size=&quot;200,20&quot; name=&quot;newPas [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DATA {
+            get {
+                return ResourceManager.GetString("DATA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Folder {
