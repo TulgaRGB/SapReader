@@ -409,7 +409,7 @@ namespace SapReader
                     conLabel.Text = "Вход не выполнен";
             }
             else
-                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + parames["Pro.Pass"] + "\" />");
+                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
         }
         
     }    
