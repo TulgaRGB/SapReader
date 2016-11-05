@@ -526,9 +526,9 @@
             // conLabel
             // 
             this.conLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.conLabel.Location = new System.Drawing.Point(630, 0);
+            this.conLabel.Location = new System.Drawing.Point(795, 0);
             this.conLabel.Name = "conLabel";
-            this.conLabel.Size = new System.Drawing.Size(318, 13);
+            this.conLabel.Size = new System.Drawing.Size(153, 13);
             this.conLabel.TabIndex = 2;
             this.conLabel.Tag = "OnBorder";
             this.conLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;

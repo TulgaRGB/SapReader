@@ -50,6 +50,7 @@ namespace SapReader
             browser.ForeColor = ForeColor;
             lsfb.MakeControlLikeWork(browser);
             browser.Hide();
+            conLabel.SendToBack();
             LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
@@ -130,7 +131,7 @@ namespace SapReader
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
                             Text = "Pro";
-                            conLabel.Text = response.Attributes.GetNamedItem("login").InnerText;
+                            conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             browser.Hide();
                             LSFB.drawForm(lsfb.work, Properties.Resources.PRO, true);
                             LSFB.CbyName(lsfb.work.Controls, "hi").Text+=", " + conLabel.Text + "!";
