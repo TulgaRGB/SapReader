@@ -190,6 +190,21 @@ Compare($var,false)
 	&lt;/script&gt;
 &lt;/FORM&gt;</value>
   </data>
+  <data name="CHAT" xml:space="preserve">
+    <value>&lt;FORM&gt;
+&lt;nl&gt;
+-&lt;/nl&gt;
+&lt;label location="12,12" font="24"&gt;SapChat Beta&lt;/label&gt;
+&lt;richtextbox location="12,50" size="911,322" readonly="" name="box"/&gt;
+&lt;richtextbox location="12,380" size="777,134" name="ent"/&gt;
+&lt;button location="789,380" font="14" size="134" click="Send:" name="send"&gt;Отправить&lt;/button&gt;
+&lt;script&gt;
+Send:
+#box=@Parse(#box#nl#ent)
+#ent = null;
+&lt;/script&gt;
+&lt;/FORM&gt;</value>
+  </data>
   <data name="DATA" xml:space="preserve">
     <value>&lt;FORM&gt; 
 &lt;label location="12,12" font="12" &gt;Поменять имя&lt;/label&gt; 

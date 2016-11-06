@@ -61,6 +61,27 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;FORM&gt;
+        ///&lt;nl&gt;
+        ///-&lt;/nl&gt;
+        ///&lt;label location=&quot;12,12&quot; font=&quot;24&quot;&gt;SapChat Beta&lt;/label&gt;
+        ///&lt;richtextbox location=&quot;12,50&quot; size=&quot;911,322&quot; readonly=&quot;&quot; name=&quot;box&quot;/&gt;
+        ///&lt;richtextbox location=&quot;12,380&quot; size=&quot;777,134&quot; name=&quot;ent&quot;/&gt;
+        ///&lt;button location=&quot;789,380&quot; font=&quot;14&quot; size=&quot;134&quot; click=&quot;Send:&quot; name=&quot;send&quot;&gt;Отправить&lt;/button&gt;
+        ///&lt;script&gt;
+        ///Send:
+        ///#box=@Parse(#box#nl#ent)
+        ///#ent = null;
+        ///&lt;/script&gt;
+        ///&lt;/FORM&gt;.
+        /// </summary>
+        internal static string CHAT {
+            get {
+                return ResourceManager.GetString("CHAT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;FORM&gt; 
         ///&lt;label location=&quot;12,12&quot; font=&quot;12&quot; &gt;Поменять имя&lt;/label&gt; 
         ///&lt;label location=&quot;222,42&quot; font=&quot;10&quot; &gt;Новое имя&lt;/label&gt; 
