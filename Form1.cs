@@ -65,6 +65,23 @@ namespace SapReader
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                    case "chat":
+                        if (LSFB.CbyName(lsfb.work.Controls, "box") != null)
+                        {
+                            LSFB.CbyName(lsfb.work.Controls, "box").Text += response.InnerText + "\n";
+                        }
+                        else
+                        {
+                            browser.Hide();
+                            lsfb.work.Controls.Clear();
+                            LSFB.drawForm(lsfb.work, Properties.Resources.CHAT, true);
+                            LSFB.CbyName(lsfb.work.Controls, "send").Click += (object sender, EventArgs e) =>
+                            {
+                                ClientSend("<QUERY type=\"chat\">" + LSFB.CbyName(lsfb.work.Controls, "ent").Text + "</QUERY>");
+                                LSFB.CbyName(lsfb.work.Controls, "ent").Text = "";
+                            };
+                        }
+                        break;
                     case "persData":
                         Text = "Смена данных";
                         browser.Hide();
@@ -148,7 +165,7 @@ namespace SapReader
                         temp.Columns.Add("ID", temp.Width/4);
                         temp.Columns.Add("Название", temp.Width / 4);
                         temp.Columns.Add("Автор", temp.Width / 4);
-                        temp.Columns.Add("Проверенно", temp.Width / 4);
+                        temp.Columns.Add("Проверенно", temp.Width / 4 -10);
                         foreach (XmlNode f in response.ChildNodes)
                         {
                             ListViewItem item = new ListViewItem(new[] 
@@ -156,7 +173,7 @@ namespace SapReader
                                 f.Attributes.GetNamedItem("id").InnerText,
                                 f.Attributes.GetNamedItem("name").InnerText,
                                 f.Attributes.GetNamedItem("author").InnerText,
-                                f.Attributes.GetNamedItem("validated").InnerText == "True"? "ДА" : "НЕТ"
+                                f.Attributes.GetNamedItem("validated").InnerText != "False"? "ДА" : "НЕТ"
                             });
                             temp.Items.Add(item);
                             
@@ -173,7 +190,7 @@ namespace SapReader
                             LSFB.CbyName(lsfb.work.Controls, "libPlugin").Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<QUERY type=\"forms\"/>");
+                                ClientSend("<QUERY type=\"forms\" validated=\"True"+ (parames.ContainsKey("Bool.UseNotValidPlugins")? parames["Bool.UseNotValidPlugins"] == "True"? "|False" :  "" : "") + "\"/>");
                             };
                             LSFB.CbyName(lsfb.work.Controls, "checkApp").Click += (object sender, EventArgs e) =>
                             {
@@ -188,6 +205,11 @@ namespace SapReader
                                 lsfb.work.Controls.Clear();
                                 ClientSend("<QUERY type=\"persData\"/>");
                             };
+                            LSFB.CbyName(lsfb.work.Controls, "joinChat").Click += (object sender, EventArgs e) =>
+                            {
+                                lsfb.work.Controls.Clear();
+                                ClientSend("<QUERY type=\"chat\"/>");
+                            };
                         }
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "query")
@@ -197,8 +219,12 @@ namespace SapReader
                         else
                         {
                             Login tmp = new Login(parames["Pro.Login"],parames["Pro.Pass"], response.InnerText);
-                            if(!tmp.cancel)
-                            ClientSend("<QUERY type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
+                            if (!tmp.cancel)
+                            {
+                                parames["Pro.Login"] = tmp.textBox1.Text;
+                                parames["Pro.Pass"] = tmp.pass.Text;
+                                ClientSend("<QUERY type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
+                            }
                         }
                         break;
                 }

@@ -230,25 +230,25 @@ Send:
     <value>&lt;FORM name="Pro" author="LISENKO SOFT"&gt;
 &lt;label location="12,12" font="18" name="hi"&gt;Добро пожаловать&lt;/label&gt;
 
-&lt;label location="12,50" font="12" name="pluginsLabel"&gt;Плагины&lt;/label&gt;
+&lt;label location="12,50" font="12"&gt;Плагины&lt;/label&gt;
 &lt;button location="15,80" name="addPlugin"&gt;Добавить плагин&lt;/button&gt;
 &lt;button location="15,110" name="libPlugin"&gt;Библиотека плагинов&lt;/button&gt;
 &lt;button location="15,140" name="proPlugin"&gt;Pro плагины&lt;/button&gt;
 
 
-&lt;label location="12,200" font="12" name="cloudLabel"&gt;Облако&lt;/label&gt;
+&lt;label location="12,200" font="12"&gt;Облако&lt;/label&gt;
 &lt;button location="15,230" name="addCloud"&gt;Добавить облако&lt;/button&gt;
 &lt;button location="15,260" name="myCloud"&gt;Мои облака&lt;/button&gt;
 &lt;button location="15,290" name="invites"&gt;Приглашения&lt;/button&gt;
 
 
-&lt;label location="300,50" font="12" name="secLabel"&gt;Безопасность&lt;/label&gt;
+&lt;label location="300,50" font="12"&gt;Безопасность&lt;/label&gt;
 &lt;button location="300,80" name="persData"&gt;Смена данных&lt;/button&gt;
 &lt;button location="300,110" name="checkApp"&gt;Проверить приложение&lt;/button&gt;
 
-&lt;label location="300,200" font="12" name="chatLabel"&gt;Чат&lt;/label&gt;
+&lt;label location="300,200" font="12"&gt;Сообщество&lt;/label&gt;
 &lt;button location="300,230" name="joinChat"&gt;Присоединиться к чату&lt;/button&gt;
-
+&lt;button location="300,260" name="news"&gt;Новости&lt;/button&gt;
 &lt;button location="386,290" name="exitButton"&gt;Выход&lt;/button&gt;
 
 
