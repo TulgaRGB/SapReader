@@ -122,11 +122,11 @@
     <value>..\Resources\Folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="HOME" xml:space="preserve">
-    <value>&lt;FORM name="Добро пожаловать!" author="LIENKO SOFT"&gt; 
+    <value>&lt;FORM name="Добро пожаловать!" author="LIENKO SOFT" noparse=""&gt; 
 &lt;label location="12,12" font="18"&gt;SapReader&lt;/label&gt; 
-&lt;button location="12,50" click="clickStart:"&gt;Начало работы&lt;/button&gt; 
-&lt;button location="112,50" click="clickAbout:"&gt;О программе&lt;/button&gt; 
-&lt;button location="203,50" click="clickSap:"&gt;О Sapphire™&lt;/button&gt; 
+&lt;button location="12,50" click="@clickStart()"&gt;Начало работы&lt;/button&gt; 
+&lt;button location="112,50" click="@clickAbout()"&gt;О программе&lt;/button&gt; 
+&lt;button location="203,50" click="@clickSap()"&gt;О Sapphire™&lt;/button&gt; 
 
 &lt;label location="12,80" name="mainLabel"&gt;Добро пожаловать в SapReader.&lt;/label&gt;
 &lt;labelStart&gt;Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы.&lt;/labelStart&gt;
@@ -137,57 +137,27 @@
 
 &lt;textbox location="12,117" size="420,20" name="key"&gt;Введите ключ&lt;/textbox&gt; 
 &lt;richtextbox location="12,139" size="420,134" name="text"&gt;Введите текст&lt;/richtextbox&gt; 
-&lt;button location="12,275" click="Click:"&gt;Шифровать&lt;/button&gt; 
-&lt;button location="100,275" click="@Click:"&gt;Расшифровать&lt;/button&gt; 
+&lt;button location="12,275" click="@Enc()"&gt;Шифровать&lt;/button&gt; 
+&lt;button location="100,275" click="@Dec()"&gt;Расшифровать&lt;/button&gt; 
 
 
 
 &lt;label location="12,300" font="7"&gt;SapphireReader powered by Sapphire™
 LISENKO SOFT 2016 год
 &lt;/label&gt;
-
-
-
-
-
-&lt;script&gt; 
-clickStart:
-#mainLabel=#labelStart;
-clickAbout:
-#mainLabel=#labelAbout;
-clickSap:
-#mainLabel=#labelSap;
-
-Click: 
-$var = Click(@) 
-Compare($var,false) 
-#text=Sapphire(#text,#key) 
-!#text=@Sapphire(#text,#key); 
-
-
-&lt;/script&gt; 
-
 &lt;/FORM&gt;</value>
   </data>
   <data name="ls1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ls1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LSSL" xml:space="preserve">
-    <value>&lt;FORM name="LIENKO SOFT security lite" author="LIENKO SOFT"&gt;
-	&lt;label location="12,12" font="18"&gt;LSsec lite&lt;/label&gt;
-	&lt;textbox location="12,50" size="420,20" name="key"&gt;Введите ключ&lt;/textbox&gt;
-	&lt;richtextbox location="12,80" size="420,134" name="text"&gt;Введите текст&lt;/richtextbox&gt;
-	&lt;button location="12,220" click="Click:"&gt;Шифровать&lt;/button&gt;
-	&lt;button location="100,220" click="@Click:"&gt;Расшифровать&lt;/button&gt;
-	&lt;script&gt;
-Main:
-;
-Click:
-$var = Click(@)
-Compare($var,false)
-#text=Sapphire(#text,#key)
-!#text=@Sapphire(#text,#key);
-	&lt;/script&gt;
+    <value>&lt;FORM name="test"&gt;
+&lt;button size="100" name="ses" click="Main"/&gt;
+&lt;script&gt;
+function Main()
+Alert(2+3000/69)
+end
+&lt;/script&gt;
 &lt;/FORM&gt;</value>
   </data>
   <data name="CHAT" xml:space="preserve">
@@ -230,25 +200,25 @@ Send:
     <value>&lt;FORM name="Pro" author="LISENKO SOFT"&gt;
 &lt;label location="12,12" font="18" name="hi"&gt;Добро пожаловать&lt;/label&gt;
 
-&lt;label location="12,50" font="12"&gt;Плагины&lt;/label&gt;
+&lt;label location="12,50" font="12" name="pluginsLabel"&gt;Плагины&lt;/label&gt;
 &lt;button location="15,80" name="addPlugin"&gt;Добавить плагин&lt;/button&gt;
 &lt;button location="15,110" name="libPlugin"&gt;Библиотека плагинов&lt;/button&gt;
 &lt;button location="15,140" name="proPlugin"&gt;Pro плагины&lt;/button&gt;
 
 
-&lt;label location="12,200" font="12"&gt;Облако&lt;/label&gt;
+&lt;label location="12,200" font="12" name="cloudLabel"&gt;Облако&lt;/label&gt;
 &lt;button location="15,230" name="addCloud"&gt;Добавить облако&lt;/button&gt;
 &lt;button location="15,260" name="myCloud"&gt;Мои облака&lt;/button&gt;
 &lt;button location="15,290" name="invites"&gt;Приглашения&lt;/button&gt;
 
 
-&lt;label location="300,50" font="12"&gt;Безопасность&lt;/label&gt;
+&lt;label location="300,50" font="12" name="secLabel"&gt;Безопасность&lt;/label&gt;
 &lt;button location="300,80" name="persData"&gt;Смена данных&lt;/button&gt;
 &lt;button location="300,110" name="checkApp"&gt;Проверить приложение&lt;/button&gt;
 
-&lt;label location="300,200" font="12"&gt;Сообщество&lt;/label&gt;
+&lt;label location="300,200" font="12" name="chatLabel"&gt;Чат&lt;/label&gt;
 &lt;button location="300,230" name="joinChat"&gt;Присоединиться к чату&lt;/button&gt;
-&lt;button location="300,260" name="news"&gt;Новости&lt;/button&gt;
+
 &lt;button location="386,290" name="exitButton"&gt;Выход&lt;/button&gt;
 
 

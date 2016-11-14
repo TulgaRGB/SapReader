@@ -112,14 +112,14 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM name=&quot;Добро пожаловать!&quot; author=&quot;LIENKO SOFT&quot;&gt; 
+        ///   Looks up a localized string similar to &lt;FORM name=&quot;Добро пожаловать!&quot; author=&quot;LIENKO SOFT&quot; noparse=&quot;&quot;&gt; 
         ///&lt;label location=&quot;12,12&quot; font=&quot;18&quot;&gt;SapReader&lt;/label&gt; 
-        ///&lt;button location=&quot;12,50&quot; click=&quot;clickStart:&quot;&gt;Начало работы&lt;/button&gt; 
-        ///&lt;button location=&quot;112,50&quot; click=&quot;clickAbout:&quot;&gt;О программе&lt;/button&gt; 
-        ///&lt;button location=&quot;203,50&quot; click=&quot;clickSap:&quot;&gt;О Sapphire™&lt;/button&gt; 
+        ///&lt;button location=&quot;12,50&quot; click=&quot;@clickStart()&quot;&gt;Начало работы&lt;/button&gt; 
+        ///&lt;button location=&quot;112,50&quot; click=&quot;@clickAbout()&quot;&gt;О программе&lt;/button&gt; 
+        ///&lt;button location=&quot;203,50&quot; click=&quot;@clickSap()&quot;&gt;О Sapphire™&lt;/button&gt; 
         ///
         ///&lt;label location=&quot;12,80&quot; name=&quot;mainLabel&quot;&gt;Добро пожаловать в SapReader.&lt;/label&gt;
-        ///&lt;labelStart&gt;Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы.&lt;/labelStar [rest of string was truncated]&quot;;.
+        ///&lt;labelStart&gt;Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части прог [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string HOME {
             get {
@@ -138,20 +138,14 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM name=&quot;LIENKO SOFT security lite&quot; author=&quot;LIENKO SOFT&quot;&gt;
-        ///	&lt;label location=&quot;12,12&quot; font=&quot;18&quot;&gt;LSsec lite&lt;/label&gt;
-        ///	&lt;textbox location=&quot;12,50&quot; size=&quot;420,20&quot; name=&quot;key&quot;&gt;Введите ключ&lt;/textbox&gt;
-        ///	&lt;richtextbox location=&quot;12,80&quot; size=&quot;420,134&quot; name=&quot;text&quot;&gt;Введите текст&lt;/richtextbox&gt;
-        ///	&lt;button location=&quot;12,220&quot; click=&quot;Click:&quot;&gt;Шифровать&lt;/button&gt;
-        ///	&lt;button location=&quot;100,220&quot; click=&quot;@Click:&quot;&gt;Расшифровать&lt;/button&gt;
-        ///	&lt;script&gt;
-        ///Main:
-        ///;
-        ///Click:
-        ///$var = Click(@)
-        ///Compare($var,false)
-        ///#text=Sapphire(#text,#key)
-        ///!#text=@ [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;FORM name=&quot;test&quot;&gt;
+        ///&lt;button size=&quot;100&quot; name=&quot;ses&quot; click=&quot;Main&quot;/&gt;
+        ///&lt;script&gt;
+        ///function Main()
+        ///Alert(2+3000/69)
+        ///end
+        ///&lt;/script&gt;
+        ///&lt;/FORM&gt;.
         /// </summary>
         internal static string LSSL {
             get {
@@ -163,15 +157,14 @@ namespace SapReader.Properties {
         ///   Looks up a localized string similar to &lt;FORM name=&quot;Pro&quot; author=&quot;LISENKO SOFT&quot;&gt;
         ///&lt;label location=&quot;12,12&quot; font=&quot;18&quot; name=&quot;hi&quot;&gt;Добро пожаловать&lt;/label&gt;
         ///
-        ///&lt;label location=&quot;12,50&quot; font=&quot;12&quot;&gt;Плагины&lt;/label&gt;
+        ///&lt;label location=&quot;12,50&quot; font=&quot;12&quot; name=&quot;pluginsLabel&quot;&gt;Плагины&lt;/label&gt;
         ///&lt;button location=&quot;15,80&quot; name=&quot;addPlugin&quot;&gt;Добавить плагин&lt;/button&gt;
         ///&lt;button location=&quot;15,110&quot; name=&quot;libPlugin&quot;&gt;Библиотека плагинов&lt;/button&gt;
         ///&lt;button location=&quot;15,140&quot; name=&quot;proPlugin&quot;&gt;Pro плагины&lt;/button&gt;
         ///
         ///
-        ///&lt;label location=&quot;12,200&quot; font=&quot;12&quot;&gt;Облако&lt;/label&gt;
-        ///&lt;button location=&quot;15,230&quot; name=&quot;addCloud&quot;&gt;Добавить облако&lt;/button&gt;
-        ///&lt;button location=&quot;1 [rest of string was truncated]&quot;;.
+        ///&lt;label location=&quot;12,200&quot; font=&quot;12&quot; name=&quot;cloudLabel&quot;&gt;Облако&lt;/label&gt;
+        ///&lt;button location=&quot;15,230&quot; name=&quot;addCloud&quot;&gt;Добавит [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PRO {
             get {

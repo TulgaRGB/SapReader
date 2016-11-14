@@ -17,7 +17,7 @@ namespace SapReader
         // 6 1
         LSFB main;
         int ok = 0;
-        public List<ReadOnlyCheckBox> Items = new List<ReadOnlyCheckBox>();
+        public List<LSFB.ReadOnlyCheckBox> Items = new List<LSFB.ReadOnlyCheckBox>();
         public Crypy(ListView.SelectedListViewItemCollection files, bool encrypt)
         {
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace SapReader
             radioButton2.Checked = !encrypt;
             foreach (ListViewItem s in files)
             {
-                ReadOnlyCheckBox t = new ReadOnlyCheckBox
+                LSFB.ReadOnlyCheckBox t = new LSFB.ReadOnlyCheckBox
                 {
                     ReadOnly = true,
                     Location = new Point(12, 6 + 23 * files.IndexOf(s)),
@@ -40,7 +40,7 @@ namespace SapReader
             Height = Items.Last().Top < Screen.PrimaryScreen.WorkingArea.Height/2 - 130? Items.Last().Top + 133 : Screen.PrimaryScreen.WorkingArea.Height / 2;
             pb.ForeColor = BackColor;
             main.work.AutoScroll = true;
-            foreach (ReadOnlyCheckBox c in Items)
+            foreach (LSFB.ReadOnlyCheckBox c in Items)
                 main.work.Controls.Add(c);
             Width -= 24;
         }
@@ -94,7 +94,7 @@ namespace SapReader
             new Task(() =>
             {
                 ChangeBar(0, false);
-                foreach (ReadOnlyCheckBox s in Items)
+                foreach (LSFB.ReadOnlyCheckBox s in Items)
                 {
                     try
                     {
@@ -139,22 +139,6 @@ namespace SapReader
             {
                 Progress_Load(null,null);
             }
-        }
-    }
-    public class ReadOnlyCheckBox : System.Windows.Forms.CheckBox
-    {
-        private bool readOnly;
-
-        protected override void OnClick(EventArgs e)
-        {
-            // pass the event up only if its not readlonly
-            if (!ReadOnly) base.OnClick(e);
-        }
-
-        public bool ReadOnly
-        {
-            get { return readOnly; }
-            set { readOnly = value; }
         }
     }
 }

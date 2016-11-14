@@ -61,10 +61,25 @@ namespace SapReader
         }
         public void ParseResponse(XmlDocument _response)
         {
-                XmlNode response = _response.SelectSingleNode("/RESPONSE");
+                XmlNode response = _response.FirstChild;
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                    case "news":
+                        if(response.FirstChild != null)
+                        {
+                            if(response.FirstChild.Attributes.GetNamedItem("text") == null)
+                            {
+                                foreach(XmlNode news in response.ChildNodes)
+                                {
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        break;
                     case "chat":
                         if (LSFB.CbyName(lsfb.work.Controls, "box") != null)
                         {
@@ -77,7 +92,7 @@ namespace SapReader
                             LSFB.drawForm(lsfb.work, Properties.Resources.CHAT, true);
                             LSFB.CbyName(lsfb.work.Controls, "send").Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<QUERY type=\"chat\">" + LSFB.CbyName(lsfb.work.Controls, "ent").Text + "</QUERY>");
+                                ClientSend("<REQUEST type=\"chat\">" + LSFB.CbyName(lsfb.work.Controls, "ent").Text + "</REQUEST>");
                                 LSFB.CbyName(lsfb.work.Controls, "ent").Text = "";
                             };
                         }
@@ -110,7 +125,7 @@ namespace SapReader
                             }
                             if (LSFB.CbyName(lsfb.work.Controls, "error").Text == "")
                             {
-                                ClientSend("<QUERY type=\"persData\" newName=\"" + LSFB.CbyName(lsfb.work.Controls, "newName").Text + "\"" + oldpass + newpass + "/>");
+                                ClientSend("<REQUEST type=\"persData\" newName=\"" + LSFB.CbyName(lsfb.work.Controls, "newName").Text + "\"" + oldpass + newpass + "/>");
                                 lsfb.work.Controls.Clear();
                             }
                         };
@@ -155,7 +170,7 @@ namespace SapReader
                         {
                             if(e.Button == MouseButtons.Left)
                             {
-                                ClientSend("<QUERY type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
+                                ClientSend("<REQUEST type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
                             }
                         };
                         temp.View = View.Details;
@@ -190,31 +205,35 @@ namespace SapReader
                             LSFB.CbyName(lsfb.work.Controls, "libPlugin").Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<QUERY type=\"forms\" validated=\"True"+ (parames.ContainsKey("Bool.UseNotValidPlugins")? parames["Bool.UseNotValidPlugins"] == "True"? "|False" :  "" : "") + "\"/>");
+                                ClientSend("<REQUEST type=\"forms\" validated=\"True"+ (parames.ContainsKey("Bool.UseNotValidPlugins")? parames["Bool.UseNotValidPlugins"] == "True"? "|False" :  "" : "") + "\"/>");
                             };
                             LSFB.CbyName(lsfb.work.Controls, "checkApp").Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<QUERY type=\"sum\" hash=\""+ Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) +"\"/>");
+                                ClientSend("<REQUEST type=\"sum\" hash=\""+ Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) +"\"/>");
                             };
                             LSFB.CbyName(lsfb.work.Controls, "exitButton").Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<QUERY type=\"exit\"/>");
+                                ClientSend("<REQUEST type=\"exit\"/>");
                             };
                             LSFB.CbyName(lsfb.work.Controls, "persData").Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<QUERY type=\"persData\"/>");
+                                ClientSend("<REQUEST type=\"persData\"/>");
                             };
                             LSFB.CbyName(lsfb.work.Controls, "joinChat").Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<QUERY type=\"chat\"/>");
+                                ClientSend("<REQUEST type=\"chat\"/>");
+                            }; LSFB.CbyName(lsfb.work.Controls, "news").Click += (object sender, EventArgs e) =>
+                            {
+                                lsfb.work.Controls.Clear();
+                                ClientSend("<REQUEST type=\"news\"/>");
                             };
                         }
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "query")
                         {
-                            ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                            ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
                         else
                         {
@@ -223,7 +242,7 @@ namespace SapReader
                             {
                                 parames["Pro.Login"] = tmp.textBox1.Text;
                                 parames["Pro.Pass"] = tmp.pass.Text;
-                                ClientSend("<QUERY type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
+                                ClientSend("<REQUEST type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
                             }
                         }
                         break;
@@ -412,7 +431,7 @@ namespace SapReader
                             Text = tmp["name"];
                             break;
                         case "Add":
-                            OpenFileDialog od = new OpenFileDialog { Filter = "*.dll|*.dll" };
+                        System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.dll|*.dll" };
                             if (od.ShowDialog() == DialogResult.OK)
                             {
                                 string xml = UnicodeEncoding.UTF8.GetString(File.ReadAllBytes(od.FileName));
@@ -475,7 +494,7 @@ namespace SapReader
                     conLabel.Text = "Вход не выполнен";
             }
             else
-                ClientSend("<QUERY type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
+                ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
         }
         
     }    
