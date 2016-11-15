@@ -67,7 +67,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Main|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Main|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Main\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -77,7 +77,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Main|x86'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Main|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Main\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -120,7 +120,6 @@
     </Compile>
     <Compile Include="..\..\LS\LSFB.cs">
       <Link>LSFB.cs</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="About.cs">
       <SubType>Form</SubType>

@@ -1,5 +1,4 @@
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.exe.config
-D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\LSFB.cs
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\HOME.lua
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.pdb
