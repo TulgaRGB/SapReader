@@ -14,3 +14,5 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Debug\SapReader.Props.res
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Debug\SapReader.csproj.GenerateResource.Cache
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Debug\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Debug\SapReader.pdb
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Debug\HOME.lua
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Debug\LSFB.cs

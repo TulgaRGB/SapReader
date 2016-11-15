@@ -30,7 +30,7 @@ namespace SapReader
                 scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
             else
                 scrpt = Form1.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Form1.parames["Bool.AllowScript"]) : true;
-            Dictionary <string,string> tmp = LSFB.drawForm(splitContainer1.Panel2, xml, scrpt);
+            Dictionary <string,string> tmp = new Dictionary<string, string>();
             name = tmp["name"];
             Text = name + " от " + tmp["author"];
             richTextBox1.BackColor = main.work.BackColor;

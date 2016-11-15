@@ -121,56 +121,6 @@
   <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="HOME" xml:space="preserve">
-    <value>&lt;FORM name="Добро пожаловать!" author="LIENKO SOFT"&gt; 
-&lt;label location="12,12" font="18"&gt;SapReader&lt;/label&gt; 
-&lt;button location="12,50" click="clickStart"&gt;Начало работы&lt;/button&gt; 
-&lt;button location="112,50" click="clickAbout"&gt;О программе&lt;/button&gt; 
-&lt;button location="203,50" click="clickSap"&gt;О Sapphire™&lt;/button&gt; 
-
-&lt;label location="12,80" name="mainLabel"&gt;Добро пожаловать в SapReader.&lt;/label&gt;
-&lt;labelStart&gt;Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы.&lt;/labelStart&gt;
-&lt;labelAbout&gt;Программа предназначена для работы в двух режимах: проводник с возможностью шифровать файлы и архиватор зашифрованных архивов.&lt;/labelAbout&gt;
-&lt;labelSap&gt;Security Algorythm, Private Protection From InfoRmation Exposure (Sapphire™) Защитный алгоритм, частная защита от уязвимости 
-информации - криптографический алгоритм с закрытым ключом для хранения и компакной передачи информации.&lt;/labelSap&gt;
-
-
-&lt;textbox location="12,117" size="420,20" name="key"&gt;Введите ключ&lt;/textbox&gt; 
-&lt;richtextbox location="12,139" size="420,134" name="text"&gt;Введите текст&lt;/richtextbox&gt; 
-&lt;button location="12,275" click="Enc"&gt;Шифровать&lt;/button&gt; 
-&lt;button location="100,275" click="Dec"&gt;Расшифровать&lt;/button&gt; 
-
-
-
-&lt;label location="12,300" font="7"&gt;SapphireReader powered by Sapphire™
-LISENKO SOFT 2016 год
-&lt;/label&gt;
-
-
-
-
-
-&lt;script&gt; 
-function clickStart()
-mainLabel.Text=labelStart
-end
-function clickAbout()
-mainLabel.Text=labelAbout
-end
-function clickSap()
-mainLabel.Text=labelSap
-end
-function Enc() 
-text.Text=Encrypt(text.Text,key.Text) 
-end
-function Dec() 
-text.Text=Decrypt(text.Text,key.Text) 
-end
-
-&lt;/script&gt; 
-
-&lt;/FORM&gt;</value>
-  </data>
   <data name="ls1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ls1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

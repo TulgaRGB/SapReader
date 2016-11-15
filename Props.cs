@@ -25,7 +25,6 @@ namespace SapReader
             main = new LS.LSFB(this, 2, 0, 80, false );
             foreach (TabPage p in tabControl.TabPages)
             {
-                main.MakeControlLikeWork(p);
                 p.AutoScroll = true;
             }
             tabControl.Dock = DockStyle.Fill;

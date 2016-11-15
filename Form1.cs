@@ -16,6 +16,7 @@ using System.Media;
 using System.Xml;
 using System.Net;
 using System.Numerics;
+using LuaInterface;
 
 namespace SapReader
 {
@@ -33,9 +34,10 @@ namespace SapReader
         public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
         public static NetConnection client = new NetConnection { BufferSize = 8192 };
+        public static FastLua flua;
         public Form1()
         {
-            InitializeComponent(); exp = Diff(osn, mysec, false);
+            InitializeComponent(); exp = Diff(osn, mysec, false);            
             ReloadAllParams();
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
@@ -50,8 +52,9 @@ namespace SapReader
             browser.ForeColor = ForeColor;
             lsfb.MakeControlLikeWork(browser);
             browser.Hide();
-            conLabel.SendToBack();
-            LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
+            conLabel.SendToBack();        
+            flua = new FastLua(lsfb.work);
+            flua.DoFile("HOME.lua");
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
         }
@@ -81,51 +84,51 @@ namespace SapReader
                         }
                         break;
                     case "chat":
-                        if (LSFB.CbyName(lsfb.work.Controls, "box") != null)
+                        if (lsfb.work.Controls.Find("box",false).Last() != null)
                         {
-                            LSFB.CbyName(lsfb.work.Controls, "box").Text += response.InnerText + "\n";
+                            lsfb.work.Controls.Find("box", false).Last().Text += response.InnerText + "\n";
                         }
                         else
                         {
                             browser.Hide();
                             lsfb.work.Controls.Clear();
-                            LSFB.drawForm(lsfb.work, Properties.Resources.CHAT, true);
-                            LSFB.CbyName(lsfb.work.Controls, "send").Click += (object sender, EventArgs e) =>
+                            flua.DoString(Properties.Resources.CHAT);
+                            lsfb.work.Controls.Find("send", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<REQUEST type=\"chat\">" + LSFB.CbyName(lsfb.work.Controls, "ent").Text + "</REQUEST>");
-                                LSFB.CbyName(lsfb.work.Controls, "ent").Text = "";
+                                ClientSend("<REQUEST type=\"chat\">" + lsfb.work.Controls.Find("ent", false).Last().Text + "</REQUEST>");
+                                lsfb.work.Controls.Find("ent",false).Last().Text = "";
                             };
                         }
                         break;
                     case "persData":
                         Text = "Смена данных";
                         browser.Hide();
-                        LSFB.drawForm(lsfb.work, Properties.Resources.DATA, true);
-                        LSFB.CbyName(lsfb.work.Controls, "error").Text = response.InnerText;
-                        LSFB.CbyName(lsfb.work.Controls, "newName").Text = conLabel.Text;
+                       flua.DoString(Properties.Resources.DATA);
+                        lsfb.work.Controls.Find("error", false).Last().Text = response.InnerText;
+                        lsfb.work.Controls.Find("newName", false).Last().Text = conLabel.Text;
                         string oldpass = null;
                         string newpass = null;
-                        LSFB.CbyName(lsfb.work.Controls, "save").Click += (object sender, EventArgs e) =>
+                        lsfb.work.Controls.Find("save", false).Last().Click += (object sender, EventArgs e) =>
                         {
-                            LSFB.CbyName(lsfb.work.Controls, "error").Text = "";
-                            if (LSFB.CbyName(lsfb.work.Controls, "newPass").Text != "")
+                            lsfb.work.Controls.Find("error",false).Last().Text = "";
+                            if (lsfb.work.Controls.Find("newPass",false).Last().Text != "")
                             {
-                                if (LSFB.CbyName(lsfb.work.Controls, "oldPass").Text != LSFB.CbyName(lsfb.work.Controls, "newPass").Text)
+                                if (lsfb.work.Controls.Find("oldPass",false).Last().Text != lsfb.work.Controls.Find("newPass",false).Last().Text)
                                 {
-                                    if (LSFB.CbyName(lsfb.work.Controls, "checkPass").Text == LSFB.CbyName(lsfb.work.Controls, "newPass").Text)
+                                    if (lsfb.work.Controls.Find("checkPass",false).Last().Text == lsfb.work.Controls.Find("newPass",false).Last().Text)
                                     {
-                                        oldpass = " oldPass =\"" + Sapphire.GetMd5Hash(LSFB.CbyName(lsfb.work.Controls, "oldPass").Text) + "\" ";
-                                        newpass = "newPass=\"" + Sapphire.GetMd5Hash(LSFB.CbyName(lsfb.work.Controls, "newPass").Text) + "\"";
+                                        oldpass = " oldPass =\"" + Sapphire.GetMd5Hash(lsfb.work.Controls.Find("oldPass",false).Last().Text) + "\" ";
+                                        newpass = "newPass=\"" + Sapphire.GetMd5Hash(lsfb.work.Controls.Find("newPass",false).Last().Text) + "\"";
                                     }
                                     else
-                                        LSFB.CbyName(lsfb.work.Controls, "error").Text = "Новые пароли должны совпадать!";
+                                        lsfb.work.Controls.Find("error",false).Last().Text = "Новые пароли должны совпадать!";
                                 }
                                 else
-                                    LSFB.CbyName(lsfb.work.Controls, "error").Text = "Новый пароль должен отличаться от старого!";
+                                    lsfb.work.Controls.Find("error",false).Last().Text = "Новый пароль должен отличаться от старого!";
                             }
-                            if (LSFB.CbyName(lsfb.work.Controls, "error").Text == "")
+                            if (lsfb.work.Controls.Find("error",false).Last().Text == "")
                             {
-                                ClientSend("<REQUEST type=\"persData\" newName=\"" + LSFB.CbyName(lsfb.work.Controls, "newName").Text + "\"" + oldpass + newpass + "/>");
+                                ClientSend("<REQUEST type=\"persData\" newName=\"" + lsfb.work.Controls.Find("newName",false).Last().Text + "\"" + oldpass + newpass + "/>");
                                 lsfb.work.Controls.Clear();
                             }
                         };
@@ -143,8 +146,7 @@ namespace SapReader
                             {
                                 conLabel.Text = "Вход не выполнен";
                                 lsfb.work.Controls.Clear();
-                                Dictionary<string,string> tmp = LSFB.drawForm((Control)lsfb.work, Properties.Resources.HOME);
-                            Text = tmp["name"];
+                                flua.DoFile("HOME.lua");
                             }
                                 break;
                     case "form":
@@ -152,7 +154,7 @@ namespace SapReader
                         {
                             browser.Hide();
                             lsfb.work.Controls.Clear();
-                            LSFB.drawForm(lsfb.work, response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
+                            flua.DoString(response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
                         }
                         else
                         new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
@@ -200,31 +202,31 @@ namespace SapReader
                             Text = "Pro";
                             conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             browser.Hide();
-                            LSFB.drawForm(lsfb.work, Properties.Resources.PRO, true);
-                            LSFB.CbyName(lsfb.work.Controls, "hi").Text+=", " + conLabel.Text + "!";
-                            LSFB.CbyName(lsfb.work.Controls, "libPlugin").Click += (object sender, EventArgs e) =>
+                            flua.DoString(Properties.Resources.PRO);
+                            lsfb.work.Controls.Find("hi", false).Last().Text+=", " + conLabel.Text + "!";
+                            lsfb.work.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
                                 ClientSend("<REQUEST type=\"forms\" validated=\"True"+ (parames.ContainsKey("Bool.UseNotValidPlugins")? parames["Bool.UseNotValidPlugins"] == "True"? "|False" :  "" : "") + "\"/>");
                             };
-                            LSFB.CbyName(lsfb.work.Controls, "checkApp").Click += (object sender, EventArgs e) =>
+                            lsfb.work.Controls.Find("checkApp", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 ClientSend("<REQUEST type=\"sum\" hash=\""+ Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) +"\"/>");
                             };
-                            LSFB.CbyName(lsfb.work.Controls, "exitButton").Click += (object sender, EventArgs e) =>
+                            lsfb.work.Controls.Find("exitButton", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 ClientSend("<REQUEST type=\"exit\"/>");
                             };
-                            LSFB.CbyName(lsfb.work.Controls, "persData").Click += (object sender, EventArgs e) =>
+                            lsfb.work.Controls.Find("persData", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
                                 ClientSend("<REQUEST type=\"persData\"/>");
                             };
-                            LSFB.CbyName(lsfb.work.Controls, "joinChat").Click += (object sender, EventArgs e) =>
+                            lsfb.work.Controls.Find("joinChat", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
                                 ClientSend("<REQUEST type=\"chat\"/>");
-                            }; LSFB.CbyName(lsfb.work.Controls, "news").Click += (object sender, EventArgs e) =>
+                            }; lsfb.work.Controls.Find("news", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
                                 ClientSend("<REQUEST type=\"news\"/>");
@@ -333,7 +335,7 @@ namespace SapReader
                 ToolStripMenuItem temp = new ToolStripMenuItem { Text = name };
                 temp.Click += (object sender, EventArgs e) => {
                     browser.Hide();
-                    LSFB.drawForm(lsfb.work, plugs[name]);
+                    flua.DoString(plugs[name]);
                 };
                 return temp;
             }
@@ -424,11 +426,6 @@ namespace SapReader
                         #region Инструменты
                         case "Brow":
                             browser.Show(); lsfb.work.Controls.Clear();
-                            break;
-                        case "LSsl":
-                            browser.Hide();
-                            Dictionary<string, string> tmp = LSFB.drawForm(lsfb.work, Properties.Resources.LSSL);
-                            Text = tmp["name"];
                             break;
                         case "Add":
                         System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.dll|*.dll" };
