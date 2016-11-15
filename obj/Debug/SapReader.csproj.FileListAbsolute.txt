@@ -12,5 +12,5 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.pdb
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.csprojResolveAssemblyReference.cache
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\Debug\SapReader.Login.resources
-D:\Users\fast\Documents\VS\SapReader\SapReader\bin\Debug\lua51.dll
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\Debug\LuaInterface.dll
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\Debug\lua51.dll
