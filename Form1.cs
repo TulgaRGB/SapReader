@@ -55,6 +55,8 @@ namespace SapReader
             conLabel.SendToBack();        
             flua = new FastLua(lsfb.work);
             flua.DoFile("HOME.lua");
+            if (flua.Name != null)
+                Text = flua.Name;
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
         }

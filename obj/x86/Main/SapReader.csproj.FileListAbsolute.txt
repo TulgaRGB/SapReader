@@ -14,3 +14,4 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.Props.reso
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.csproj.GenerateResource.Cache
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.pdb
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.csprojResolveAssemblyReference.cache
