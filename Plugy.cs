@@ -22,20 +22,19 @@ namespace SapReader
             InitializeComponent();
             this.xml = xml;
             menuStrip1.Renderer = new LSFB.MyRenderer();
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
             main = new LSFB(this, 0, 24);
             bool scrpt;
             if (Form1.parames.ContainsKey("Bool.DontAskForScript") ? !Convert.ToBoolean(Form1.parames["Bool.DontAskForScript"]) : false)
                 scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
             else
                 scrpt = Form1.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Form1.parames["Bool.AllowScript"]) : true;
-            Dictionary <string,string> tmp = new Dictionary<string, string>();
-            name = tmp["name"];
-            Text = name + " от " + tmp["author"];
+            FastLua tmp = new FastLua(splitContainer1.Panel2);
+            tmp.DoString(xml);
+            name = tmp.Name;
+            Text = name + " от " + tmp.Author;
             richTextBox1.BackColor = main.work.BackColor;
             richTextBox1.ForeColor = ForeColor;
-            richTextBox1.Text = tmp["script"];
+            richTextBox1.Text = xml;
             LSFB.AddCms(richTextBox1);
             Size = LSFB.MainForm.Size;            
             ShowDialog();

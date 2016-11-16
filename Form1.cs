@@ -54,7 +54,7 @@ namespace SapReader
             browser.Hide();
             conLabel.SendToBack();        
             flua = new FastLua(lsfb.work);
-            flua.DoFile("HOME.lua");
+            flua.DoString(File.ReadAllText("HOME.lua"));
             if (flua.Name != null)
                 Text = flua.Name;
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
@@ -430,11 +430,11 @@ namespace SapReader
                             browser.Show(); lsfb.work.Controls.Clear();
                             break;
                         case "Add":
-                        System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.dll|*.dll" };
+                        System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua" };
                             if (od.ShowDialog() == DialogResult.OK)
                             {
-                                string xml = UnicodeEncoding.UTF8.GetString(File.ReadAllBytes(od.FileName));
-                                new Plugy(xml.Substring(1));
+                                string xml = File.ReadAllText(od.FileName);
+                                new Plugy(xml);
                             }
                             break;
                         #endregion

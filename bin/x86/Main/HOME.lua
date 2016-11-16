@@ -1,26 +1,26 @@
-labelStart = "Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы."
-labelAbout = "Программа предназначена для работы в двух режимах: проводник с возможностью шифровать файлы и архиватор зашифрованных архивов."
-labelSap = [[Security Algorythm, Private Protection From InfoRmation Exposure (Sapphire™) Защитный алгоритм, частная защита от уязвимости 
-информации - криптографический алгоритм с закрытым ключом для хранения и компакной передачи информации.]]
-this.Name = "Добро пожаловать!"
+п»їlabelStart = "Р”Р»СЏ РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚С‹ РІРѕСЃРїРѕР»СЊР·СѓР№С‚РµСЃСЊ С„РѕСЂРјРѕР№ РЅРёР¶Рµ РёР»Рё РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РјРµРЅСЋ РІ РІРµСЂС…РЅРµР№ С‡Р°СЃС‚Рё РїСЂРѕРіСЂР°РјРјС‹."
+labelAbout = "РџСЂРѕРіСЂР°РјРјР° РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅР° РґР»СЏ СЂР°Р±РѕС‚С‹ РІ РґРІСѓС… СЂРµР¶РёРјР°С…: РїСЂРѕРІРѕРґРЅРёРє СЃ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊСЋ С€РёС„СЂРѕРІР°С‚СЊ С„Р°Р№Р»С‹ Рё Р°СЂС…РёРІР°С‚РѕСЂ Р·Р°С€РёС„СЂРѕРІР°РЅРЅС‹С… Р°СЂС…РёРІРѕРІ."
+labelSap = [[Security Algorythm, Private Protection From InfoRmation Exposure (Sapphireв„ў) Р—Р°С‰РёС‚РЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј, С‡Р°СЃС‚РЅР°СЏ Р·Р°С‰РёС‚Р° РѕС‚ СѓСЏР·РІРёРјРѕСЃС‚Рё 
+РёРЅС„РѕСЂРјР°С†РёРё - РєСЂРёРїС‚РѕРіСЂР°С„РёС‡РµСЃРєРёР№ Р°Р»РіРѕСЂРёС‚Рј СЃ Р·Р°РєСЂС‹С‚С‹Рј РєР»СЋС‡РѕРј РґР»СЏ С…СЂР°РЅРµРЅРёСЏ Рё РєРѕРјРїР°РєРЅРѕР№ РїРµСЂРµРґР°С‡Рё РёРЅС„РѕСЂРјР°С†РёРё.]]
+this.Name = "Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ!"
 Draw([[
 <FORM> 
 <label location="12,12" font="18">SapReader</label> 
-<button location="12,50" name="clickStart">Начало работы</button> 
-<button location="112,50">О программе</button> 
-<button location="203,50">О Sapphire™</button> 
+<button location="12,50" name="clickStart">РќР°С‡Р°Р»Рѕ СЂР°Р±РѕС‚С‹</button> 
+<button location="112,50">Рћ РїСЂРѕРіСЂР°РјРјРµ</button> 
+<button location="203,50">Рћ Sapphireв„ў</button> 
 
-<label location="12,80" name="mainLabel">Добро пожаловать в SapReader.</label>
+<label location="12,80" name="mainLabel">Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ SapReader.</label>
 
-<textbox location="12,117" size="420,20" name="key">Введите ключ</textbox> 
-<richtextbox location="12,139" size="420,134" name="text">Введите текст</richtextbox> 
-<button location="12,275">Шифровать</button> 
-<button location="100,275">Расшифровать</button> 
+<textbox location="12,117" size="420,20" name="key">Р’РІРµРґРёС‚Рµ РєР»СЋС‡</textbox> 
+<richtextbox location="12,139" size="420,134" name="text">Р’РІРµРґРёС‚Рµ С‚РµРєСЃС‚</richtextbox> 
+<button location="12,275">РЁРёС„СЂРѕРІР°С‚СЊ</button> 
+<button location="100,275">Р Р°СЃС€РёС„СЂРѕРІР°С‚СЊ</button> 
 
 
 
-<label location="12,300" font="7">SapphireReader powered by Sapphire™
-LISENKO SOFT 2016 год
+<label location="12,300" font="7">SapphireReader powered by Sapphireв„ў
+LISENKO SOFT 2016 РіРѕРґ
 </label>
 </FORM>
 ]])
