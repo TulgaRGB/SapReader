@@ -107,7 +107,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Plugy";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Plugy";
+            this.Text = "Добавить плагин";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
