@@ -29,5 +29,3 @@ this:Draw([[
 
 </FORM>
 ]])
-
-Send("SOSI HUY")
