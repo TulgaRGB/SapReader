@@ -22,7 +22,7 @@ namespace SapReader
             switch (h)
             {
                 case "SapphireReader":
-                    p.Text = "SapphireReader powered by Sapphire™\nSapphireReader Version: " + ProductVersion + "\nSapphire™ Version: " + LS.Sapphire.ver + "\nЛицензия для " + Form1.owner + "\n© 2016 LISENKO SOFT\n\nПрограмма предназначена для работы в двух режимах: проводник с возможностью шифровать файлы и архиватор зашифрованных архивов.\n\n" + LS.Sapphire.About;
+                    p.Text = "SapphireReader powered by Sapphire™\nSapphireReader Version: " + ProductVersion + "\nSapphire™ Version: " + LS.Sapphire.ver + "\nЛицензия для " + Main.owner + "\n© 2016 LISENKO SOFT\n\nПрограмма предназначена для работы в двух режимах: проводник с возможностью шифровать файлы и архиватор зашифрованных архивов.\n\n" + LS.Sapphire.About;
                     break;
                 case "LSsec lite":
                     p.Text = "sosi";

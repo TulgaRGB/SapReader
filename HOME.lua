@@ -5,7 +5,7 @@ labelSap = [[Security Algorythm, Private Protection From InfoRmation Exposure (S
 this.Name = "Добро пожаловать!"
 this.Author = "LISENKO SOFT"
 
-Draw([[
+this:Draw([[
 <FORM> 
 <label location="12,12" font="18">SapReader</label> 
 <button location="12,50" name="clickStart">Начало работы</button> 

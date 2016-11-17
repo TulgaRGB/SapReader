@@ -123,17 +123,17 @@ namespace SapReader
                 bool ch = false;
                 try
                 {
-                    ch = Convert.ToBoolean(Form1.parames["Bool."+Bools[k]]);
+                    ch = Convert.ToBoolean(Main.parames["Bool."+Bools[k]]);
                 }
                 catch { }
                     Мойвыбор.Controls.Add(new CheckBox { Text = k, AutoSize = true, Location = new Point(12, 12 + 23 * Мойвыбор.Controls.Count), Checked = ch, FlatStyle = FlatStyle.Flat });
                 }
-            if (Form1.parames.ContainsKey("Pro.Login"))
-                login.Text = Form1.parames["Pro.Login"];
-            if (Form1.parames.ContainsKey("Pro.Pass"))
-                pass.Text = Form1.parames["Pro.Pass"];
-            if (Form1.parames.ContainsKey("Pro.Ip"))
-                ip.Text = Form1.parames["Pro.Ip"];
+            if (Main.parames.ContainsKey("Pro.Login"))
+                login.Text = Main.parames["Pro.Login"];
+            if (Main.parames.ContainsKey("Pro.Pass"))
+                pass.Text = Main.parames["Pro.Pass"];
+            if (Main.parames.ContainsKey("Pro.Ip"))
+                ip.Text = Main.parames["Pro.Ip"];
             Show();
         }
         Dictionary<string, string> Bools = new Dictionary<string, string>()
@@ -153,13 +153,13 @@ namespace SapReader
                     Color tmp = LSFB.MainForm.ForeColor;
                     LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
                     LSFB.MainForm.ForeColor = tmp;
-                    Form1.parames["Color.BackColor"] = LSFB.ToHex(pxl);
+                    Main.parames["Color.BackColor"] = LSFB.ToHex(pxl);
                 }
                 else
                     if (e.Button == MouseButtons.Right)
                 {
                     LSFB.MainForm.ForeColor = pxl;
-                    Form1.parames["Color.ForeColor"] = LSFB.ToHex(pxl);
+                    Main.parames["Color.ForeColor"] = LSFB.ToHex(pxl);
                 }
                 
         }
@@ -190,7 +190,7 @@ namespace SapReader
                     Color tmp = LSFB.MainForm.ForeColor;
                     LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
                     LSFB.MainForm.ForeColor = tmp;
-                    Form1.parames["Color.BackColor"] = LSFB.ToHex(LSFB.MainForm.BackColor);
+                    Main.parames["Color.BackColor"] = LSFB.ToHex(LSFB.MainForm.BackColor);
                 }
                 else
                 {
@@ -198,7 +198,7 @@ namespace SapReader
                         if (p[i] == -1)
                             p[i] = i < 1 ? LSFB.MainForm.ForeColor.R : i > 1 ? LSFB.MainForm.ForeColor.B : LSFB.MainForm.ForeColor.G;
                     LSFB.MainForm.ForeColor = Color.FromArgb(255, p[0], p[1], p[2]);
-                    Form1.parames["Color.ForeColor"] = LSFB.ToHex(LSFB.MainForm.ForeColor);
+                    Main.parames["Color.ForeColor"] = LSFB.ToHex(LSFB.MainForm.ForeColor);
                 }
             }
         }
@@ -249,17 +249,17 @@ namespace SapReader
 
         private void button4_Click(object sender, EventArgs e)
         {
-            ((Form1)LSFB.MainForm).ReloadAllParams();
+            ((Main)LSFB.MainForm).ReloadAllParams();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form1.parames["Pro.Login"] = login.Text;
-            Form1.parames["Pro.Ip"] = ip.Text;
+            Main.parames["Pro.Login"] = login.Text;
+            Main.parames["Pro.Ip"] = ip.Text;
             foreach (CheckBox c in Мойвыбор.Controls)
-                Form1.parames["Bool." + Bools[c.Text]] = c.Checked + "";
-                Form1.parames["Pro.Pass"] = pass.Text;
-            if (!LSFB.SaveParams("SapReader", Form1.parames))((Form1)LSFB.MainForm).DebugMessage("Настройки не были сохранены!");
+                Main.parames["Bool." + Bools[c.Text]] = c.Checked + "";
+                Main.parames["Pro.Pass"] = pass.Text;
+            if (!LSFB.SaveParams("SapReader", Main.parames))((Main)LSFB.MainForm).DebugMessage("Настройки не были сохранены!");
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -136,25 +136,5 @@ namespace SapReader.Properties {
                 return ResourceManager.GetString("LSSL", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM name=&quot;Pro&quot; author=&quot;LISENKO SOFT&quot;&gt;
-        ///&lt;label location=&quot;12,12&quot; font=&quot;18&quot; name=&quot;hi&quot;&gt;Добро пожаловать&lt;/label&gt;
-        ///
-        ///&lt;label location=&quot;12,50&quot; font=&quot;12&quot;&gt;Плагины&lt;/label&gt;
-        ///&lt;button location=&quot;15,80&quot; name=&quot;addPlugin&quot;&gt;Добавить плагин&lt;/button&gt;
-        ///&lt;button location=&quot;15,110&quot; name=&quot;libPlugin&quot;&gt;Библиотека плагинов&lt;/button&gt;
-        ///&lt;button location=&quot;15,140&quot; name=&quot;proPlugin&quot;&gt;Pro плагины&lt;/button&gt;
-        ///
-        ///
-        ///&lt;label location=&quot;12,200&quot; font=&quot;12&quot;&gt;Облако&lt;/label&gt;
-        ///&lt;button location=&quot;15,230&quot; name=&quot;addCloud&quot;&gt;Добавить облако&lt;/button&gt;
-        ///&lt;button location=&quot;1 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PRO {
-            get {
-                return ResourceManager.GetString("PRO", resourceCulture);
-            }
-        }
     }
 }

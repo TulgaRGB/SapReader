@@ -20,7 +20,7 @@ using LuaInterface;
 
 namespace SapReader
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         public static Random RNG = new Random();
         static public BigInteger exp;
@@ -35,7 +35,7 @@ namespace SapReader
         LSFB lsfb;
         public static NetConnection client = new NetConnection { BufferSize = 8192 };
         public static FastLua flua;
-        public Form1()
+        public Main()
         {
             InitializeComponent(); exp = Diff(osn, mysec, false);            
             ReloadAllParams();
@@ -52,8 +52,9 @@ namespace SapReader
             browser.ForeColor = ForeColor;
             lsfb.MakeControlLikeWork(browser);
             browser.Hide();
-            conLabel.SendToBack();        
+            conLabel.SendToBack();
             flua = new FastLua(lsfb.work);
+            flua.RegisterFunction("Send",this,GetType().GetMethod("ClientSend"));
             flua.DoString(File.ReadAllText("HOME.lua"));
             if (flua.Name != null)
                 Text = flua.Name;
@@ -94,7 +95,7 @@ namespace SapReader
                         {
                             browser.Hide();
                             lsfb.work.Controls.Clear();
-                            flua.DoString(Properties.Resources.CHAT);
+                            flua.DoString(File.ReadAllText("CHAT.lua"));
                             lsfb.work.Controls.Find("send", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 ClientSend("<REQUEST type=\"chat\">" + lsfb.work.Controls.Find("ent", false).Last().Text + "</REQUEST>");
@@ -105,7 +106,7 @@ namespace SapReader
                     case "persData":
                         Text = "Смена данных";
                         browser.Hide();
-                       flua.DoString(Properties.Resources.DATA);
+                       flua.DoString(File.ReadAllText("DATA.lua"));
                         lsfb.work.Controls.Find("error", false).Last().Text = response.InnerText;
                         lsfb.work.Controls.Find("newName", false).Last().Text = conLabel.Text;
                         string oldpass = null;
@@ -204,7 +205,7 @@ namespace SapReader
                             Text = "Pro";
                             conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             browser.Hide();
-                            flua.DoString(Properties.Resources.PRO);
+                            flua.DoString(File.ReadAllText("PRO.lua"));
                             lsfb.work.Controls.Find("hi", false).Last().Text+=", " + conLabel.Text + "!";
                             lsfb.work.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
                             {

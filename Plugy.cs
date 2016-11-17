@@ -24,10 +24,10 @@ namespace SapReader
             menuStrip1.Renderer = new LSFB.MyRenderer();
             main = new LSFB(this, 0, 24);
             bool scrpt;
-            if (Form1.parames.ContainsKey("Bool.DontAskForScript") ? !Convert.ToBoolean(Form1.parames["Bool.DontAskForScript"]) : false)
+            if (Main.parames.ContainsKey("Bool.DontAskForScript") ? !Convert.ToBoolean(Main.parames["Bool.DontAskForScript"]) : false)
                 scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
             else
-                scrpt = Form1.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Form1.parames["Bool.AllowScript"]) : true;
+                scrpt = Main.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Main.parames["Bool.AllowScript"]) : true;
             FastLua tmp = new FastLua(splitContainer1.Panel2);
             tmp.DoString(xml);
             name = tmp.Name;
@@ -47,9 +47,9 @@ namespace SapReader
 
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ((Form1)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Remove(((Form1)LSFB.MainForm).пустоToolStripMenuItem);
-            ((Form1)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Add(((Form1)LSFB.MainForm).PlugMaker(name));
-            ((Form1)LSFB.MainForm).plugs[name] = xml;
+            ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Remove(((Main)LSFB.MainForm).пустоToolStripMenuItem);
+            ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Add(((Main)LSFB.MainForm).PlugMaker(name));
+            ((Main)LSFB.MainForm).plugs[name] = xml;
             Close();
         }
     }

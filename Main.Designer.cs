@@ -1,6 +1,6 @@
 ﻿namespace SapReader
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.mm = new System.Windows.Forms.MenuStrip();
             this.ыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
