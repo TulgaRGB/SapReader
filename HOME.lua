@@ -48,5 +48,5 @@ else
 Controls.text.Text = Sapphire.GetText(Controls.text.Text, Controls.key.Text)
 end
 end
-Controls.enc.MouseUp:Add(sapClick)
+Controls.enc.MouseUp:Add(sapClick) 
 Controls.dec.MouseUp:Add(sapClick)
