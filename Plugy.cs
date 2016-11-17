@@ -28,10 +28,13 @@ namespace SapReader
                 scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
             else
                 scrpt = Main.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Main.parames["Bool.AllowScript"]) : true;
-            FastLua tmp = new FastLua(splitContainer1.Panel2);
-            tmp.DoString(xml);
-            name = tmp.Name;
-            Text = name + " от " + tmp.Author;
+            if(scrpt)
+            {
+                FastLua tmp = new FastLua(splitContainer1.Panel2);
+                tmp.DoString(xml);
+                name = tmp.Name;
+                Text = name + " от " + tmp.Author;
+            }
             richTextBox1.BackColor = main.work.BackColor;
             richTextBox1.ForeColor = ForeColor;
             richTextBox1.Text = xml;
