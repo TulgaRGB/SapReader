@@ -149,25 +149,13 @@ Send:
 &lt;/script&gt;
 &lt;/FORM&gt;</value>
   </data>
-  <data name="DATA" xml:space="preserve">
-    <value>&lt;FORM&gt; 
-&lt;label location="12,12" font="12" &gt;Поменять имя&lt;/label&gt; 
-&lt;label location="222,42" font="10" &gt;Новое имя&lt;/label&gt; 
-
-&lt;textbox location="12,42" size="200,20" name="newName"&gt;&lt;/textbox&gt; 
-
-&lt;label location="12,72" font="12" &gt;Поменять пароль&lt;/label&gt; 
-
-&lt;label location="222,102" font="10" &gt;Старый пароль&lt;/label&gt; 
-&lt;textbox location="12,102" size="200,20" name="oldPass" secured=""&gt;&lt;/textbox&gt; 
-&lt;label location="222,132" font="10" &gt;Новый пароль&lt;/label&gt; 
-&lt;textbox location="12,132" size="200,20" name="newPass" secured=""&gt;&lt;/textbox&gt; 
-&lt;label location="222,162" font="10" &gt;Повтор пароля&lt;/label&gt; 
-&lt;textbox location="12,162" size="200,20" name="checkPass" secured=""&gt;&lt;/textbox&gt; 
-
-&lt;button location="12,192" name="save"&gt;Сохранить изменения&lt;/button&gt; 
-
-&lt;label location="12,230" font="7" name="error"&gt;&lt;/label&gt; 
-&lt;/FORM&gt;</value>
+  <data name="DATA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DATA.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="HOME" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HOME.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PRO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PRO.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

@@ -1,5 +1,4 @@
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.exe.config
-D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\HOME.lua
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\SapReader.pdb
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\lua51.dll
@@ -14,5 +13,4 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.csproj.Gen
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.pdb
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.csprojResolveAssemblyReference.cache
-D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\PRO.lua
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.Main.resources

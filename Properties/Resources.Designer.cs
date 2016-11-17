@@ -82,22 +82,12 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM&gt; 
-        ///&lt;label location=&quot;12,12&quot; font=&quot;12&quot; &gt;Поменять имя&lt;/label&gt; 
-        ///&lt;label location=&quot;222,42&quot; font=&quot;10&quot; &gt;Новое имя&lt;/label&gt; 
-        ///
-        ///&lt;textbox location=&quot;12,42&quot; size=&quot;200,20&quot; name=&quot;newName&quot;&gt;&lt;/textbox&gt; 
-        ///
-        ///&lt;label location=&quot;12,72&quot; font=&quot;12&quot; &gt;Поменять пароль&lt;/label&gt; 
-        ///
-        ///&lt;label location=&quot;222,102&quot; font=&quot;10&quot; &gt;Старый пароль&lt;/label&gt; 
-        ///&lt;textbox location=&quot;12,102&quot; size=&quot;200,20&quot; name=&quot;oldPass&quot; secured=&quot;&quot;&gt;&lt;/textbox&gt; 
-        ///&lt;label location=&quot;222,132&quot; font=&quot;10&quot; &gt;Новый пароль&lt;/label&gt; 
-        ///&lt;textbox location=&quot;12,132&quot; size=&quot;200,20&quot; name=&quot;newPas [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string DATA {
+        internal static byte[] DATA {
             get {
-                return ResourceManager.GetString("DATA", resourceCulture);
+                object obj = ResourceManager.GetObject("DATA", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -108,6 +98,16 @@ namespace SapReader.Properties {
             get {
                 object obj = ResourceManager.GetObject("Folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] HOME {
+            get {
+                object obj = ResourceManager.GetObject("HOME", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -134,6 +134,16 @@ namespace SapReader.Properties {
         internal static string LSSL {
             get {
                 return ResourceManager.GetString("LSSL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PRO {
+            get {
+                object obj = ResourceManager.GetObject("PRO", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

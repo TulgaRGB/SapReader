@@ -17,11 +17,14 @@ using System.Xml;
 using System.Net;
 using System.Numerics;
 using LuaInterface;
+using System.Net.Sockets;
 
 namespace SapReader
 {
     public partial class Main : Form
     {
+        public static Main main;
+        public List<List<string>> history = new List<List<string>>();
         public static Random RNG = new Random();
         static public BigInteger exp;
         static public BigInteger osn = Convert.ToInt32("3");
@@ -37,7 +40,7 @@ namespace SapReader
         public static FastLua flua;
         public Main()
         {
-            InitializeComponent(); exp = Diff(osn, mysec, false);            
+            InitializeComponent(); exp = Diff(osn, mysec, false); main = this;
             ReloadAllParams();
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
@@ -55,11 +58,20 @@ namespace SapReader
             conLabel.SendToBack();
             flua = new FastLua(lsfb.work);
             flua.RegisterFunction("Send",this,GetType().GetMethod("ClientSend"));
-            flua.DoString(File.ReadAllText("HOME.lua"));
+            flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.HOME));
             if (flua.Name != null)
                 Text = flua.Name;
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
+            if(parames.ContainsKey("Plugins"))
+            foreach(string p in parames["Plugins"].Split('|'))
+                    if(p!="")
+                    {
+                        ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Remove(((Main)LSFB.MainForm).пустоToolStripMenuItem);
+                        ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Add(((Main)LSFB.MainForm).PlugMaker(p));
+                        plugs[p] = parames["Plugins." + p];
+                }
+
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
@@ -106,7 +118,7 @@ namespace SapReader
                     case "persData":
                         Text = "Смена данных";
                         browser.Hide();
-                       flua.DoString(File.ReadAllText("DATA.lua"));
+                       flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.DATA));
                         lsfb.work.Controls.Find("error", false).Last().Text = response.InnerText;
                         lsfb.work.Controls.Find("newName", false).Last().Text = conLabel.Text;
                         string oldpass = null;
@@ -149,7 +161,7 @@ namespace SapReader
                             {
                                 conLabel.Text = "Вход не выполнен";
                                 lsfb.work.Controls.Clear();
-                                flua.DoFile("HOME.lua");
+                                flua.DoFile(UnicodeEncoding.UTF8.GetString(Properties.Resources.HOME));
                             }
                                 break;
                     case "form":
@@ -202,10 +214,11 @@ namespace SapReader
                     case "login":
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
+                            lsfb.work.Controls.Clear();
                             Text = "Pro";
                             conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             browser.Hide();
-                            flua.DoString(File.ReadAllText("PRO.lua"));
+                            flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.PRO));
                             lsfb.work.Controls.Find("hi", false).Last().Text+=", " + conLabel.Text + "!";
                             lsfb.work.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
                             {
@@ -265,8 +278,13 @@ namespace SapReader
             }
         }
         #region connection
+        delegate void ConDel();
         void Con()
         {
+            if (InvokeRequired)
+                Invoke(new ConDel(Con));
+            else
+            {
                 try
                 {
                     try
@@ -274,30 +292,30 @@ namespace SapReader
                         client.Disconnect();
                     }
                     catch { }
-                IPAddress ip;
-                    bool _ip =  IPAddress.TryParse(parames["Pro.Ip"], out ip);
-                if (_ip)
-                    client.Connect(ip, 228);
-                else
-                    client.Connect(parames["Pro.Ip"], 228);
+                    IPAddress ip;
+                    bool _ip = IPAddress.TryParse(parames["Pro.Ip"], out ip);
+                    if (_ip)
+                        client.Connect(ip, 228);
+                    else
+                        client.Connect(parames["Pro.Ip"], 228);
                     client.OnDisconnect += (object sender1, NetConnection c) =>
                         {
                             key = null;
                             conLabel.Text = "";
-                            DebugMessage("Потеряно соединение с сервером!");                           
+                            DebugMessage("Потеряно соединение с сервером!");
                         };
                     client.OnDataReceived += (object sender1, NetConnection c, byte[] b) =>
                         {
                             if (key != null)
                             {
                                 XmlDocument _response = new XmlDocument();
-                            _response.LoadXml(UnicodeEncoding.Unicode.GetString(Sapphire.GetTextBytes(b, key)));
+                                _response.LoadXml(UnicodeEncoding.Unicode.GetString(Sapphire.GetTextBytes(b, key)));
                                 ParseResponse(_response);
                             }
                             else
                             {
-                                    client.Send(UnicodeEncoding.Unicode.GetBytes(exp + ""));
-                                    key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");                          
+                                client.Send(UnicodeEncoding.Unicode.GetBytes(exp + ""));
+                                key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");
                             }
                         };
                 }
@@ -306,6 +324,7 @@ namespace SapReader
                 {
                     DebugMessage(ex.Message + "");
                 }
+            }
         }
         #endregion
         public void ReloadAllParams()
@@ -338,6 +357,7 @@ namespace SapReader
                 ToolStripMenuItem temp = new ToolStripMenuItem { Text = name };
                 temp.Click += (object sender, EventArgs e) => {
                     browser.Hide();
+                    lsfb.work.Controls.Clear();
                     flua.DoString(plugs[name]);
                 };
                 return temp;
@@ -484,14 +504,32 @@ namespace SapReader
                 catch { SystemSounds.Exclamation.Play(); }
             }
         }
-
+        public void AccessToWebService(string host)
+        {
+            new Task(() =>
+            {
+                TcpClient tcpClient = new TcpClient();
+                try
+                {
+                    Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = false; });
+                    DebugMessage("Попытка подключения к серверу Pro", "Pro");
+                    tcpClient.Connect(host, 228);
+                    client = new NetConnection { BufferSize = 8192 };
+                    Invoke((MethodInvoker)delegate { conLabel.Text = "Вход не выполнен"; });
+                    Con();
+                }
+                catch
+                {
+                    DebugMessage("Не удалось подключится к серверу Pro");
+                }
+                Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = true; });
+            }).Start();
+        }
         private void proToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (key == null)
             {
-                    client = new NetConnection { BufferSize = 8192 };
-                    Con();
-                    conLabel.Text = "Вход не выполнен";
+                AccessToWebService(parames["Pro.Ip"]);
             }
             else
                 ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");

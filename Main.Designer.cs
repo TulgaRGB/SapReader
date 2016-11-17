@@ -84,6 +84,7 @@
             this.browser = new System.Windows.Forms.ListView();
             this.tray = new System.Windows.Forms.NotifyIcon(this.components);
             this.conLabel = new System.Windows.Forms.Label();
+            this.историяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.cms.SuspendLayout();
             this.SuspendLayout();
@@ -100,7 +101,7 @@
             this.proToolStripMenuItem});
             this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(416, 24);
+            this.mm.Size = new System.Drawing.Size(508, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -165,7 +166,8 @@
             this.удалитьToolStripMenuItem,
             this.toolStripSeparator2,
             this.шифроватьToolStripMenuItem,
-            this.расшифроватьToolStripMenuItem});
+            this.расшифроватьToolStripMenuItem,
+            this.историяToolStripMenuItem});
             this.проводникToolStripMenuItem.Name = "проводникToolStripMenuItem";
             this.проводникToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.проводникToolStripMenuItem.Text = "Проводник";
@@ -533,7 +535,13 @@
             this.conLabel.Tag = "OnBorder";
             this.conLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // Form1
+            // историяToolStripMenuItem
+            // 
+            this.историяToolStripMenuItem.Name = "историяToolStripMenuItem";
+            this.историяToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.историяToolStripMenuItem.Text = "История";
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -543,7 +551,7 @@
             this.Controls.Add(this.browser);
             this.Controls.Add(this.mm);
             this.MainMenuStrip = this.mm;
-            this.Name = "Form1";
+            this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SapReader";
             this.mm.ResumeLayout(false);
@@ -610,6 +618,7 @@
         private System.Windows.Forms.ToolStripMenuItem proToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem хэшСуммаToolStripMenuItem;
         private System.Windows.Forms.Label conLabel;
+        private System.Windows.Forms.ToolStripMenuItem историяToolStripMenuItem;
     }
 }
 

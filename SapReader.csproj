@@ -194,12 +194,6 @@
     <EmbeddedResource Include="Props.resx">
       <DependentUpon>Props.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="HOME.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="PRO.lua">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -209,6 +203,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\DATA.lua" />
+    <None Include="Resources\HOME.lua" />
+    <None Include="Resources\PRO.lua" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
