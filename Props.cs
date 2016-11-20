@@ -135,12 +135,11 @@ namespace SapReader
                 }
             #endregion
             #region Pros
-            if (Main.parames.ContainsKey("Pro.Login"))
+                checkBox1.Checked = Main.parames["Pro.Custom"] == "True";
                 login.Text = Main.parames["Pro.Login"];
-            if (Main.parames.ContainsKey("Pro.Pass"))
                 pass.Text = Main.parames["Pro.Pass"];
-            if (Main.parames.ContainsKey("Pro.Ip"))
                 ip.Text = Main.parames["Pro.Ip"];
+            ip.Enabled = checkBox1.Checked;
             #endregion
             #region Yolka            
             Yolka();
@@ -344,6 +343,7 @@ namespace SapReader
         {
             Main.parames["Pro.Login"] = login.Text;
             Main.parames["Pro.Ip"] = ip.Text;
+            Main.parames["Pro.Custom"] = checkBox1.Checked + "";
             foreach (CheckBox c in Мойвыбор.Controls)
                 Main.parames["Bool." + Bools[c.Text]] = c.Checked + "";
                 Main.parames["Pro.Pass"] = pass.Text;
@@ -398,5 +398,11 @@ namespace SapReader
             }
         }
         #endregion
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            ip.Enabled = checkBox1.Checked;
+            Main.parames["Pro.Custom"] = checkBox1.Checked + "";
+        }
     }
 }

@@ -33,7 +33,19 @@ namespace SapReader
         public int mysec = RNG.Next(10000, 100000);
         string key = null;
         public static string owner = Environment.UserName;
-        public static Dictionary<string, string> parames;
+        public static Dictionary<string, string> parames = new Dictionary<string, string>
+        {
+            {"Bool.AllowScript",""},
+            {"Bool.DontAskForScript",""},
+            {"Bool.MaximizeOnStart",""},
+            {"Color.BackColor",""},
+            {"Color.ForeColor",""},
+            {"Pro.Login",""},
+            {"Pro.Pass",""},
+            {"Bool.UseNotValidPlugins",""},
+            {"Pro.Custom",""},
+            {"Pro.Ip",""}
+        };
         public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
         public static NetConnection client = new NetConnection { BufferSize = 8192 };
@@ -61,7 +73,7 @@ namespace SapReader
             flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.HOME));
             if (flua.Name != null)
                 Text = flua.Name;
-            if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
+            if (parames["Bool.MaximizeOnStart"] == "True")
                 WindowState = FormWindowState.Maximized;
             tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             UpdatePlugs();
@@ -70,6 +82,7 @@ namespace SapReader
         {
             return !second ? BigInteger.Pow(inp, step) % mosn : BigInteger.Pow((BigInteger.Pow(inp, step) % mosn), (int)osn) % mosn2;
         }
+        #region ParseResponse
         public void ParseResponse(XmlDocument _response)
         {
                 XmlNode response = _response.FirstChild;
@@ -154,7 +167,6 @@ namespace SapReader
                             {
                                 conLabel.Text = "Вход не выполнен";
                                 lsfb.work.Controls.Clear();
-                                flua.DoFile(UnicodeEncoding.UTF8.GetString(Properties.Resources.HOME));
                             }
                                 break;
                     case "form":
@@ -263,6 +275,7 @@ namespace SapReader
                 }
                 
         }
+        #endregion
         public void ClientSend(string query)
         {
             if(key != null)
@@ -325,7 +338,9 @@ namespace SapReader
         #endregion
         public void ReloadAllParams()
         {
-            parames = LSFB.LoadParams("SapReader");
+            Dictionary<string,string> tmp = LSFB.LoadParams("SapReader");
+            foreach (KeyValuePair<string, string> t in tmp)
+                parames[t.Key] = t.Value;
             if (parames.ContainsKey("Color.BackColor"))
                 BackColor = LSFB.FromHex(parames["Color.BackColor"]);            
             if (parames.ContainsKey("Color.ForeColor"))
@@ -574,6 +589,8 @@ namespace SapReader
         {
             if (key == null)
             {
+                if (parames["Pro.Custom"] != "True")
+                    parames["Pro.Ip"] = Properties.Resources.Host;
                 AccessToWebService(parames["Pro.Ip"]);
             }
             else

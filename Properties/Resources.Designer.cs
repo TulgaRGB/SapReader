@@ -112,28 +112,21 @@ namespace SapReader.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 5.167.225.32.
+        /// </summary>
+        internal static string Host {
+            get {
+                return ResourceManager.GetString("Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap ls1 {
             get {
                 object obj = ResourceManager.GetObject("ls1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;FORM name=&quot;test&quot;&gt;
-        ///&lt;button size=&quot;100&quot; name=&quot;ses&quot; click=&quot;Main&quot;/&gt;
-        ///&lt;script&gt;
-        ///function Main()
-        ///Alert(_(&quot;ses&quot;).text)
-        ///end
-        ///&lt;/script&gt;
-        ///&lt;/FORM&gt;.
-        /// </summary>
-        internal static string LSSL {
-            get {
-                return ResourceManager.GetString("LSSL", resourceCulture);
             }
         }
         

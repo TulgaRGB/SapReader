@@ -69,6 +69,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.новаяПапкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.mm.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
@@ -364,6 +365,7 @@
             // 
             // Pro
             // 
+            this.Pro.Controls.Add(this.checkBox1);
             this.Pro.Controls.Add(this.ip);
             this.Pro.Controls.Add(this.pass);
             this.Pro.Controls.Add(this.login);
@@ -420,7 +422,7 @@
             this.добавитьToolStripMenuItem,
             this.новаяПапкаToolStripMenuItem});
             this.cmsPlugs.Name = "cmsPlugs";
-            this.cmsPlugs.Size = new System.Drawing.Size(153, 148);
+            this.cmsPlugs.Size = new System.Drawing.Size(147, 126);
             // 
             // обновитьToolStripMenuItem
             // 
@@ -465,6 +467,18 @@
             this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox1.Location = new System.Drawing.Point(6, 133);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(87, 17);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Свой сервер";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Props
             // 
@@ -538,5 +552,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem новаяПапкаToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
