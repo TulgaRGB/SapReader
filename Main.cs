@@ -39,14 +39,14 @@ namespace SapReader
         public static NetConnection client = new NetConnection { BufferSize = 8192 };
         public static FastLua flua;
         public Main()
-        {
+        {           
             InitializeComponent(); exp = Diff(osn, mysec, false); main = this;
             ReloadAllParams();
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
             LSFB.MainForm = this;
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
-            lsfb = new LS.LSFB(this,4, 24, autoscroll:true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
+            lsfb = LSFB.AddLSFB(this,4, 24, autoscroll:true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });            
             lsfb.customtext[0] = nazvanie + " - ";
             Text = "Добро пожаловать!";
             mm.Renderer = new LSFB.MyRenderer();
@@ -63,15 +63,8 @@ namespace SapReader
                 Text = flua.Name;
             if (parames.ContainsKey("Bool.MaximizeOnStart") ? Convert.ToBoolean(parames["Bool.MaximizeOnStart"]) == true : false)
                 WindowState = FormWindowState.Maximized;
-            if(parames.ContainsKey("Plugins"))
-            foreach(string p in parames["Plugins"].Split('|'))
-                    if(p!="")
-                    {
-                        ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Remove(((Main)LSFB.MainForm).пустоToolStripMenuItem);
-                        ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Add(((Main)LSFB.MainForm).PlugMaker(p));
-                        plugs[p] = parames["Plugins." + p];
-                }
-
+            tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            UpdatePlugs();
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
@@ -172,7 +165,10 @@ namespace SapReader
                             flua.DoString(response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
                         }
                         else
-                        new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
+                            try { 
+                            new Plugy(response.InnerText.Replace("lt;","<").Replace("gt;",">"));
+                            }
+                            catch (Exception ex) { DebugMessage(ex.Message); }
                         break;
                     case "forms":
                         ListView temp = new ListView();
@@ -350,21 +346,60 @@ namespace SapReader
             }
             browser.Show();
         }
-        public ToolStripMenuItem PlugMaker(string name)
+        public void UpdatePlugs(string way = "Plugins", ToolStripItemCollection c = null)
         {
-            if(!plugs.Keys.Contains(name))
+            if (Directory.Exists(way))
             {
-                ToolStripMenuItem temp = new ToolStripMenuItem { Text = name };
-                temp.Click += (object sender, EventArgs e) => {
-                    browser.Hide();
-                    lsfb.work.Controls.Clear();
-                    flua.DoString(plugs[name]);
-                };
-                return temp;
+                bool empty = true;
+                if (c == null)
+                {
+                    c = инструментыToolStripMenuItem.DropDownItems;
+                    c.Clear();
+                    c.AddRange(new ToolStripItem[] 
+                    { проводникToolStripMenuItem1,
+                        toolStripSeparator3,
+                        добавитьToolStripMenuItem,
+                        настроитьToolStripMenuItem,
+                        обновитьToolStripMenuItem2,
+                        toolStripSeparator9 });
+                }
+                else
+                    c.Clear();
+                foreach (string d in Directory.GetDirectories(way))
+                {
+                    ToolStripMenuItem temp = new ToolStripMenuItem {Text = new DirectoryInfo(d).Name, Tag = "Plugin" };
+                    UpdatePlugs(d, temp.DropDownItems);
+                    c.Add(temp);
+                    empty = false;
+                }
+                foreach (string d in Directory.GetFiles(way))
+                {
+                    ToolStripMenuItem temp = new ToolStripMenuItem { Text = new DirectoryInfo(d).Name, Tag = "Plugin" };
+                    string xml = File.ReadAllText(d);
+                    temp.Click += (object sender, EventArgs e) =>
+                    {
+                        try
+                        {
+                            Dictionary<string,string> tmp = LSFB.GetInfo(Plugy.ExtractFromString(xml, "([[", "]])").First());
+                            bool doo = tmp.ContainsKey("window") ? tmp["window"] == "True" ? false : true : true;
+                            if (doo)
+                            {
+                                browser.Hide();
+                                lsfb.work.Controls.Clear();
+                            }
+                            flua.DoString(xml);
+                            if(doo)
+                            Text = flua.Name;
+                        }
+                        catch (Exception ex) { DebugMessage(ex.Message); }
+                    };
+                    c.Add(temp);
+                    empty = false;
+                }
+                if (empty)
+                    c.Add(new ToolStripMenuItem { Text = "(Пусто)", Enabled = false });
             }
-            return null;
         }
-        public Dictionary<string, string> plugs = new Dictionary<string, string>();
         public DirectoryInfo nowDir = null;
         public void Go(string way)
         {
@@ -454,10 +489,20 @@ namespace SapReader
                         System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua" };
                             if (od.ShowDialog() == DialogResult.OK)
                             {
+                            try
+                            {
                                 string xml = File.ReadAllText(od.FileName);
                                 new Plugy(xml);
                             }
+                            catch (Exception ex) { DebugMessage(ex.Message); }
+                            }
                             break;
+                        case "Update":
+                        UpdatePlugs();
+                        break;
+                    case "Fix":
+                        new Props(3);
+                        break;
                         #endregion
                         case "Props":
                             new Props();
@@ -534,6 +579,5 @@ namespace SapReader
             else
                 ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
         }
-        
     }    
 }

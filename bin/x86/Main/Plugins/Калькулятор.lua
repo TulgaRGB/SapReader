@@ -1,0 +1,25 @@
+Info([[<INFO name="Калькулятор" author="fast" window="True"/>]])
+main = AddWindow()
+main:Draw([[<FORM>
+  <textbox name="from" location="12,12" size="289,50" font="24" readonly="">
+  </textbox>
+  <button location="12,60" size="73" font="36" name="b1">1</button>
+  <button location="84,60" size="73" font="36" name="b2">2</button>
+  <button location="156,60" size="73" font="36" name="b3">3</button>
+  <button location="12,132" size="73" font="36" name="b4">4</button>
+  <button location="84,132" size="73" font="36" name="b5">5</button>
+  <button location="156,132" size="73" font="36" name="b6">6</button>
+  <button location="12,204" size="73" font="36" name="b7">7</button>
+  <button location="84,204" size="73" font="36" name="b8">8</button>
+  <button location="156,204" size="73" font="36" name="b9">9</button>
+  <button location="228,60" size="73" font="36" name="bpl">+</button>
+  <button location="228,132" size="73" font="36" name="bmi">-</button>
+  <button location="228,204" size="73" font="36" name="bmu">*</button>
+  <button location="228,276" size="73" font="36" name="bsl">/</button>
+  <button location="12,276" size="73" font="36" name="bcl">C</button>
+  <button location="84,276" size="73" font="36" name="b0">0</button>
+  <button location="156,276" size="73" font="36" name="bdo">=</button>
+</FORM>]])
+LSFB.AddLSFB(main)
+main.Text = this.Name
+main:Show()

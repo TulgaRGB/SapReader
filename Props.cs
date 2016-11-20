@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using LS;
 
 namespace SapReader
@@ -20,7 +21,6 @@ namespace SapReader
             tabControl.Appearance = TabAppearance.FlatButtons;
             tabControl.ItemSize = new Size(0, 1);
             tabControl.SizeMode = TabSizeMode.Fixed;
-            tabControl.SelectTab(page);
             mm.Renderer = new LSFB.MyRenderer();            
             main = new LS.LSFB(this, 2, 0, 80, false );
             foreach (TabPage p in tabControl.TabPages)
@@ -29,6 +29,8 @@ namespace SapReader
                 p.AutoScroll = true;
             }
             tabControl.Dock = DockStyle.Fill;
+            cmsPlugs.Renderer = new LSFB.MyRenderer();
+            #region Colors
             Image image = new Bitmap(201,201);
             using (Graphics g = Graphics.FromImage(image))
             {
@@ -119,6 +121,8 @@ namespace SapReader
             bb.MouseMove += RGB;
             pictureBox1.MouseMove += pick;
             pictureBox1.MouseClick += pick;
+            #endregion
+            #region Bools
             foreach (string k in Bools.Keys)
                 {
                 bool ch = false;
@@ -129,13 +133,96 @@ namespace SapReader
                 catch { }
                     Мойвыбор.Controls.Add(new CheckBox { Text = k, AutoSize = true, Location = new Point(12, 12 + 23 * Мойвыбор.Controls.Count), Checked = ch, FlatStyle = FlatStyle.Flat });
                 }
+            #endregion
+            #region Pros
             if (Main.parames.ContainsKey("Pro.Login"))
                 login.Text = Main.parames["Pro.Login"];
             if (Main.parames.ContainsKey("Pro.Pass"))
                 pass.Text = Main.parames["Pro.Pass"];
             if (Main.parames.ContainsKey("Pro.Ip"))
                 ip.Text = Main.parames["Pro.Ip"];
+            #endregion
+            #region Yolka            
+            Yolka();
+            #endregion
+            tabSelect(mm.Items[page], null);
             Show();
+        }
+        void Yolka(TreeNode n = null, ToolStripItemCollection cc = null)
+        {
+            if (n == null)
+            {
+                переместитьToolStripMenuItem.DropDownItems.Clear();
+                yolka.Nodes.Clear();
+                ToolStripMenuItem l = new ToolStripMenuItem("...");
+                l.Click += (object sender, EventArgs e) =>
+                {
+                    try
+                    {
+                        TreeNode rnode = yolka.SelectedNode;
+                        if (rnode.Text.Contains('.'))
+                        {
+                            if (@"Plugins\" + rnode.Text != @"Plugins\" + rnode.FullPath)
+                            {
+                                File.WriteAllBytes(@"Plugins\" + rnode.Text, File.ReadAllBytes(@"Plugins\" + rnode.FullPath));
+                                File.Delete(@"Plugins\" + rnode.FullPath);
+                            }
+                        }
+                        else
+                        {
+                            Directory.Delete(@"Plugins\" + rnode.FullPath);
+                            Directory.CreateDirectory(@"Plugins\" + rnode.Text);
+                        }
+                        обновитьToolStripMenuItem_Click(null, null);
+                    }
+                    catch (Exception ex) { Main.main.DebugMessage(ex.Message); }
+                };
+                переместитьToolStripMenuItem.DropDownItems.Add(l);
+                переместитьToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+            }
+            if (cc == null)
+                cc = Main.main.инструментыToolStripMenuItem.DropDownItems;
+            foreach (ToolStripItem i in cc)
+            {
+                if (i.Tag + "" == "Plugin")
+                {
+                    TreeNode node = new TreeNode(i.Text);
+                    if (n == null)
+                        yolka.Nodes.Add(node);
+                    else
+                        n.Nodes.Add(node);
+                    Yolka(node, ((ToolStripMenuItem)i).DropDownItems);
+                    if (!node.Text.Contains('.'))
+                    {
+                        ToolStripMenuItem l = new ToolStripMenuItem(node.Text);
+                        l.Click += (object sender, EventArgs e) =>
+                        {
+                            try
+                            {
+                                TreeNode rnode = yolka.SelectedNode;
+                                if (rnode.Text.Contains('.'))
+                                {
+                                    if (@"Plugins\" + node.FullPath + "\\" + rnode.Text != @"Plugins\" + rnode.FullPath)
+                                    {
+                                        File.WriteAllBytes(@"Plugins\" + node.FullPath + "\\" + rnode.Text, File.ReadAllBytes(@"Plugins\" + rnode.FullPath));
+                                        File.Delete(@"Plugins\" + rnode.FullPath);
+                                    }
+                                }
+                                else
+                                {
+                                    Directory.Delete(@"Plugins\" + rnode.FullPath);
+                                    Directory.CreateDirectory(@"Plugins\" + node.FullPath + @"\" + rnode.Text);
+                                }
+                                обновитьToolStripMenuItem_Click(null, null);
+                            }
+                            catch (Exception ex) { Main.main.DebugMessage(ex.Message); }
+                        };
+                        переместитьToolStripMenuItem.DropDownItems.Add(l);
+                    }
+                }
+            }
+            if(n == null)
+                yolka.ExpandAll();
         }
         Dictionary<string, string> Bools = new Dictionary<string, string>()
         {
@@ -269,5 +356,47 @@ namespace SapReader
                 LSFB.ResetParams("SapReader");
             label2.Visible = !label2.Visible;
         }
+        #region cmsPro
+        private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Main.main.UpdatePlugs();
+            Yolka();
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode now = yolka.SelectedNode;
+            string way = @"Plugins\"+ now.FullPath;
+            try
+            {
+                if (now.Text.Contains('.'))
+            {
+                
+                    File.Delete(way);
+            }
+            else
+            {
+                    Directory.Delete(way);
+            }
+            обновитьToolStripMenuItem_Click(null,null);
+            }
+                catch (Exception ex) { Main.main.DebugMessage(ex.Message); }
+        }
+
+        private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Main.main.MenuHandler(new ToolStripMenuItem {Tag = "Add" },null);
+        }
+
+        private void новаяПапкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string text = null;
+            if(LSFB.InputBox(Text,"Введите название папки:",ref text, false) == DialogResult.OK)
+            {
+                Directory.CreateDirectory(@"Plugins\" + text);
+                обновитьToolStripMenuItem_Click(null,null);
+            }
+        }
+        #endregion
     }
 }

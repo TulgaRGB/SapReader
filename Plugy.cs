@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LS;
-using System.Xml;
+using System.IO;
 
 namespace SapReader
 {
@@ -38,18 +38,23 @@ namespace SapReader
             }
             else
             {
+                    string first = xml.Split(Convert.ToChar(13)).First();
                 try
                 {
-                    name = ExtractFromString(xml, "--[[", "]]").First();
+                    LSFB.GetInfo(ExtractFromString(first, "Info([[", "]])").First()).TryGetValue("name", out name);
                 }
                 catch { }
-                foreach (string s in ExtractFromString(xml, "Draw([[", "]])"))
+                foreach (string s in ExtractFromString(xml.Replace(first + Convert.ToChar(13),""), "Draw([[", "]])"))
                 {
                     Dictionary<string, Control> cc = LSFB.DrawForm(splitContainer1.Panel2, s);
                     foreach(KeyValuePair<string, Control> v in cc)
                     {
                         LSFB.AddHelp(v.Value, v.Key);
                     }
+                }
+                if (splitContainer1.Panel2.Controls.Count == 0)
+                {
+                    LSFB.AddHelp(splitContainer1.Panel2, "Нет предварительного просмотра");
                 }
             }
             if (String.IsNullOrEmpty(name))
@@ -62,7 +67,7 @@ namespace SapReader
             Size = LSFB.MainForm.Size;            
             ShowDialog();
         }
-        private static List<string> ExtractFromString(
+        public static List<string> ExtractFromString(
         string text, string startString, string endString)
         {
             List<string> matched = new List<string>();
@@ -87,12 +92,12 @@ namespace SapReader
         {
             Close();
         }
-
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Remove(((Main)LSFB.MainForm).пустоToolStripMenuItem);
-            ((Main)LSFB.MainForm).плагиныToolStripMenuItem.DropDownItems.Add(((Main)LSFB.MainForm).PlugMaker(name));
-            ((Main)LSFB.MainForm).plugs[name] = xml;
+            if (!Directory.Exists("Plugins"))
+                Directory.CreateDirectory("Plugins");
+            File.WriteAllText(@"Plugins\" + name+".lua",xml);
+            Main.main.UpdatePlugs();
             Close();
         }
     }
