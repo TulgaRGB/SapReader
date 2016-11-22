@@ -341,10 +341,8 @@ namespace SapReader
             Dictionary<string,string> tmp = LSFB.LoadParams("SapReader");
             foreach (KeyValuePair<string, string> t in tmp)
                 parames[t.Key] = t.Value;
-            if (parames.ContainsKey("Color.BackColor"))
-                BackColor = LSFB.FromHex(parames["Color.BackColor"]);            
-            if (parames.ContainsKey("Color.ForeColor"))
-                ForeColor = LSFB.FromHex(parames["Color.ForeColor"]);
+                BackColor = LSFB.FromHex(parames["Color.BackColor"]+"ffffff");    
+                ForeColor = LSFB.FromHex(parames["Color.ForeColor"]+"000000");
         }
         #region menu options
         public void MainScr()
