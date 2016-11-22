@@ -38,13 +38,12 @@ namespace SapReader
             }
             else
             {
-                    string first = xml.Split(Convert.ToChar(13)).First();
                 try
                 {
-                    LSFB.GetInfo(ExtractFromString(first, "Info([[", "]])").First()).TryGetValue("name", out name);
+                    LSFB.GetInfo(ExtractFromString(xml, "Info([[", "]])").First()).TryGetValue("name", out name);
                 }
                 catch { }
-                foreach (string s in ExtractFromString(xml.Replace(first + Convert.ToChar(13),""), "Draw([[", "]])"))
+                foreach (string s in ExtractFromString(xml.Replace("Info([[","Draw([["), "Draw([[", "]])"))
                 {
                     Dictionary<string, Control> cc = LSFB.DrawForm(splitContainer1.Panel2, s);
                     foreach(KeyValuePair<string, Control> v in cc)

@@ -39,3 +39,4 @@ main.WindowControls["from"].Text = main.WindowControls["from"].Text .. sender.Te
 end
 clear = false
 end
+Alert(main.WindowControls["from"])
