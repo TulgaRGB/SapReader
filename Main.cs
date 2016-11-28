@@ -16,7 +16,6 @@ using System.Media;
 using System.Xml;
 using System.Net;
 using System.Numerics;
-using LuaInterface;
 using System.Net.Sockets;
 
 namespace SapReader
@@ -94,13 +93,26 @@ namespace SapReader
                         {
                             if(response.FirstChild.Attributes.GetNamedItem("text") == null)
                             {
-                                foreach(XmlNode news in response.ChildNodes)
+                                LSFB.DrawForm(lsfb.work, "<FORM><label font=\"18\" location=\"12\">Список новостей:</label></FORM>");
+                                Text = "Новости";
+                                foreach (XmlNode news in response.ChildNodes)
                                 {
+                                    lsfb.work.Controls.Add(new News
+                                    (
+                                        news.Attributes.GetNamedItem("id").InnerText,
+                                        news.Attributes.GetNamedItem("title").InnerText,
+                                        news.Attributes.GetNamedItem("time").InnerText,
+                                        news.Attributes.GetNamedItem("comments").InnerText
+                                    )
+                                    {
+                                        Location = new Point(12,lsfb.work.Controls[lsfb.work.Controls.Count-1].Top + lsfb.work.Controls[lsfb.work.Controls.Count - 1].Height + 12)
+                                    }
+                                        );
                                 }
                             }
                             else
                             {
-
+                                LSFB.DrawForm(lsfb.work, "<FORM><label font=\"18\" location=\"12\">\"" + response.FirstChild.Attributes.GetNamedItem("title").InnerText + "\", автор: " + response.FirstChild.Attributes.GetNamedItem("author").InnerText + "</label><label location=\"12,69\">" + response.FirstChild.Attributes.GetNamedItem("text").InnerText + "</label></FORM>", true);
                             }
                         }
                         break;
@@ -126,7 +138,6 @@ namespace SapReader
                         browser.Hide();
                        flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.DATA));
                         lsfb.work.Controls.Find("error", false).Last().Text = response.InnerText;
-                        lsfb.work.Controls.Find("newName", false).Last().Text = conLabel.Text;
                         string oldpass = null;
                         string newpass = null;
                         lsfb.work.Controls.Find("save", false).Last().Click += (object sender, EventArgs e) =>
@@ -215,8 +226,7 @@ namespace SapReader
                                 f.Attributes.GetNamedItem("author").InnerText,
                                 f.Attributes.GetNamedItem("validated").InnerText != "False"? "ДА" : "НЕТ"
                             });
-                            temp.Items.Add(item);
-                            
+                            temp.Items.Add(item);                            
                         }
                         break;
                     case "login":
@@ -500,15 +510,11 @@ namespace SapReader
                             break;
                         case "Add":
                         System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua" };
-                            if (od.ShowDialog() == DialogResult.OK)
-                            {
-                            try
-                            {
-                                string xml = File.ReadAllText(od.FileName);
-                                new Plugy(xml);
-                            }
-                            catch (Exception ex) { DebugMessage(ex.Message); }
-                            }
+                        if (od.ShowDialog() == DialogResult.OK)
+                        {
+                            string xml = File.ReadAllText(od.FileName);
+                            new Plugy(xml);
+                        }
                             break;
                         case "Update":
                         UpdatePlugs();
@@ -528,7 +534,7 @@ namespace SapReader
                         break;
                     }
             }
-            // try { }
+           //  try { }
             catch (Exception ex) { DebugMessage(ex.Message + "");}
         }
         public void DebugMessage(string text,string header = "Ошибка!")
