@@ -11,52 +11,29 @@ using LS;
 
 namespace SapReader
 {
-    class News : Panel
+    class News : Button
     {
-        public News(string id, string title,  string date, string comments)
+        public News(string id, string title,  string date, string comments, string author, string text)
         {
-            BorderStyle = BorderStyle.FixedSingle;
-            Label h1 = new Label
+            FlatStyle = FlatStyle.Flat;
+            Paint += LSFB.DrawText(title,LSFB.sizer(22), BackColor, new Point(12, 12));
+            Paint += LSFB.DrawText(date, LSFB.sizer(8), BackColor, new Point(12, 50));
+            Paint += LSFB.DrawText("От " + author, LSFB.sizer(8), BackColor, new Point(120, 50));
+            Paint += LSFB.DrawText((comments != "" ? comments.Split('|').Length + "" : "нет") + " коментариев", LSFB.sizer(8), BackColor, new Point(12,69));
+            Paint += LSFB.DrawText(text, LSFB.sizer(12), BackColor, new Point(12, 100));
+            Click += (object sender, EventArgs e) =>
             {
-                Location = new Point(12,12),
-                Text = title,
-                Font = LSFB.sizer(14),
-                AutoSize = true
-            };
-
-            Label data = new Label
-            {
-                Location = new Point(12, h1.Top + h1.Height + 12),
-                Text = date,
-                Font = LSFB.sizer(8),
-                AutoSize = true
-            };
-
-            Label com = new Label
-            {
-                Location = new Point(data.Width + 12, h1.Top + h1.Height + 12),
-                Text = comments + " коментариев",
-                Font = LSFB.sizer(8),
-                AutoSize = true
-            };
-            Controls.AddRange(new Control[] {h1,data,com });
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowOnly;
-
-            Button b = new Button
-            {
-                Location = new Point(data.Width + 12, data.Top + data.Height + 12),
-                FlatStyle = FlatStyle.Flat,
-                Text = "Подробнее...",
-                Font = LSFB.sizer(8),
-                AutoSize = true,
-                Anchor = AnchorStyles.Right
-            };
-            Controls.Add(b);
-            Height += 12;
-            b.Click += (object sender, EventArgs e) =>
-            {
-                Main.main.ClientSend("<REQUEST type=\"news\" id=\"" + id + "\"/>");
+                Control tmp = Parent;
+                tmp.Controls.Clear();
+                Main.main.ClientSend(@"
+<REQUEST type='FQL' return-type='comments'>
+    <QUERY>
+        <SELECT FROM='newsCom'>
+			<WHERE Field='id' IS='" + comments + @"'/>
+            <ORDER BY='+when'/>
+        </SELECT>
+    </QUERY>
+</REQUEST>");
             };
         }
     }

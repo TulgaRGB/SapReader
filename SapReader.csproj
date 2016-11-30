@@ -27,7 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyVersion>0.2.291.0</AssemblyVersion>
+    <AssemblyVersion>0.2.395.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -121,6 +121,9 @@
   <ItemGroup>
     <Compile Include="..\..\LS\FastLua.cs">
       <Link>FastLua.cs</Link>
+    </Compile>
+    <Compile Include="..\..\LS\LSDB.cs">
+      <Link>LSDB.cs</Link>
     </Compile>
     <Compile Include="..\..\LS\LSFB.cs">
       <Link>LSFB.cs</Link>

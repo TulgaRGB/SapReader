@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.mm = new System.Windows.Forms.MenuStrip();
             this.ыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -304,7 +303,7 @@
             // проводникToolStripMenuItem1
             // 
             this.проводникToolStripMenuItem1.Name = "проводникToolStripMenuItem1";
-            this.проводникToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.проводникToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
             this.проводникToolStripMenuItem1.Tag = "Brow";
             this.проводникToolStripMenuItem1.Text = "Проводник";
             this.проводникToolStripMenuItem1.Click += new System.EventHandler(this.MenuHandler);
@@ -312,12 +311,12 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(133, 6);
             // 
             // добавитьToolStripMenuItem
             // 
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.добавитьToolStripMenuItem.Tag = "Add";
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
@@ -325,7 +324,7 @@
             // настроитьToolStripMenuItem
             // 
             this.настроитьToolStripMenuItem.Name = "настроитьToolStripMenuItem";
-            this.настроитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.настроитьToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.настроитьToolStripMenuItem.Tag = "Fix";
             this.настроитьToolStripMenuItem.Text = "Настроить";
             this.настроитьToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
@@ -333,7 +332,7 @@
             // обновитьToolStripMenuItem2
             // 
             this.обновитьToolStripMenuItem2.Name = "обновитьToolStripMenuItem2";
-            this.обновитьToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.обновитьToolStripMenuItem2.Size = new System.Drawing.Size(136, 22);
             this.обновитьToolStripMenuItem2.Tag = "Update";
             this.обновитьToolStripMenuItem2.Text = "Обновить";
             this.обновитьToolStripMenuItem2.Click += new System.EventHandler(this.MenuHandler);
@@ -341,7 +340,7 @@
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(133, 6);
             // 
             // настройкиToolStripMenuItem
             // 

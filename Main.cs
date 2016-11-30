@@ -88,32 +88,32 @@ namespace SapReader
                 if(response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
                 {
+                    case "comments":
+                        MessageBox.Show(response.InnerXml);
+                        break;
                     case "news":
-                        if(response.FirstChild != null)
+                        Text = "Новости";
+                        LSDB newsDB = new LSDB();
+                        newsDB.LoadXml(response.InnerXml);
+                        LSDB.Table newsTable = newsDB.SelectTable("news");
+                        if(newsTable != null)
                         {
-                            if(response.FirstChild.Attributes.GetNamedItem("text") == null)
-                            {
-                                LSFB.DrawForm(lsfb.work, "<FORM><label font=\"18\" location=\"12\">Список новостей:</label></FORM>");
-                                Text = "Новости";
-                                foreach (XmlNode news in response.ChildNodes)
+                            foreach (LSDB.Table.Row r in newsTable.Values)
+                                lsfb.work.Controls.Add(new News
+                                   (
+                                       r.SelectField("id"),
+                                       r.SelectField("title"),
+                                       r.SelectField("time"),
+                                       r.SelectField("comments"),
+                                       r.SelectField("author"),
+                                       r.SelectField("text")
+                                   )
                                 {
-                                    lsfb.work.Controls.Add(new News
-                                    (
-                                        news.Attributes.GetNamedItem("id").InnerText,
-                                        news.Attributes.GetNamedItem("title").InnerText,
-                                        news.Attributes.GetNamedItem("time").InnerText,
-                                        news.Attributes.GetNamedItem("comments").InnerText
-                                    )
-                                    {
-                                        Location = new Point(12,lsfb.work.Controls[lsfb.work.Controls.Count-1].Top + lsfb.work.Controls[lsfb.work.Controls.Count - 1].Height + 12)
-                                    }
-                                        );
+                                    Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+                                    Size = new Size(lsfb.work.Width - 24, 150),
+                                    Location = new Point(12, lsfb.work.Controls.Count == 0? 12: (lsfb.work.Controls[lsfb.work.Controls.Count - 1].Top + lsfb.work.Controls[lsfb.work.Controls.Count - 1].Height + 12))
                                 }
-                            }
-                            else
-                            {
-                                LSFB.DrawForm(lsfb.work, "<FORM><label font=\"18\" location=\"12\">\"" + response.FirstChild.Attributes.GetNamedItem("title").InnerText + "\", автор: " + response.FirstChild.Attributes.GetNamedItem("author").InnerText + "</label><label location=\"12,69\">" + response.FirstChild.Attributes.GetNamedItem("text").InnerText + "</label></FORM>", true);
-                            }
+                                       );
                         }
                         break;
                     case "chat":
@@ -263,7 +263,14 @@ namespace SapReader
                             }; lsfb.work.Controls.Find("news", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<REQUEST type=\"news\"/>");
+                                ClientSend(@"
+<REQUEST type='FQL' return-type='news'>
+    <QUERY>
+        <SELECT FROM='news'>
+            <ORDER BY='-time'/>
+        </SELECT>
+    </QUERY>
+</REQUEST>");
                             };
                         }
                         else
@@ -537,7 +544,7 @@ namespace SapReader
            //  try { }
             catch (Exception ex) { DebugMessage(ex.Message + "");}
         }
-        public void DebugMessage(string text,string header = "Ошибка!")
+        public void DebugMessage(object text,string header = "Ошибка!")
         {
           tray.ShowBalloonTip(1000, header, text + "", ToolTipIcon.None);
         }
