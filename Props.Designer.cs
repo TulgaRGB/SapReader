@@ -55,21 +55,22 @@
             this.Темы = new System.Windows.Forms.TabPage();
             this.Плагины = new System.Windows.Forms.TabPage();
             this.yolka = new System.Windows.Forms.TreeView();
-            this.Мойвыбор = new System.Windows.Forms.TabPage();
-            this.Pro = new System.Windows.Forms.TabPage();
-            this.ip = new System.Windows.Forms.TextBox();
-            this.pass = new System.Windows.Forms.TextBox();
-            this.login = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.cmsPlugs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.переместитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.новаяПапкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.новаяПапкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Мойвыбор = new System.Windows.Forms.TabPage();
+            this.Pro = new System.Windows.Forms.TabPage();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.ip = new System.Windows.Forms.TextBox();
+            this.pass = new System.Windows.Forms.TextBox();
+            this.login = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.сброситьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
@@ -79,8 +80,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.rb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.Плагины.SuspendLayout();
-            this.Pro.SuspendLayout();
             this.cmsPlugs.SuspendLayout();
+            this.Pro.SuspendLayout();
             this.SuspendLayout();
             // 
             // mm
@@ -354,6 +355,64 @@
             this.yolka.Size = new System.Drawing.Size(220, 394);
             this.yolka.TabIndex = 3;
             // 
+            // cmsPlugs
+            // 
+            this.cmsPlugs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.обновитьToolStripMenuItem,
+            this.сброситьToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.переместитьToolStripMenuItem,
+            this.удалитьToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.добавитьToolStripMenuItem,
+            this.новаяПапкаToolStripMenuItem});
+            this.cmsPlugs.Name = "cmsPlugs";
+            this.cmsPlugs.Size = new System.Drawing.Size(153, 170);
+            // 
+            // обновитьToolStripMenuItem
+            // 
+            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
+            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.обновитьToolStripMenuItem.Text = "Обновить";
+            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // переместитьToolStripMenuItem
+            // 
+            this.переместитьToolStripMenuItem.Name = "переместитьToolStripMenuItem";
+            this.переместитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.переместитьToolStripMenuItem.Text = "Переместить";
+            // 
+            // удалитьToolStripMenuItem
+            // 
+            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.удалитьToolStripMenuItem.Text = "Удалить";
+            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // добавитьToolStripMenuItem
+            // 
+            this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem.Text = "Добавить";
+            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            // 
+            // новаяПапкаToolStripMenuItem
+            // 
+            this.новаяПапкаToolStripMenuItem.Name = "новаяПапкаToolStripMenuItem";
+            this.новаяПапкаToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.новаяПапкаToolStripMenuItem.Text = "Новая папка";
+            this.новаяПапкаToolStripMenuItem.Click += new System.EventHandler(this.новаяПапкаToolStripMenuItem_Click);
+            // 
             // Мойвыбор
             // 
             this.Мойвыбор.Location = new System.Drawing.Point(4, 22);
@@ -376,6 +435,18 @@
             this.Pro.TabIndex = 4;
             this.Pro.Text = "Pro";
             this.Pro.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox1.Location = new System.Drawing.Point(6, 133);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(87, 17);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Свой сервер";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // ip
             // 
@@ -411,74 +482,12 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
             // 
-            // cmsPlugs
+            // сброситьToolStripMenuItem
             // 
-            this.cmsPlugs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.обновитьToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.переместитьToolStripMenuItem,
-            this.удалитьToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.добавитьToolStripMenuItem,
-            this.новаяПапкаToolStripMenuItem});
-            this.cmsPlugs.Name = "cmsPlugs";
-            this.cmsPlugs.Size = new System.Drawing.Size(147, 126);
-            // 
-            // обновитьToolStripMenuItem
-            // 
-            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.обновитьToolStripMenuItem.Text = "Обновить";
-            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
-            // 
-            // переместитьToolStripMenuItem
-            // 
-            this.переместитьToolStripMenuItem.Name = "переместитьToolStripMenuItem";
-            this.переместитьToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.переместитьToolStripMenuItem.Text = "Переместить";
-            // 
-            // удалитьToolStripMenuItem
-            // 
-            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.удалитьToolStripMenuItem.Text = "Удалить";
-            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
-            // 
-            // новаяПапкаToolStripMenuItem
-            // 
-            this.новаяПапкаToolStripMenuItem.Name = "новаяПапкаToolStripMenuItem";
-            this.новаяПапкаToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.новаяПапкаToolStripMenuItem.Text = "Новая папка";
-            this.новаяПапкаToolStripMenuItem.Click += new System.EventHandler(this.новаяПапкаToolStripMenuItem_Click);
-            // 
-            // добавитьToolStripMenuItem
-            // 
-            this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.добавитьToolStripMenuItem.Text = "Добавить";
-            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox1.Location = new System.Drawing.Point(6, 133);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(87, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Свой сервер";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.сброситьToolStripMenuItem.Name = "сброситьToolStripMenuItem";
+            this.сброситьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.сброситьToolStripMenuItem.Text = "Сбросить";
+            this.сброситьToolStripMenuItem.Click += new System.EventHandler(this.сброситьToolStripMenuItem_Click);
             // 
             // Props
             // 
@@ -503,9 +512,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.rb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.Плагины.ResumeLayout(false);
+            this.cmsPlugs.ResumeLayout(false);
             this.Pro.ResumeLayout(false);
             this.Pro.PerformLayout();
-            this.cmsPlugs.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -553,5 +562,6 @@
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem новаяПапкаToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ToolStripMenuItem сброситьToolStripMenuItem;
     }
 }

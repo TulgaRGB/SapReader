@@ -96,6 +96,7 @@ namespace SapReader
             if (!Directory.Exists("Plugins"))
                 Directory.CreateDirectory("Plugins");
             File.WriteAllText(@"Plugins\" + name+".lua",xml);
+            Main.pluginsSha.Add(Sapphire.GetSha512(File.ReadAllBytes(@"Plugins\" + name + ".lua")));
             Main.main.UpdatePlugs();
             Close();
         }

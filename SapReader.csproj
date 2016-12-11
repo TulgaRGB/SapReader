@@ -27,7 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyVersion>0.2.395.0</AssemblyVersion>
+    <AssemblyVersion>0.2.481.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -92,12 +92,13 @@
     <ApplicationIcon>256.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="lua51">
-      <HintPath>C:\Users\fast\Downloads\lua51.dll</HintPath>
+    <Reference Include="lua51, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\LS_Private\lua51.dll</HintPath>
     </Reference>
     <Reference Include="LuaInterface, Version=2.0.0.16708, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\fast\Downloads\LuaInterface.dll</HintPath>
+      <HintPath>..\..\LS_Private\LuaInterface.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -128,6 +129,9 @@
     <Compile Include="..\..\LS\LSFB.cs">
       <Link>LSFB.cs</Link>
     </Compile>
+    <Compile Include="..\..\LS_Private\NetConnection.cs">
+      <Link>NetConnection.cs</Link>
+    </Compile>
     <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,7 +153,6 @@
     <Compile Include="Misc.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="NetConnection.cs" />
     <Compile Include="Plugy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +215,7 @@
     </Compile>
     <None Include="Resources\DATA.lua" />
     <None Include="Resources\HOME.lua" />
+    <None Include="Resources\NEWS.lua" />
     <None Include="Resources\PRO.lua" />
   </ItemGroup>
   <ItemGroup>

@@ -25,12 +25,12 @@ namespace SapReader
             {
                 Control tmp = Parent;
                 tmp.Controls.Clear();
+                Main.flua.DoString(Encoding.UTF8.GetString(Properties.Resources.NEWS));
                 Main.main.ClientSend(@"
 <REQUEST type='FQL' return-type='comments'>
     <QUERY>
         <SELECT FROM='newsCom'>
 			<WHERE Field='id' IS='" + comments + @"'/>
-            <ORDER BY='+when'/>
         </SELECT>
     </QUERY>
 </REQUEST>");

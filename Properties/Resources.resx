@@ -151,4 +151,7 @@ Send:
   <data name="Host" xml:space="preserve">
     <value>5.167.225.32</value>
   </data>
+  <data name="NEWS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NEWS.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

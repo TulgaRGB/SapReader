@@ -362,7 +362,11 @@ namespace SapReader
             Main.main.UpdatePlugs();
             Yolka();
         }
-
+        private void сброситьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (LSFB.ResetParams("SapReader", new[] { "Auto.Plugs" }))
+                Main.pluginsSha.Clear();
+        }
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode now = yolka.SelectedNode;
@@ -371,7 +375,6 @@ namespace SapReader
             {
                 if (now.Text.Contains('.'))
             {
-                
                     File.Delete(way);
             }
             else

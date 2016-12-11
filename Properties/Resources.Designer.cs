@@ -133,6 +133,16 @@ namespace SapReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] NEWS {
+            get {
+                object obj = ResourceManager.GetObject("NEWS", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] PRO {
             get {
                 object obj = ResourceManager.GetObject("PRO", resourceCulture);

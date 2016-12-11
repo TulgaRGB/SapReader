@@ -23,6 +23,7 @@ namespace SapReader
     public partial class Main : Form
     {
         public static Main main;
+        public static List<string> pluginsSha = new List<string>();
         public List<List<string>> history = new List<List<string>>();
         public static Random RNG = new Random();
         static public BigInteger exp;
@@ -43,7 +44,7 @@ namespace SapReader
             {"Pro.Pass",""},
             {"Bool.UseNotValidPlugins",""},
             {"Pro.Custom",""},
-            {"Pro.Ip",""}
+            {"Pro.Ip",""},
         };
         public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
@@ -69,11 +70,20 @@ namespace SapReader
             conLabel.SendToBack();
             flua = new FastLua(lsfb.work);
             flua.RegisterFunction("Send",this,GetType().GetMethod("ClientSend"));
-            flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.HOME));
+            flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
             if (flua.Name != null)
                 Text = flua.Name;
             if (parames["Bool.MaximizeOnStart"] == "True")
                 WindowState = FormWindowState.Maximized;
+            if (parames.ContainsKey("Auto.Size"))
+            {
+                string[] sizeParts = parames["Auto.Size"].Split(':');
+                int height = int.Parse(sizeParts[0]);
+                int width = int.Parse(sizeParts[1]);
+                Size = new Size(height, width);
+            }
+            if(parames.ContainsKey("Auto.Plugs"))
+            pluginsSha = parames["Auto.Plugs"].Split('|').ToList();
             tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             UpdatePlugs();
         }
@@ -136,7 +146,7 @@ namespace SapReader
                     case "persData":
                         Text = "Смена данных";
                         browser.Hide();
-                       flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.DATA));
+                       flua.DoString(Encoding.UTF8.GetString(Properties.Resources.DATA));
                         lsfb.work.Controls.Find("error", false).Last().Text = response.InnerText;
                         string oldpass = null;
                         string newpass = null;
@@ -194,39 +204,45 @@ namespace SapReader
                             catch (Exception ex) { DebugMessage(ex.Message); }
                         break;
                     case "forms":
-                        ListView temp = new ListView();
-                        temp.Resize += (object sender, EventArgs e) =>
+                        LSDB formsDB = new LSDB();
+                        formsDB.LoadXml(response.InnerXml);
+                        LSDB.Table forms = formsDB.SelectTable("forms");
+                        if (forms != null)
                         {
-                            foreach(ColumnHeader c in temp.Columns)
+                            ListView temp = new ListView();
+                            temp.Resize += (object sender, EventArgs e) =>
                             {
-                                c.Width = temp.Width / 4;
-                            }
-                        };
-                        temp.MouseDoubleClick += (object sender, MouseEventArgs e) =>
-                        {
-                            if(e.Button == MouseButtons.Left)
+                                foreach (ColumnHeader c in temp.Columns)
+                                {
+                                    c.Width = temp.Width / 4;
+                                }
+                            };
+                            temp.MouseDoubleClick += (object sender, MouseEventArgs e) =>
                             {
-                                ClientSend("<REQUEST type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
-                            }
-                        };
-                        temp.View = View.Details;
-                        temp.Anchor = browser.Anchor;
-                        temp.Size = lsfb.work.Size;
-                        lsfb.work.Controls.Add(temp);
-                        temp.Columns.Add("ID", temp.Width/4);
-                        temp.Columns.Add("Название", temp.Width / 4);
-                        temp.Columns.Add("Автор", temp.Width / 4);
-                        temp.Columns.Add("Проверенно", temp.Width / 4 -10);
-                        foreach (XmlNode f in response.ChildNodes)
-                        {
-                            ListViewItem item = new ListViewItem(new[] 
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                    ClientSend("<REQUEST type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
+                                }
+                            };
+                            temp.View = View.Details;
+                            temp.Anchor = browser.Anchor;
+                            temp.Size = lsfb.work.Size;
+                            lsfb.work.Controls.Add(temp);
+                            temp.Columns.Add("ID", temp.Width / 4);
+                            temp.Columns.Add("Название", temp.Width / 4);
+                            temp.Columns.Add("Автор", temp.Width / 4);
+                            temp.Columns.Add("Проверенно", temp.Width / 4 - 10);
+                            foreach (LSDB.Table.Row f in forms.Values)
                             {
-                                f.Attributes.GetNamedItem("id").InnerText,
-                                f.Attributes.GetNamedItem("name").InnerText,
-                                f.Attributes.GetNamedItem("author").InnerText,
-                                f.Attributes.GetNamedItem("validated").InnerText != "False"? "ДА" : "НЕТ"
+                                ListViewItem item = new ListViewItem(new[]
+                                {
+                                    f.GetId(),
+                                    f.SelectField("name"),
+                                    f.SelectField("author"),
+                                    f.SelectField("validated")!= "False"? "ДА" : "НЕТ"
                             });
-                            temp.Items.Add(item);                            
+                                temp.Items.Add(item);
+                            }
                         }
                         break;
                     case "login":
@@ -236,12 +252,19 @@ namespace SapReader
                             Text = "Pro";
                             conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             browser.Hide();
-                            flua.DoString(UnicodeEncoding.UTF8.GetString(Properties.Resources.PRO));
+                            flua.DoString(Encoding.UTF8.GetString(Properties.Resources.PRO));
                             lsfb.work.Controls.Find("hi", false).Last().Text+=", " + conLabel.Text + "!";
                             lsfb.work.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
                             {
                                 lsfb.work.Controls.Clear();
-                                ClientSend("<REQUEST type=\"forms\" validated=\"True"+ (parames.ContainsKey("Bool.UseNotValidPlugins")? parames["Bool.UseNotValidPlugins"] == "True"? "|False" :  "" : "") + "\"/>");
+                                ClientSend(@"
+<REQUEST type='FQL' return-type='forms'>
+    <QUERY>
+        <SELECT FROM='forms' ORDERBY='+name'>
+            <WHERE Field='validated' IS='True" + (parames["Bool.UseNotValidPlugins"] == "True"? "|False" : "") + @"'/>
+        </SELECT>
+    </QUERY>
+</REQUEST>");
                             };
                             lsfb.work.Controls.Find("checkApp", false).Last().Click += (object sender, EventArgs e) =>
                             {
@@ -266,15 +289,13 @@ namespace SapReader
                                 ClientSend(@"
 <REQUEST type='FQL' return-type='news'>
     <QUERY>
-        <SELECT FROM='news'>
-            <ORDER BY='-time'/>
-        </SELECT>
+        <SELECT FROM='news' ORDERBY='-time'/>
     </QUERY>
 </REQUEST>");
                             };
                         }
                         else
-                            if (response.Attributes.GetNamedItem("result").InnerText == "query")
+                            if (response.Attributes.GetNamedItem("result").InnerText == "request")
                         {
                             ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
@@ -408,20 +429,26 @@ namespace SapReader
                     string xml = File.ReadAllText(d);
                     temp.Click += (object sender, EventArgs e) =>
                     {
-                        try
+                        if (!pluginsSha.Contains(Sapphire.GetSha512(File.ReadAllBytes(d))))
                         {
-                            Dictionary<string,string> tmp = LSFB.GetInfo(Plugy.ExtractFromString(xml, "([[", "]])").First());
-                            bool doo = tmp.ContainsKey("window") ? tmp["window"] == "True" ? false : true : true;
-                            if (doo)
-                            {
-                                browser.Hide();
-                                lsfb.work.Controls.Clear();
-                            }
-                            flua.DoString(xml);
-                            if(doo)
-                            Text = flua.Name;
+                            DebugMessage("Плагин " + d + " был изменён, проверьте код и добавьте его заного");
+                            new Plugy(File.ReadAllText(d));
                         }
-                        catch (Exception ex) { DebugMessage(ex.Message); }
+                        else
+                            try
+                            {
+                                Dictionary<string, string> tmp = LSFB.GetInfo(Plugy.ExtractFromString(xml, "([[", "]])").First());
+                                bool doo = tmp.ContainsKey("window") ? tmp["window"] == "True" ? false : true : true;
+                                if (doo)
+                                {
+                                    browser.Hide();
+                                    lsfb.work.Controls.Clear();
+                                }
+                                flua.DoString(xml);
+                                if (doo)
+                                    Text = flua.Name;
+                            }
+                            catch (Exception ex) { DebugMessage(ex.Message); }
                     };
                     c.Add(temp);
                     empty = false;
@@ -505,11 +532,37 @@ namespace SapReader
                             break;
                         //separator
                         case "Encrypt":
-                            Encrypt(browser.SelectedItems, true);
+                            Encrypt(browser.SelectedItems, true);                        
                             break;
                         case "Decrypt":
                             Encrypt(browser.SelectedItems, false);
                             break;
+                        case "MD5":
+                        string outp = "MD5 выбранных файлов:";
+                        foreach (ListViewItem item in browser.SelectedItems)
+                        {
+                            outp += Environment.NewLine + item.Text + " - ";
+                            try
+                            {
+                                outp += Sapphire.GetMd5HashBytes(File.ReadAllBytes(nowDir + item.Text));
+                            }
+                            catch (Exception ex) { outp += ex.Message; }
+                        }
+                        MessageBox.Show(outp, "MD5");
+                        break;
+                        case "SHA-512":
+                        outp = "SHA-512 выбранных файлов:";
+                        foreach (ListViewItem item in browser.SelectedItems)
+                        {
+                            outp += Environment.NewLine + item.Text + " - ";
+                            try
+                            {
+                                outp += Sapphire.GetSha512(File.ReadAllBytes(nowDir +item.Text));
+                            }
+                            catch (Exception ex) { outp += ex.Message; }
+                        }
+                        MessageBox.Show(outp,"SHA-512");
+                        break;
                         #endregion
                         #region Инструменты
                         case "Brow":
@@ -606,6 +659,15 @@ namespace SapReader
             }
             else
                 ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
+        }
+        //work done
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(WindowState == FormWindowState.Normal)
+            parames["Auto.Size"] = string.Format("{0}:{1}", Width, Height);
+            parames["Auto.Plugs"] = String.Join("|",pluginsSha.Where(s=> s != "").ToArray());
+            LSFB.SaveParams("SapReader", parames.Where(s => s.Key.Split('.').First() == "Auto")
+                        .ToDictionary(dict => dict.Key, dict => dict.Value));
         }
     }    
 }
