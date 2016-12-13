@@ -1,0 +1,15 @@
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x64\Main\SapReader.exe.config
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x64\Main\SapReader.exe
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x64\Main\SapReader.pdb
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x64\Main\NLua.dll
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x64\Main\KopiLua.dll
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.About.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Main.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Crypy.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Login.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Plugy.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Properties.Resources.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.Props.resources
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.csproj.GenerateResource.Cache
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.exe
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x64\Main\SapReader.pdb
