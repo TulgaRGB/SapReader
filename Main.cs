@@ -24,41 +24,44 @@ namespace SapReader
     {
         public static Main main;
         public static List<string> pluginsSha = new List<string>();
-        public List<List<string>> history = new List<List<string>>();
+        public static List<List<string>> history = new List<List<string>>();
         public static Random RNG = new Random();
         static public BigInteger exp;
         static public BigInteger osn = Convert.ToInt32("3");
         static public BigInteger mosn = Convert.ToInt32("93563");
         static public BigInteger mosn2 = Convert.ToInt32("2147483647");
-        public int mysec = RNG.Next(10000, 100000);
-        string key = null;
+        public static int mysec = RNG.Next(10000, 100000);
+        static string key = null;
         public static string owner = Environment.UserName;
         public static Dictionary<string, string> parames = new Dictionary<string, string>
         {
             {"Bool.AllowScript",""},
             {"Bool.DontAskForScript",""},
             {"Bool.MaximizeOnStart",""},
+            {"Bool.UseNotValidPlugins",""},
+            {"Bool.UsePluginsNoSha","" },
             {"Color.BackColor",""},
             {"Color.ForeColor",""},
             {"Pro.Login",""},
             {"Pro.Pass",""},
-            {"Bool.UseNotValidPlugins",""},
             {"Pro.Custom",""},
             {"Pro.Ip",""},
         };
-        public readonly static string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
+        public static object lastSender = null;
+        public readonly string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
         public static NetConnection client = new NetConnection { BufferSize = 8192 };
         public static FastLua flua;
-        public Main()
+        public Main(bool first = true)
         {           
             InitializeComponent(); exp = Diff(osn, mysec, false); main = this;
             ReloadAllParams();
             browser.Dock = DockStyle.Fill;
             browser.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
+            if(first)
             LSFB.MainForm = this;
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
-            lsfb = LSFB.AddLSFB(this,4, 24, autoscroll:true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });            
+            lsfb = LSFB.AddLSFB(this, first? 4 : 3, first ? 24 : 0, autoscroll:true, help:   (object sender, EventArgs e) => { new About("SapphireReader"); });    
             lsfb.customtext[0] = nazvanie + " - ";
             Text = "Добро пожаловать!";
             mm.Renderer = new LSFB.MyRenderer();
@@ -86,6 +89,8 @@ namespace SapReader
             pluginsSha = parames["Auto.Plugs"].Split('|').ToList();
             tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             UpdatePlugs();
+            if (!first)
+                Controls.Remove(mm);
         }
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
@@ -407,7 +412,9 @@ namespace SapReader
                     c = инструментыToolStripMenuItem.DropDownItems;
                     c.Clear();
                     c.AddRange(new ToolStripItem[] 
-                    { проводникToolStripMenuItem1,
+                    {
+                        главнаяСтраницаToolStripMenuItem,
+                        проводникToolStripMenuItem1,
                         toolStripSeparator3,
                         добавитьToolStripMenuItem,
                         настроитьToolStripMenuItem,
@@ -429,7 +436,7 @@ namespace SapReader
                     string xml = File.ReadAllText(d);
                     temp.Click += (object sender, EventArgs e) =>
                     {
-                        if (!pluginsSha.Contains(Sapphire.GetSha512(File.ReadAllBytes(d))))
+                        if (!pluginsSha.Contains(Sapphire.GetSha512(File.ReadAllBytes(d))) && parames["Bool.UsePluginsNoSha"] != "True")
                         {
                             DebugMessage("Плагин " + d + " был изменён, проверьте код и добавьте его заного");
                             new Plugy(File.ReadAllText(d));
@@ -502,8 +509,15 @@ namespace SapReader
                 catch { s2 = (ContextMenuStrip)sender; }
                     switch (s != null ? s.Tag + "" : s2.Tag + "")
                     {
-                        #region Проводник
-                        case "MainScr":
+                    #region Файл
+                    case "NewWindow":
+                        Main nM = new Main(false);
+                        nM.Show();
+                        nM.Invoke((EventHandler)nM.MenuHandler, nM.mm.Items.Find(((ToolStripMenuItem)lastSender).Name, true).First(), null);
+                        break;
+                    #endregion
+                    #region Проводник
+                    case "MainScr":
                             MainScr();
                             break;
                         //separator
@@ -563,8 +577,13 @@ namespace SapReader
                         }
                         MessageBox.Show(outp,"SHA-512");
                         break;
-                        #endregion
-                        #region Инструменты
+                    #endregion
+                    #region Инструменты
+                    case "Main":
+                        browser.Hide();
+                        lsfb.work.Controls.Clear();
+                        flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
+                        break;
                         case "Brow":
                             browser.Show(); lsfb.work.Controls.Clear();
                             break;
@@ -593,6 +612,7 @@ namespace SapReader
                         DebugMessage("Хэш Сумма " + Clipboard.GetText() + " в буфере обмена","Успешно!");
                         break;
                     }
+                lastSender = sender;
             }
            //  try { }
             catch (Exception ex) { DebugMessage(ex.Message + "");}

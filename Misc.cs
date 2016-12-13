@@ -26,6 +26,9 @@ namespace SapReader
                 Control tmp = Parent;
                 tmp.Controls.Clear();
                 Main.flua.DoString(Encoding.UTF8.GetString(Properties.Resources.NEWS));
+                LSFB.CbyName(tmp.Controls, "header").Text = title;
+                LSFB.CbyName(tmp.Controls, "time").Text = date + " - " + author;
+                LSFB.CbyName(tmp.Controls, "article").Text = text;
                 Main.main.ClientSend(@"
 <REQUEST type='FQL' return-type='comments'>
     <QUERY>
