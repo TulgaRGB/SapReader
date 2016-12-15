@@ -154,6 +154,8 @@ namespace SapReader
             pages.TabPages.Add(n);
             n.BackColor = lsfb.work.BackColor;
             n.ForeColor = ForeColor;
+            if(flua!= null)
+            flua.Form = n;
             pages.SelectedTab = n;
         }
         #endregion
