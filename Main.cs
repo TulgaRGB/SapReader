@@ -17,6 +17,7 @@ using System.Xml;
 using System.Net;
 using System.Numerics;
 using System.Net.Sockets;
+using System.Drawing.Drawing2D;
 
 namespace SapReader
 {
@@ -61,16 +62,13 @@ namespace SapReader
             }
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
             lsfb = LSFB.AddLSFB(this, first ? 4 : 3, 24, autoscroll: true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
-            if (first)
-                lsfb.customtext[0] = nazvanie + " - ";
-            pages.SelectedTab.Text = "Добро пожаловать!";
+            Text = nazvanie;
             mm.Renderer = new LSFB.MyRenderer();
             cms.Renderer = new LSFB.MyRenderer();
             conLabel.SendToBack();
+            NewTab();
             flua = new FastLua(pages.SelectedTab);
             pages.Dock = DockStyle.Fill;
-            pages.SelectedTab.BackColor = lsfb.work.BackColor;
-            pages.SelectedTab.ForeColor = lsfb.work.ForeColor;
             flua.RegisterFunction("Send", this, GetType().GetMethod("ClientSend"));
             flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
             if (flua.Name != null)
@@ -90,10 +88,75 @@ namespace SapReader
             UpdatePlugs();
             if (!first)
                 mm.Items.Remove(proToolStripMenuItem);
-            TabStyleProvider tmp = pages.DisplayStyleProvider;
-            tmp.BorderColorSelected = Color.Azure;
+            TabStyleProvider tmp = new LSTabStyleProvider(pages);
             pages.DisplayStyleProvider = tmp;
         }
+        #region pages
+        public class LSTabStyleProvider : TabStyleRoundedProvider
+        {
+            //#007ACC
+            private Color cc = Color.White;
+            private Color fc = Color.White;
+            public LSTabStyleProvider(CustomTabControl tabControl) : base(tabControl)
+            {
+                ShowTabCloser = true;
+                Invalidate(tabControl);
+                tabControl.FindForm().BackColorChanged += (object sender, EventArgs e) =>
+                {
+                    Invalidate(tabControl);
+                };
+                tabControl.FindForm().ForeColorChanged += (object sender, EventArgs e) =>
+                {
+                    Invalidate(tabControl);
+                };
+            }
+            public void Invalidate(CustomTabControl tabControl)
+            {
+                CloserColor = tabControl.Parent.ForeColor;
+                TextColorSelected = tabControl.Parent.ForeColor;
+                fc = tabControl.FindForm().BackColor;
+                cc = tabControl.Parent.BackColor;
+                CloserColorActive = LSFB.Colorize(CloserColor);
+                TextColor = LSFB.Colorize(TextColorSelected);
+                BorderColorHot = tabControl.Parent.ForeColor;
+                BorderColorSelected = fc;
+                BorderColor = fc;
+                foreach(TabPage tp in tabControl.TabPages)
+               tp.BackColor =cc;                
+            }
+            protected override Brush GetTabBackgroundBrush(int index)
+            {
+                LinearGradientBrush fillBrush = null;
+                Color dark = cc;
+                Color light =fc;
+                Rectangle tabBounds = this.GetTabRect(index);
+                switch (this._TabControl.Alignment)
+                {
+                    case TabAlignment.Top:
+                        fillBrush = new LinearGradientBrush(tabBounds, light, dark, LinearGradientMode.Vertical);
+                        break;
+                    case TabAlignment.Bottom:
+                        fillBrush = new LinearGradientBrush(tabBounds, dark, light, LinearGradientMode.Vertical);
+                        break;
+                    case TabAlignment.Left:
+                        fillBrush = new LinearGradientBrush(tabBounds, light, dark, LinearGradientMode.Horizontal);
+                        break;
+                    case TabAlignment.Right:
+                        fillBrush = new LinearGradientBrush(tabBounds, dark, light, LinearGradientMode.Horizontal);
+                        break;
+                }
+                return fillBrush;
+            }
+        }
+        public void NewTab()
+        {
+            TabPage n = new TabPage {Text = "Новая вкладка" };
+            pages.TabPages.Add(n);
+            n.BackColor = lsfb.work.BackColor;
+            n.ForeColor = ForeColor;
+            pages.SelectedTab = n;
+        }
+        #endregion
         public static BigInteger Diff(BigInteger inp, int step, bool second)
         {
             return !second ? BigInteger.Pow(inp, step) % mosn : BigInteger.Pow((BigInteger.Pow(inp, step) % mosn), (int)osn) % mosn2;
@@ -520,9 +583,7 @@ namespace SapReader
                 {
                     #region Файл
                     case "NewPage":
-                        TabPage n = new TabPage();
-                        pages.TabPages.Add(n);
-                        pages.SelectedTab = n;
+                        NewTab();
                         break;
                     case "NewWindow":
                         new Main(false).Show();
@@ -714,8 +775,6 @@ namespace SapReader
         private void pages_SelectedIndexChanged(object sender, EventArgs e)
         {
             flua.Form = pages.SelectedTab;
-            if (pages.SelectedTab != null)
-                pages.SelectedTab.BackColor = lsfb.work.BackColor;            
         }
     }
 }

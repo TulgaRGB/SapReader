@@ -44,6 +44,7 @@
             this.экспортToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.новоеОкноToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.новаяВкладкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.проводникToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.устройстваИДискиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -84,13 +85,10 @@
             this.tray = new System.Windows.Forms.NotifyIcon(this.components);
             this.conLabel = new System.Windows.Forms.Label();
             this.pizda = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pages = new System.Windows.Forms.CustomTabControl();
-            this.новаяВкладкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.cms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pizda)).BeginInit();
-            this.pages.SuspendLayout();
             this.SuspendLayout();
             // 
             // mm
@@ -214,6 +212,14 @@
             this.новоеОкноToolStripMenuItem.Tag = "NewWindow";
             this.новоеОкноToolStripMenuItem.Text = "Новое окно";
             this.новоеОкноToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
+            // 
+            // новаяВкладкаToolStripMenuItem
+            // 
+            this.новаяВкладкаToolStripMenuItem.Name = "новаяВкладкаToolStripMenuItem";
+            this.новаяВкладкаToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.новаяВкладкаToolStripMenuItem.Tag = "NewPage";
+            this.новаяВкладкаToolStripMenuItem.Text = "Новая вкладка";
+            this.новаяВкладкаToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // проводникToolStripMenuItem
             // 
@@ -533,40 +539,29 @@
             // 
             this.pizda.ContainerControl = this;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 27);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(928, 470);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Новая вкладка";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
             // pages
             // 
             this.pages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pages.Controls.Add(this.tabPage1);
-            this.pages.DisplayStyle = System.Windows.Forms.TabStyle.VS2010;
+            this.pages.DisplayStyle = System.Windows.Forms.TabStyle.Rounded;
             // 
             // 
             // 
-            this.pages.DisplayStyleProvider.BorderColor = System.Drawing.Color.Transparent;
-            this.pages.DisplayStyleProvider.BorderColorHot = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(167)))), ((int)(((byte)(183)))));
+            this.pages.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark;
+            this.pages.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark;
             this.pages.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(157)))), ((int)(((byte)(185)))));
-            this.pages.DisplayStyleProvider.CloserColor = System.Drawing.Color.FromArgb(((int)(((byte)(117)))), ((int)(((byte)(99)))), ((int)(((byte)(61)))));
+            this.pages.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray;
             this.pages.DisplayStyleProvider.FocusTrack = false;
             this.pages.DisplayStyleProvider.HotTrack = true;
             this.pages.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.pages.DisplayStyleProvider.Opacity = 1F;
             this.pages.DisplayStyleProvider.Overlap = 0;
-            this.pages.DisplayStyleProvider.Padding = new System.Drawing.Point(6, 5);
-            this.pages.DisplayStyleProvider.Radius = 3;
-            this.pages.DisplayStyleProvider.ShowTabCloser = true;
-            this.pages.DisplayStyleProvider.TextColor = System.Drawing.Color.White;
-            this.pages.DisplayStyleProvider.TextColorDisabled = System.Drawing.Color.WhiteSmoke;
+            this.pages.DisplayStyleProvider.Padding = new System.Drawing.Point(6, 3);
+            this.pages.DisplayStyleProvider.Radius = 10;
+            this.pages.DisplayStyleProvider.ShowTabCloser = false;
+            this.pages.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText;
+            this.pages.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark;
             this.pages.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText;
             this.pages.HotTrack = true;
             this.pages.Location = new System.Drawing.Point(12, 27);
@@ -576,14 +571,6 @@
             this.pages.TabIndex = 3;
             this.pages.Tag = "";
             this.pages.SelectedIndexChanged += new System.EventHandler(this.pages_SelectedIndexChanged);
-            // 
-            // новаяВкладкаToolStripMenuItem
-            // 
-            this.новаяВкладкаToolStripMenuItem.Name = "новаяВкладкаToolStripMenuItem";
-            this.новаяВкладкаToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.новаяВкладкаToolStripMenuItem.Tag = "NewPage";
-            this.новаяВкладкаToolStripMenuItem.Text = "Новая вкладка";
-            this.новаяВкладкаToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // Main
             // 
@@ -603,7 +590,6 @@
             this.mm.PerformLayout();
             this.cms.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pizda)).EndInit();
-            this.pages.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -667,7 +653,6 @@
         private System.Windows.Forms.ToolStripMenuItem новоеОкноToolStripMenuItem;
         private System.Windows.Forms.ErrorProvider pizda;
         private System.Windows.Forms.CustomTabControl pages;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ToolStripMenuItem новаяВкладкаToolStripMenuItem;
     }
 }
