@@ -13,3 +13,5 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Develop\SapReader.Props.r
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Develop\SapReader.csproj.GenerateResource.Cache
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Develop\SapReader.exe
 D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Develop\SapReader.pdb
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Develop\SapReader.csprojResolveAssemblyReference.cache
+D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Develop\JacksonSoft.CustomTabControl.dll

@@ -27,7 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <AssemblyVersion>0.3.60.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -152,6 +152,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JacksonSoft.CustomTabControl">
+      <HintPath>..\..\LS_Private\JacksonSoft.CustomTabControl.dll</HintPath>
+    </Reference>
     <Reference Include="NLua">
       <HintPath>Resources\NLua.dll</HintPath>
     </Reference>
