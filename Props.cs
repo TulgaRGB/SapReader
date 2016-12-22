@@ -229,7 +229,8 @@ namespace SapReader
             { "Не спрашивать при запуске скриптов", "DontAskForScript" },
             { "Разворачивать окно при старте", "MaximizeOnStart" },
             { "Работать с непровереннымим плагинами","UseNotValidPlugins" },
-            { "Разрешать запуск плагинов без Хеша", "UsePluginsNoSha" }
+            { "Разрешать запуск плагинов без Хеша", "UsePluginsNoSha" },
+            { "Давать плагинам доступ к серверу", "AllowPluginConnection" }
         };
         void pick(object sender, MouseEventArgs e)
         {

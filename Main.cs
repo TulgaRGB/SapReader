@@ -26,17 +26,11 @@ namespace SapReader
         public static Main main;
         public static List<string> pluginsSha = new List<string>();
         public static List<List<string>> history = new List<List<string>>();
-        public static Random RNG = new Random();
-        static public BigInteger exp;
-        static public BigInteger osn = Convert.ToInt32("3");
-        static public BigInteger mosn = Convert.ToInt32("93563");
-        static public BigInteger mosn2 = Convert.ToInt32("2147483647");
-        public static int mysec = RNG.Next(10000, 100000);
-        static string key = null;
         public static string owner = Environment.UserName;
         public static Dictionary<string, string> parames = new Dictionary<string, string>
         {
             {"Bool.AllowScript",""},
+            {"Bool.AllowPluginConnection","" },
             {"Bool.DontAskForScript",""},
             {"Bool.MaximizeOnStart",""},
             {"Bool.UseNotValidPlugins",""},
@@ -46,19 +40,27 @@ namespace SapReader
             {"Pro.Login",""},
             {"Pro.Pass",""},
             {"Pro.Custom",""},
-            {"Pro.Ip",""},
+            {"Pro.Ip",""}
         };
+        public static FastConnection fc;
+        public TabPage page { get { return pages.SelectedTab; } }
         public readonly string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
-        public static NetConnection client = new NetConnection { BufferSize = 8192 };
-        public static FastLua flua;
+        public FastLua flua;
         public Main(bool first = true)
         {
-            InitializeComponent(); exp = Diff(osn, mysec, false); main = this;
+            InitializeComponent(); 
+            fc = new FastConnection(ParseResponse);
+            fc.OnDisconnect += (object sender, NetConnection c) =>
+            {
+                conLabel.Text = "";
+                DebugMessage("Потеряно соединение с сервером!");
+            };
             ReloadAllParams();
             if (first)
             {
-                LSFB.MainForm = this;
+                FastLua.InitThis = new Type[] { typeof(LSFB), typeof(Sapphire), typeof(FastLua), typeof(Main) };
+                LSFB.MainForm = this; main = this;
             }
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
             lsfb = LSFB.AddLSFB(this, first ? 4 : 3, 24, autoscroll: true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
@@ -67,12 +69,11 @@ namespace SapReader
             cms.Renderer = new LSFB.MyRenderer();
             conLabel.SendToBack();
             NewTab();
-            flua = new FastLua(pages.SelectedTab);
+            flua = new FastLua(page);
             pages.Dock = DockStyle.Fill;
-            flua.RegisterFunction("Send", this, GetType().GetMethod("ClientSend"));
             flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
             if (flua.Name != null)
-                pages.SelectedTab.Text = flua.Name;
+                page.Text = flua.Name;
             if (parames["Bool.MaximizeOnStart"] == "True")
                 WindowState = FormWindowState.Maximized;
             if (parames.ContainsKey("Auto.Size"))
@@ -91,8 +92,16 @@ namespace SapReader
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
             pages.DisplayStyleProvider = tmp;
         }
+        public static void Send(string message,string dlya = null)
+        {
+            bool granted = parames["Bool.AllowPluginConnection"] == "True";
+            if(!granted)
+            granted = MessageBox.Show("Плагин просит разрешение на отправку сообщения на сервер" + (dlya != null? " для\n" + dlya : ""), "Разрешить отправку?", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            if(granted)
+            fc.ClientSend(message);
+        }
         #region pages
-        public class LSTabStyleProvider : TabStyleRoundedProvider
+        public class LSTabStyleProvider : TabStyleAngledProvider
         {
             //#007ACC
             private Color cc = Color.White;
@@ -118,11 +127,14 @@ namespace SapReader
                 cc = tabControl.Parent.BackColor;
                 CloserColorActive = LSFB.Colorize(CloserColor);
                 TextColor = LSFB.Colorize(TextColorSelected);
-                BorderColorHot = tabControl.Parent.ForeColor;
-                BorderColorSelected = fc;
+                BorderColorHot = LSFB.Colorize(tabControl.Parent.ForeColor);
+                BorderColorSelected = tabControl.Parent.ForeColor;
                 BorderColor = fc;
-                foreach(TabPage tp in tabControl.TabPages)
-               tp.BackColor =cc;                
+                foreach (TabPage tp in tabControl.TabPages)
+                {
+                    tp.ForeColor = tabControl.FindForm().ForeColor;
+                    tp.BackColor = cc;
+                }
             }
             protected override Brush GetTabBackgroundBrush(int index)
             {
@@ -150,22 +162,23 @@ namespace SapReader
         }
         public void NewTab()
         {
-            TabPage n = new TabPage {Text = "Новая вкладка" };
-            pages.TabPages.Add(n);
-            n.BackColor = lsfb.work.BackColor;
-            n.ForeColor = ForeColor;
-            if(flua!= null)
-            flua.Form = n;
-            pages.SelectedTab = n;
+            if (pages.TabCount == 0 || page.Controls.Count != 0)
+            {
+                TabPage n = new TabPage { Text = "Новая вкладка" };
+                pages.TabPages.Add(n);
+                n.BackColor = lsfb.work.BackColor;
+                n.ForeColor = ForeColor;
+                if (flua != null)
+                    flua.Form = n;
+                pages.SelectedTab = n;
+            }
         }
         #endregion
-        public static BigInteger Diff(BigInteger inp, int step, bool second)
-        {
-            return !second ? BigInteger.Pow(inp, step) % mosn : BigInteger.Pow((BigInteger.Pow(inp, step) % mosn), (int)osn) % mosn2;
-        }
         #region ParseResponse
-        public void ParseResponse(XmlDocument _response)
+        public void ParseResponse(string message)
         {
+            XmlDocument _response = new XmlDocument();
+            _response.LoadXml(message);
             XmlNode response = _response.FirstChild;
             if (response.Attributes.GetNamedItem("type") != null)
                 switch (response.Attributes.GetNamedItem("type").InnerText)
@@ -174,74 +187,75 @@ namespace SapReader
                         MessageBox.Show(response.InnerXml);
                         break;
                     case "news":
-                        pages.SelectedTab.Text = "Новости";
+                        page.Text = "Новости";
                         LSDB newsDB = new LSDB();
                         newsDB.LoadXml(response.InnerXml);
                         LSDB.Table newsTable = newsDB.SelectTable("news");
                         if (newsTable != null)
                         {
                             foreach (LSDB.Table.Row r in newsTable.Values)
-                                pages.SelectedTab.Controls.Add(new News
+                                page.Controls.Add(new News
                                    (
                                        r.SelectField("id"),
                                        r.SelectField("title"),
                                        r.SelectField("time"),
                                        r.SelectField("comments"),
                                        r.SelectField("author"),
-                                       r.SelectField("text")
+                                       r.SelectField("text"),
+                                       page.ForeColor
                                    )
                                 {
                                     Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
-                                    Size = new Size(pages.SelectedTab.Width - 24, 150),
-                                    Location = new Point(12, pages.SelectedTab.Controls.Count == 0 ? 12 : (pages.SelectedTab.Controls[pages.SelectedTab.Controls.Count - 1].Top + pages.SelectedTab.Controls[pages.SelectedTab.Controls.Count - 1].Height + 12))
+                                    Size = new Size(page.Width - 24, 150),
+                                    Location = new Point(12, page.Controls.Count == 0 ? 12 : (page.Controls[page.Controls.Count - 1].Top + page.Controls[page.Controls.Count - 1].Height + 12))
                                 }
                                        );
                         }
                         break;
                     case "chat":
-                        if (pages.SelectedTab.Controls.Find("box", false).Last() != null)
+                        if (page.Controls.Find("box", false).Last() != null)
                         {
-                            pages.SelectedTab.Controls.Find("box", false).Last().Text += response.InnerText + "\n";
+                            page.Controls.Find("box", false).Last().Text += response.InnerText + "\n";
                         }
                         else
                         {
-                            pages.SelectedTab.Controls.Clear();
+                            page.Controls.Clear();
                             flua.DoString(File.ReadAllText("CHAT.lua"));
-                            pages.SelectedTab.Controls.Find("send", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("send", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<REQUEST type=\"chat\">" + pages.SelectedTab.Controls.Find("ent", false).Last().Text + "</REQUEST>");
-                                pages.SelectedTab.Controls.Find("ent", false).Last().Text = "";
+                                fc.ClientSend("<REQUEST type=\"chat\">" + page.Controls.Find("ent", false).Last().Text + "</REQUEST>");
+                                page.Controls.Find("ent", false).Last().Text = "";
                             };
                         }
                         break;
                     case "persData":
-                        pages.SelectedTab.Text = "Смена данных";
+                        page.Text = "Смена данных";
                         flua.DoString(Encoding.UTF8.GetString(Properties.Resources.DATA));
-                        pages.SelectedTab.Controls.Find("error", false).Last().Text = response.InnerText;
+                        page.Controls.Find("error", false).Last().Text = response.InnerText;
                         string oldpass = null;
                         string newpass = null;
-                        pages.SelectedTab.Controls.Find("save", false).Last().Click += (object sender, EventArgs e) =>
+                        page.Controls.Find("save", false).Last().Click += (object sender, EventArgs e) =>
                         {
-                            pages.SelectedTab.Controls.Find("error", false).Last().Text = "";
-                            if (pages.SelectedTab.Controls.Find("newPass", false).Last().Text != "")
+                            page.Controls.Find("error", false).Last().Text = "";
+                            if (page.Controls.Find("newPass", false).Last().Text != "")
                             {
-                                if (pages.SelectedTab.Controls.Find("oldPass", false).Last().Text != pages.SelectedTab.Controls.Find("newPass", false).Last().Text)
+                                if (page.Controls.Find("oldPass", false).Last().Text != page.Controls.Find("newPass", false).Last().Text)
                                 {
-                                    if (pages.SelectedTab.Controls.Find("checkPass", false).Last().Text == pages.SelectedTab.Controls.Find("newPass", false).Last().Text)
+                                    if (page.Controls.Find("checkPass", false).Last().Text == page.Controls.Find("newPass", false).Last().Text)
                                     {
-                                        oldpass = " oldPass =\"" + Sapphire.GetMd5Hash(pages.SelectedTab.Controls.Find("oldPass", false).Last().Text) + "\" ";
-                                        newpass = "newPass=\"" + Sapphire.GetMd5Hash(pages.SelectedTab.Controls.Find("newPass", false).Last().Text) + "\"";
+                                        oldpass = " oldPass =\"" + Sapphire.GetMd5Hash(page.Controls.Find("oldPass", false).Last().Text) + "\" ";
+                                        newpass = "newPass=\"" + Sapphire.GetMd5Hash(page.Controls.Find("newPass", false).Last().Text) + "\"";
                                     }
                                     else
-                                        pages.SelectedTab.Controls.Find("error", false).Last().Text = "Новые пароли должны совпадать!";
+                                        page.Controls.Find("error", false).Last().Text = "Новые пароли должны совпадать!";
                                 }
                                 else
-                                    pages.SelectedTab.Controls.Find("error", false).Last().Text = "Новый пароль должен отличаться от старого!";
+                                    page.Controls.Find("error", false).Last().Text = "Новый пароль должен отличаться от старого!";
                             }
-                            if (pages.SelectedTab.Controls.Find("error", false).Last().Text == "")
+                            if (page.Controls.Find("error", false).Last().Text == "")
                             {
-                                ClientSend("<REQUEST type=\"persData\" newName=\"" + pages.SelectedTab.Controls.Find("newName", false).Last().Text + "\"" + oldpass + newpass + "/>");
-                                pages.SelectedTab.Controls.Clear();
+                                fc.ClientSend("<REQUEST type=\"persData\" newName=\"" + page.Controls.Find("newName", false).Last().Text + "\"" + oldpass + newpass + "/>");
+                                page.Controls.Clear();
                             }
                         };
                         if (response.Attributes.GetNamedItem("newName") != null)
@@ -257,13 +271,13 @@ namespace SapReader
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
                             conLabel.Text = "Вход не выполнен";
-                            pages.SelectedTab.Controls.Clear();
+                            page.Controls.Clear();
                         }
                         break;
                     case "form":
                         if (response.Attributes.GetNamedItem("pro") != null)
                         {
-                            pages.SelectedTab.Controls.Clear();
+                            page.Controls.Clear();
                             flua.DoString(response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
                         }
                         else
@@ -291,13 +305,13 @@ namespace SapReader
                             {
                                 if (e.Button == MouseButtons.Left)
                                 {
-                                    ClientSend("<REQUEST type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
+                                    fc.ClientSend("<REQUEST type=\"form\" id=\"" + temp.SelectedItems[0].Text + "\"/>");
                                 }
                             };
                             temp.View = View.Details;
                             temp.Anchor = (AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom);
-                            temp.Size = pages.SelectedTab.Size;
-                            pages.SelectedTab.Controls.Add(temp);
+                            temp.Size = page.Size;
+                            page.Controls.Add(temp);
                             temp.Columns.Add("ID", temp.Width / 4);
                             temp.Columns.Add("Название", temp.Width / 4);
                             temp.Columns.Add("Автор", temp.Width / 4);
@@ -318,15 +332,15 @@ namespace SapReader
                     case "login":
                         if (response.Attributes.GetNamedItem("result").InnerText == "succ")
                         {
-                            pages.SelectedTab.Controls.Clear();
-                            pages.SelectedTab.Text = "Pro";
+                            page.Controls.Clear();
+                            page.Text = "Pro";
                             conLabel.Text = response.Attributes.GetNamedItem("user").InnerText;
                             flua.DoString(Encoding.UTF8.GetString(Properties.Resources.PRO));
-                            pages.SelectedTab.Controls.Find("hi", false).Last().Text += ", " + conLabel.Text + "!";
-                            pages.SelectedTab.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("hi", false).Last().Text += ", " + conLabel.Text + "!";
+                            page.Controls.Find("libPlugin", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                pages.SelectedTab.Controls.Clear();
-                                ClientSend(@"
+                                page.Controls.Clear();
+                                fc.ClientSend(@"
 <REQUEST type='FQL' return-type='forms'>
     <QUERY>
         <SELECT FROM='forms' ORDERBY='+name'>
@@ -335,27 +349,27 @@ namespace SapReader
     </QUERY>
 </REQUEST>");
                             };
-                            pages.SelectedTab.Controls.Find("checkApp", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("checkApp", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<REQUEST type=\"sum\" hash=\"" + Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) + "\"/>");
+                                fc.ClientSend("<REQUEST type=\"sum\" hash=\"" + Sapphire.GetMd5HashBytes(File.ReadAllBytes(System.Reflection.Assembly.GetEntryAssembly().Location)) + "\"/>");
                             };
-                            pages.SelectedTab.Controls.Find("exitButton", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("exitButton", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                ClientSend("<REQUEST type=\"exit\"/>");
+                                fc.ClientSend("<REQUEST type=\"exit\"/>");
                             };
-                            pages.SelectedTab.Controls.Find("persData", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("persData", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                pages.SelectedTab.Controls.Clear();
-                                ClientSend("<REQUEST type=\"persData\"/>");
+                                page.Controls.Clear();
+                                fc.ClientSend("<REQUEST type=\"persData\"/>");
                             };
-                            pages.SelectedTab.Controls.Find("joinChat", false).Last().Click += (object sender, EventArgs e) =>
+                            page.Controls.Find("joinChat", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                pages.SelectedTab.Controls.Clear();
-                                ClientSend("<REQUEST type=\"chat\"/>");
-                            }; pages.SelectedTab.Controls.Find("news", false).Last().Click += (object sender, EventArgs e) =>
+                                page.Controls.Clear();
+                                fc.ClientSend("<REQUEST type=\"chat\"/>");
+                            }; page.Controls.Find("news", false).Last().Click += (object sender, EventArgs e) =>
                             {
-                                pages.SelectedTab.Controls.Clear();
-                                ClientSend(@"
+                                page.Controls.Clear();
+                                fc.ClientSend(@"
 <REQUEST type='FQL' return-type='news'>
     <QUERY>
         <SELECT FROM='news' ORDERBY='-time'/>
@@ -366,7 +380,7 @@ namespace SapReader
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "request")
                         {
-                            ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                            fc.ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
                         else
                         {
@@ -375,74 +389,12 @@ namespace SapReader
                             {
                                 parames["Pro.Login"] = tmp.textBox1.Text;
                                 parames["Pro.Pass"] = tmp.pass.Text;
-                                ClientSend("<REQUEST type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
+                                fc.ClientSend("<REQUEST type=\"login\" login=\"" + tmp.textBox1.Text + "\" pass=\"" + Sapphire.GetMd5Hash(tmp.pass.Text) + "\" />");
                             }
                         }
                         break;
                 }
 
-        }
-        #endregion
-        public void ClientSend(string query)
-        {
-            if (key != null)
-                try
-                {
-                    client.Send(Sapphire.GetCodeBytes(UnicodeEncoding.Unicode.GetBytes(query), key));
-                }
-                catch (Exception ex)
-                {
-                    DebugMessage("Запрос не был отправлен:\n" + ex.Message);
-                }
-        }
-        #region connection
-        delegate void ConDel();
-        void Con()
-        {
-            if (InvokeRequired)
-                Invoke(new ConDel(Con));
-            else
-            {
-                try
-                {
-                    try
-                    {
-                        client.Disconnect();
-                    }
-                    catch { }
-                    IPAddress ip;
-                    bool _ip = IPAddress.TryParse(parames["Pro.Ip"], out ip);
-                    if (_ip)
-                        client.Connect(ip, 228);
-                    else
-                        client.Connect(parames["Pro.Ip"], 228);
-                    client.OnDisconnect += (object sender1, NetConnection c) =>
-                        {
-                            key = null;
-                            conLabel.Text = "";
-                            DebugMessage("Потеряно соединение с сервером!");
-                        };
-                    client.OnDataReceived += (object sender1, NetConnection c, byte[] b) =>
-                        {
-                            if (key != null)
-                            {
-                                XmlDocument _response = new XmlDocument();
-                                _response.LoadXml(UnicodeEncoding.Unicode.GetString(Sapphire.GetTextBytes(b, key)));
-                                ParseResponse(_response);
-                            }
-                            else
-                            {
-                                client.Send(UnicodeEncoding.Unicode.GetBytes(exp + ""));
-                                key = Sapphire.GetMd5Hash(Diff(Convert.ToInt32(UnicodeEncoding.Unicode.GetString(b)), mysec, true) + "");
-                            }
-                        };
-                }
-                //try{ }
-                catch (Exception ex)
-                {
-                    DebugMessage(ex.Message + "");
-                }
-            }
         }
         #endregion
         public void ReloadAllParams()
@@ -457,8 +409,8 @@ namespace SapReader
         public void MainScr()
         {
             nowDir = null;
-            pages.SelectedTab.Text = "Устройства и диски";
-            ListView browser = (ListView)pages.SelectedTab.Controls.Find("browser", false).First();
+            page.Text = "Устройства и диски";
+            ListView browser = (ListView)page.Controls.Find("browser", false).First();
             browser.Items.Clear();
             browser.LargeImageList = new ImageList();
             browser.LargeImageList.ImageSize = new Size(32, 32);
@@ -515,11 +467,11 @@ namespace SapReader
                                 bool doo = tmp.ContainsKey("window") ? tmp["window"] == "True" ? false : true : true;
                                 if (doo)
                                 {
-                                    pages.SelectedTab.Controls.Clear();
+                                    page.Controls.Clear();
                                 }
                                 flua.DoString(xml);
                                 if (doo)
-                                    pages.SelectedTab.Text = flua.Name;
+                                    page.Text = flua.Name;
                             }
                             catch (Exception ex) { DebugMessage(ex.Message); }
                     };
@@ -534,11 +486,11 @@ namespace SapReader
         public void Go(string way)
         {
             DirectoryInfo bu = nowDir;
-            ListView browser = (ListView)pages.SelectedTab.Controls.Find("browser", false).First();
+            ListView browser = (ListView)page.Controls.Find("browser", false).First();
             try
             {
                 nowDir = new DirectoryInfo(way);
-                pages.SelectedTab.Text = way;
+                page.Text = way;
                 browser.Items.Clear();
                 browser.LargeImageList = new ImageList();
                 browser.LargeImageList.ImageSize = new Size(32, 32);
@@ -563,6 +515,86 @@ namespace SapReader
                 browser.Items.Add(e.Message, 0);
             }
         }
+        public RichTextBox BoxToWrite(string startText = null)
+        {
+            page.Controls.Clear();
+            Panel basa = new Panel
+            {
+                Dock = DockStyle.Fill,
+            };
+            page.Controls.Add(basa);
+            RichTextBox file = new RichTextBox
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right,
+                Name = "BoxToWrite",
+                Width = basa.Width - 24,
+                Height = basa.Height,
+                Left = 24,
+                AcceptsTab = true,
+                BorderStyle = BorderStyle.None,
+                BackColor = basa.BackColor,
+                ForeColor = basa.ForeColor,
+                WordWrap = false
+            };
+            Label numbers = new Label
+            {
+                Height = file.Height,
+                Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom,
+                BorderStyle = BorderStyle.None,
+                AutoSize = false,
+                Width = 24,
+                Text = "1"
+            };
+            if (startText != null)
+            {
+                file.Text = startText;
+                numbers.Text = "1";
+                for (int i = 1; i < file.Text.Split('\n').Length; i++)
+                    numbers.Text += "\n" + (i + 1);
+            }
+            basa.Controls.Add(file);
+            basa.Controls.Add(numbers);            
+            LSFB.AddCms(file);
+            basa.ForeColorChanged += (object sender, EventArgs e) =>
+            {
+                file.ForeColor = basa.ForeColor;
+            };
+            basa.BackColorChanged += (object sender, EventArgs e) =>
+            {
+                file.BackColor = basa.BackColor;
+            };
+            file.TextChanged += (object sender, EventArgs e) =>
+            {
+                numbers.Text = "1";
+                for (int i = 1; i < file.Text.Split('\n').Length; i++)
+                        numbers.Text +="\n" + (i+1);
+                if (file.Text.Split('\n').Length > 46)
+                    numbers.Top = -(file.Text.Split('\n').Length - 46) * 13;
+                else
+                    numbers.Top = 0;
+                numbers.Height = file.Text.Split('\n').Length * 13;
+            };
+            return file;
+        }
+        public bool CreateBrow()
+        {
+            if (page.Controls.Find("browser", false).Length != 1)
+            {
+                page.Controls.Clear();
+                ListView browser = new ListView();
+                browser.Name = "browser";
+                browser.BackColor = page.BackColor;
+                browser.ForeColor = ForeColor;
+                browser.MouseDoubleClick += browser_MouseDoubleClick;
+                browser.ContextMenuStrip = cms;
+                browser.ForeColor = ForeColor;
+                browser.Dock = DockStyle.Fill;
+                page.Controls.Add(browser);
+                page.Text = "Проводник";
+                return true;
+            }
+            return false;
+        }
         #endregion        
         public void MenuHandler(object sender, EventArgs e)
         {
@@ -571,7 +603,7 @@ namespace SapReader
                 ListView browser = null;
                 try
                 {
-                    browser = (ListView)pages.SelectedTab.Controls.Find("browser", false).First();
+                    browser = (ListView)page.Controls.Find("browser", false).First();
                 }
                 catch { }
                 ToolStripMenuItem s = null;
@@ -584,6 +616,44 @@ namespace SapReader
                 switch (s != null ? s.Tag + "" : s2.Tag + "")
                 {
                     #region Файл
+                    #region New
+                    case "NewText":
+                            NewTab();
+                        page.Text = "Безымянный.srtf";         
+                        RichTextBox file = BoxToWrite();
+                        break;
+                    case "NewLua":
+                            NewTab();
+                        page.Text = "Безымянный.lua";         
+                        file = BoxToWrite();
+                        break;
+                    #endregion
+                    case "RunLua":
+                        if(page.Text.Contains(".lua"))
+                       DebugMessage(new NLua.Lua().DoString(page.Controls.Find("BoxToWrite", true).First().Text).First(),"NLua");
+                        break;
+                    case "RunPlugin":
+                        if (page.Text.Contains(".lua"))
+                        {
+                            Form pl = new Form {StartPosition = FormStartPosition.CenterScreen };
+                            LSFB ls = new LSFB(pl,1);
+                            FastLua fl = new FastLua(ls.work);
+                            fl.DoString(page.Controls.Find("BoxToWrite", true).First().Text);
+                            pl.Show();
+                        }
+                        break;
+                    case "FileOpen":
+                        System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua", Multiselect = true };
+                        if (ofd.ShowDialog() == DialogResult.OK)
+                        {
+                            foreach (string fil in ofd.FileNames)
+                            {
+                                NewTab();
+                                page.Text = Path.GetFileName(fil);
+                                RichTextBox f = BoxToWrite(File.ReadAllText(fil));
+                            }
+                        }
+                        break;
                     case "NewPage":
                         NewTab();
                         break;
@@ -593,20 +663,24 @@ namespace SapReader
                     #endregion
                     #region Проводник
                     case "MainScr":
+                        CreateBrow();
                         MainScr();
                         break;
                     //separator
                     case "Root":
+                        if(!CreateBrow())
                         Go(nowDir.Root + "");
                         break;
                     case "Up":
-                        if (nowDir + "" == nowDir.Root + "")
+                        if (!CreateBrow())
+                            if (nowDir + "" == nowDir.Root + "")
                             MainScr();
                         else
                             Go(nowDir.Parent.FullName + (nowDir.Parent.FullName.Last() != '\\' ? @"\" : ""));
                         break;
                     case "Refr":
-                        Go(nowDir.FullName);
+                        if (!CreateBrow())
+                            Go(nowDir.FullName);
                         break;
                     //separator
                     case "CreateFile":
@@ -655,21 +729,11 @@ namespace SapReader
                     #endregion
                     #region Инструменты
                     case "Main":
-                        browser.Hide();
-                        pages.SelectedTab.Controls.Clear();
+                        page.Controls.Clear();
                         flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
                         break;
                     case "Brow":
-                        pages.SelectedTab.Controls.Clear();
-                        browser = new ListView();
-                        browser.Name = "browser";
-                        browser.BackColor = pages.SelectedTab.BackColor;
-                        browser.ForeColor = ForeColor;
-                        browser.MouseDoubleClick += browser_MouseDoubleClick;
-                        browser.ContextMenuStrip = cms;
-                        browser.ForeColor = ForeColor;
-                        browser.Dock = DockStyle.Fill;
-                        pages.SelectedTab.Controls.Add(browser);
+                        CreateBrow();
                         break;
                     case "Add":
                         System.Windows.Forms.OpenFileDialog od = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua" };
@@ -719,7 +783,7 @@ namespace SapReader
 
         private void browser_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ListView browser = (ListView)pages.SelectedTab.Controls.Find("browser", false).First();
+            ListView browser = (ListView)page.Controls.Find("browser", false).First();
             if (e.Button == MouseButtons.Left)
             {
                 try
@@ -742,9 +806,8 @@ namespace SapReader
                     Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = false; });
                     DebugMessage("Попытка подключения к серверу Pro", "Pro");
                     tcpClient.Connect(host, 228);
-                    client = new NetConnection { BufferSize = 8192 };
                     Invoke((MethodInvoker)delegate { conLabel.Text = "Вход не выполнен"; });
-                    Con();
+                    Invoke((MethodInvoker)delegate { fc.Con(parames["Pro.Ip"], 228); });                    
                 }
                 catch
                 {
@@ -755,14 +818,14 @@ namespace SapReader
         }
         private void proToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (key == null)
+            if (fc.key == null)
             {
                 if (parames["Pro.Custom"] != "True")
                     parames["Pro.Ip"] = Properties.Resources.Host;
                 AccessToWebService(parames["Pro.Ip"]);
             }
             else
-                ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
+                fc.ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"\" />");
         }
         //work done
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -776,7 +839,7 @@ namespace SapReader
 
         private void pages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            flua.Form = pages.SelectedTab;
+            flua.Form = page;
         }
     }
 }

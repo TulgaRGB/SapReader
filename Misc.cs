@@ -13,23 +13,23 @@ namespace SapReader
 {
     class News : Button
     {
-        public News(string id, string title,  string date, string comments, string author, string text)
+        public News(string id, string title,  string date, string comments, string author, string text, Color ForeColor)
         {
             FlatStyle = FlatStyle.Flat;
-            Paint += LSFB.DrawText(title,LSFB.sizer(22), BackColor, new Point(12, 12));
-            Paint += LSFB.DrawText(date, LSFB.sizer(8), BackColor, new Point(12, 50));
-            Paint += LSFB.DrawText("От " + author, LSFB.sizer(8), BackColor, new Point(120, 50));
-            Paint += LSFB.DrawText((comments != "" ? comments.Split('|').Length + "" : "нет") + " коментариев", LSFB.sizer(8), BackColor, new Point(12,69));
-            Paint += LSFB.DrawText(text, LSFB.sizer(12), BackColor, new Point(12, 100));
+            Paint += LSFB.DrawText(title,LSFB.sizer(22), ForeColor, new Point(12, 12));
+            Paint += LSFB.DrawText(date, LSFB.sizer(8), ForeColor, new Point(12, 50));
+            Paint += LSFB.DrawText("От " + author, LSFB.sizer(8), ForeColor, new Point(120, 50));
+            Paint += LSFB.DrawText((comments != "" ? comments.Split('|').Length + "" : "нет") + " коментариев", LSFB.sizer(8), ForeColor, new Point(12,69));
+            Paint += LSFB.DrawText(text, LSFB.sizer(12), ForeColor, new Point(12, 100));
             Click += (object sender, EventArgs e) =>
             {
                 Control tmp = Parent;
                 tmp.Controls.Clear();
-                Main.flua.DoString(Encoding.UTF8.GetString(Properties.Resources.NEWS));
+                Main.main.flua.DoString(Encoding.UTF8.GetString(Properties.Resources.NEWS));
                 LSFB.CbyName(tmp.Controls, "header").Text = title;
                 LSFB.CbyName(tmp.Controls, "time").Text = date + " - " + author;
                 LSFB.CbyName(tmp.Controls, "article").Text = text;
-                Main.main.ClientSend(@"
+                Main.fc.ClientSend(@"
 <REQUEST type='FQL' return-type='comments'>
     <QUERY>
         <SELECT FROM='newsCom'>
