@@ -3,7 +3,8 @@ Thumbs.db
 ehthumbs.db
 
 #Plugins folder in Main
-bin/x86/Main/Plugins/
+bin/x86/Main/Plugins
+bin/x86/Develop/Plugins
 
 # Folder config file
 Desktop.ini
