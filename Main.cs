@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LS;
-using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Media;
@@ -40,7 +39,8 @@ namespace SapReader
             {"Pro.Login",""},
             {"Pro.Pass",""},
             {"Pro.Custom",""},
-            {"Pro.Ip",""}
+            {"Pro.Ip",""},
+            {"Browser.Formats","" }
         };
         public static FastConnection fc;
         public TabPage page { get { return pages.SelectedTab; } }
@@ -49,12 +49,11 @@ namespace SapReader
         public FastLua flua;
         public Main(bool first = true)
         {
-            InitializeComponent(); 
+            InitializeComponent();
             fc = new FastConnection(ParseResponse);
             fc.OnDisconnect += (object sender, NetConnection c) =>
             {
-                conLabel.Text = "";
-                DebugMessage("Потеряно соединение с сервером!");
+                conLabel.Text = "Нет соединения";
             };
             ReloadAllParams();
             if (first)
@@ -92,13 +91,13 @@ namespace SapReader
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
             pages.DisplayStyleProvider = tmp;
         }
-        public static void Send(string message,string dlya = null)
+        public static void Send(string message, string dlya = null)
         {
             bool granted = parames["Bool.AllowPluginConnection"] == "True";
-            if(!granted)
-            granted = MessageBox.Show("Плагин просит разрешение на отправку сообщения на сервер" + (dlya != null? " для\n" + dlya : ""), "Разрешить отправку?", MessageBoxButtons.YesNo) == DialogResult.Yes;
-            if(granted)
-            fc.ClientSend(message);
+            if (!granted)
+                granted = MessageBox.Show("Плагин просит разрешение на отправку сообщения на сервер" + (dlya != null ? " для\n" + dlya : ""), "Разрешить отправку?", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            if (granted)
+                fc.ClientSend(message);
         }
         #region pages
         public class LSTabStyleProvider : TabStyleAngledProvider
@@ -140,7 +139,7 @@ namespace SapReader
             {
                 LinearGradientBrush fillBrush = null;
                 Color dark = cc;
-                Color light =fc;
+                Color light = fc;
                 Rectangle tabBounds = this.GetTabRect(index);
                 switch (this._TabControl.Alignment)
                 {
@@ -272,6 +271,7 @@ namespace SapReader
                         {
                             conLabel.Text = "Вход не выполнен";
                             page.Controls.Clear();
+                            page.Text = "Новая вкладка";
                         }
                         break;
                     case "form":
@@ -341,13 +341,11 @@ namespace SapReader
                             {
                                 page.Controls.Clear();
                                 fc.ClientSend(@"
-<REQUEST type='FQL' return-type='forms'>
-    <QUERY>
+<QUERY return='forms'>
         <SELECT FROM='forms' ORDERBY='+name'>
             <WHERE Field='validated' IS='True" + (parames["Bool.UseNotValidPlugins"] == "True" ? "|False" : "") + @"'/>
         </SELECT>
-    </QUERY>
-</REQUEST>");
+    </QUERY>");
                             };
                             page.Controls.Find("checkApp", false).Last().Click += (object sender, EventArgs e) =>
                             {
@@ -370,11 +368,9 @@ namespace SapReader
                             {
                                 page.Controls.Clear();
                                 fc.ClientSend(@"
-<REQUEST type='FQL' return-type='news'>
-    <QUERY>
+    <QUERY return='news'>
         <SELECT FROM='news' ORDERBY='-time'/>
-    </QUERY>
-</REQUEST>");
+    </QUERY>");
                             };
                         }
                         else
@@ -527,53 +523,34 @@ namespace SapReader
             {
                 Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right,
                 Name = "BoxToWrite",
-                Width = basa.Width - 24,
+                Width = basa.Width - 36,
                 Height = basa.Height,
-                Left = 24,
+                Left = 36,
                 AcceptsTab = true,
                 BorderStyle = BorderStyle.None,
                 BackColor = basa.BackColor,
                 ForeColor = basa.ForeColor,
-                WordWrap = false
+                WordWrap = false,
+                Text = startText
             };
-            Label numbers = new Label
+            LineNumbers.LineNumbers_For_RichTextBox numbers = new LineNumbers.LineNumbers_For_RichTextBox()
             {
                 Height = file.Height,
                 Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom,
-                BorderStyle = BorderStyle.None,
                 AutoSize = false,
                 Width = 24,
-                Text = "1"
+                ParentRichTextBox = file,
+                Show_GridLines = false,
+                Show_BorderLines = false,
+                Show_MarginLines = false,
+                Show_BackgroundGradient = false,
+                LineNrs_Alignment = ContentAlignment.TopLeft
+                
             };
-            if (startText != null)
-            {
-                file.Text = startText;
-                numbers.Text = "1";
-                for (int i = 1; i < file.Text.Split('\n').Length; i++)
-                    numbers.Text += "\n" + (i + 1);
-            }
             basa.Controls.Add(file);
-            basa.Controls.Add(numbers);            
+            basa.Controls.Add(numbers);
             LSFB.AddCms(file);
-            basa.ForeColorChanged += (object sender, EventArgs e) =>
-            {
-                file.ForeColor = basa.ForeColor;
-            };
-            basa.BackColorChanged += (object sender, EventArgs e) =>
-            {
-                file.BackColor = basa.BackColor;
-            };
-            file.TextChanged += (object sender, EventArgs e) =>
-            {
-                numbers.Text = "1";
-                for (int i = 1; i < file.Text.Split('\n').Length; i++)
-                        numbers.Text +="\n" + (i+1);
-                if (file.Text.Split('\n').Length > 46)
-                    numbers.Top = -(file.Text.Split('\n').Length - 46) * 13;
-                else
-                    numbers.Top = 0;
-                numbers.Height = file.Text.Split('\n').Length * 13;
-            };
+            lsfb.MakeControlLikeWork(file);
             return file;
         }
         public bool CreateBrow()
@@ -596,6 +573,10 @@ namespace SapReader
             return false;
         }
         #endregion        
+        public void MenuClick(string option)
+        {
+            MenuHandler(new ToolStripMenuItem {Tag = option },null);
+        }
         public void MenuHandler(object sender, EventArgs e)
         {
             try
@@ -618,39 +599,70 @@ namespace SapReader
                     #region Файл
                     #region New
                     case "NewText":
-                            NewTab();
-                        page.Text = "Безымянный.srtf";         
+                        NewTab();
+                        page.Text = "Безымянный.srtf";
                         RichTextBox file = BoxToWrite();
                         break;
                     case "NewLua":
-                            NewTab();
-                        page.Text = "Безымянный.lua";         
+                        NewTab();
+                        page.Text = "Безымянный.lua";
                         file = BoxToWrite();
                         break;
                     #endregion
                     case "RunLua":
-                        if(page.Text.Contains(".lua"))
-                       DebugMessage(new NLua.Lua().DoString(page.Controls.Find("BoxToWrite", true).First().Text).First(),"NLua");
+                        if (page.Text.Contains(".lua"))
+                            DebugMessage(new NLua.Lua().DoString(page.Controls.Find("BoxToWrite", true).First().Text).First(), "NLua");
                         break;
                     case "RunPlugin":
                         if (page.Text.Contains(".lua"))
                         {
-                            Form pl = new Form {StartPosition = FormStartPosition.CenterScreen };
-                            LSFB ls = new LSFB(pl,1);
+                            Form pl = new Form { StartPosition = FormStartPosition.CenterScreen };
+                            LSFB ls = new LSFB(pl, 1);
                             FastLua fl = new FastLua(ls.work);
                             fl.DoString(page.Controls.Find("BoxToWrite", true).First().Text);
                             pl.Show();
                         }
                         break;
                     case "FileOpen":
-                        System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog { Filter = "*.lua|*.lua", Multiselect = true };
+                        OpenFileDialog ofd = new OpenFileDialog { Filter = "Все файлы|*.*|Шифрованные текстовые файлы|*.srtf|Файлы плагинов|*.lua", Multiselect = true };
                         if (ofd.ShowDialog() == DialogResult.OK)
                         {
                             foreach (string fil in ofd.FileNames)
                             {
                                 NewTab();
                                 page.Text = Path.GetFileName(fil);
-                                RichTextBox f = BoxToWrite(File.ReadAllText(fil));
+                                if (fil.Split('.').Last() == "srtf")
+                                {
+                                    string key = null;
+                                    if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                    {
+                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
+                                    }
+                                }
+                                else
+                                    BoxToWrite(File.ReadAllText(fil));
+                            }
+                        }
+                        break;
+                    case "FileSaveAss":
+                        if (page.Text.Contains("."))
+                        {
+                            SaveFileDialog sfd = new SaveFileDialog { Filter = "Все файлы|*.*|Шифрованные текстовые файлы|*.srtf|Файлы плагинов|*.lua", FileName = page.Text };
+                            if (sfd.ShowDialog() == DialogResult.OK)
+                            {
+                                string fil = sfd.FileName;
+                                string save = page.Controls.Find("BoxToWrite", true).First().Text;
+                                if (fil.Split('.').Last() == "srtf")
+                                {
+                                    string key = null;
+                                    if (LSFB.InputBox("Сохранить как " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                    {
+                                        File.WriteAllBytes(fil, Sapphire.GetCodeBytes(Encoding.UTF8.GetBytes(save), key));
+                                        page.Text = new DirectoryInfo(fil).Name;
+                                    }
+                                }
+                                else
+                                    File.WriteAllText(fil, save);
                             }
                         }
                         break;
@@ -668,15 +680,15 @@ namespace SapReader
                         break;
                     //separator
                     case "Root":
-                        if(!CreateBrow())
-                        Go(nowDir.Root + "");
+                        if (!CreateBrow())
+                            Go(nowDir.Root + "");
                         break;
                     case "Up":
                         if (!CreateBrow())
                             if (nowDir + "" == nowDir.Root + "")
-                            MainScr();
-                        else
-                            Go(nowDir.Parent.FullName + (nowDir.Parent.FullName.Last() != '\\' ? @"\" : ""));
+                                MainScr();
+                            else
+                                Go(nowDir.Parent.FullName + (nowDir.Parent.FullName.Last() != '\\' ? @"\" : ""));
                         break;
                     case "Refr":
                         if (!CreateBrow())
@@ -791,7 +803,27 @@ namespace SapReader
                     if (File.GetAttributes(nowDir + browser.SelectedItems[0].Text).HasFlag(FileAttributes.Directory))
                         Go(nowDir + browser.SelectedItems[0].Text + @"\");
                     else
-                        System.Diagnostics.Process.Start(nowDir + browser.SelectedItems[0].Text);
+                    {
+                        string fil = nowDir + browser.SelectedItems[0].Text;
+
+                        if (!parames["Browser.Formats"].Split('|').Contains(fil.Split('.').Last()))
+                            System.Diagnostics.Process.Start(fil);
+                        else
+                        {
+                            NewTab();
+                            page.Text = Path.GetFileName(fil);
+                            if (fil.Split('.').Last() == "srtf")
+                            {
+                                string key = null;
+                                if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                {
+                                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
+                                }
+                            }
+                            else
+                                BoxToWrite(File.ReadAllText(fil));
+                        }
+                    }
                 }
                 catch { SystemSounds.Exclamation.Play(); }
             }
@@ -807,7 +839,7 @@ namespace SapReader
                     DebugMessage("Попытка подключения к серверу Pro", "Pro");
                     tcpClient.Connect(host, 228);
                     Invoke((MethodInvoker)delegate { conLabel.Text = "Вход не выполнен"; });
-                    Invoke((MethodInvoker)delegate { fc.Con(parames["Pro.Ip"], 228); });                    
+                    Invoke((MethodInvoker)delegate { fc.Con(parames["Pro.Ip"], 228); });
                 }
                 catch
                 {

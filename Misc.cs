@@ -30,13 +30,11 @@ namespace SapReader
                 LSFB.CbyName(tmp.Controls, "time").Text = date + " - " + author;
                 LSFB.CbyName(tmp.Controls, "article").Text = text;
                 Main.fc.ClientSend(@"
-<REQUEST type='FQL' return-type='comments'>
-    <QUERY>
+<QUERY return='comments'>
         <SELECT FROM='newsCom'>
 			<WHERE Field='id' IS='" + comments + @"'/>
         </SELECT>
-    </QUERY>
-</REQUEST>");
+    </QUERY>");
             };
         }
     }
