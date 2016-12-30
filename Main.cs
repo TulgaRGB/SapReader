@@ -568,6 +568,7 @@ namespace SapReader
                 browser.Dock = DockStyle.Fill;
                 page.Controls.Add(browser);
                 page.Text = "Проводник";
+                lsfb.MakeControlLikeWork(browser);
                 return true;
             }
             return false;

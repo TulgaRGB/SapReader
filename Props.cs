@@ -23,13 +23,18 @@ namespace SapReader
             tabControl.SizeMode = TabSizeMode.Fixed;
             mm.Renderer = new LSFB.MyRenderer();            
             main = new LS.LSFB(this, 2, 0, 80, false );
+            main.MakeControlLikeWork(yolka);
+            main.MakeControlLikeWork(formats);
             foreach (TabPage p in tabControl.TabPages)
             {
                main.MakeControlLikeWork(p);
                 p.AutoScroll = true;
+                mm.Items.Add(p.Text);
+                mm.Items[mm.Items.Count - 1].Click += tabSelect;
             }
             tabControl.Dock = DockStyle.Fill;
             cmsPlugs.Renderer = new LSFB.MyRenderer();
+            cmsBrow.Renderer = new LSFB.MyRenderer();
             #region Colors
             Image image = new Bitmap(201,201);
             using (Graphics g = Graphics.FromImage(image))
@@ -143,6 +148,10 @@ namespace SapReader
             #endregion
             #region Yolka            
             Yolka();
+            #endregion
+            #region Formats
+            foreach (string s in Main.parames["Browser.Formats"].Split('|'))
+                formats.Items.Add(s);
             #endregion
             tabSelect(mm.Items[page], null);
             Show();

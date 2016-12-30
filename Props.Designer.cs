@@ -30,12 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.mm = new System.Windows.Forms.MenuStrip();
-            this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.цветаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.темыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.проводникToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.мойВыборToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.proToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.Настройки = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,8 +45,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.Браузер = new System.Windows.Forms.TabPage();
-            this.Плагины = new System.Windows.Forms.TabPage();
-            this.yolka = new System.Windows.Forms.TreeView();
+            this.formats = new System.Windows.Forms.ListBox();
             this.cmsPlugs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сброситьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +55,10 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.новаяПапкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label4 = new System.Windows.Forms.Label();
+            this.Плагины = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.yolka = new System.Windows.Forms.TreeView();
             this.Мойвыбор = new System.Windows.Forms.TabPage();
             this.Pro = new System.Windows.Forms.TabPage();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -69,10 +66,9 @@
             this.pass = new System.Windows.Forms.TextBox();
             this.login = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.mm.SuspendLayout();
+            this.cmsBrow = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.удалитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
             this.Цвета.SuspendLayout();
@@ -81,70 +77,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.rb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.Браузер.SuspendLayout();
-            this.Плагины.SuspendLayout();
             this.cmsPlugs.SuspendLayout();
+            this.Плагины.SuspendLayout();
             this.Pro.SuspendLayout();
+            this.cmsBrow.SuspendLayout();
             this.SuspendLayout();
             // 
             // mm
             // 
             this.mm.Dock = System.Windows.Forms.DockStyle.None;
-            this.mm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.настройкиToolStripMenuItem,
-            this.цветаToolStripMenuItem,
-            this.темыToolStripMenuItem,
-            this.проводникToolStripMenuItem,
-            this.мойВыборToolStripMenuItem,
-            this.proToolStripMenuItem});
             this.mm.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.mm.Location = new System.Drawing.Point(-6, 9);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(89, 120);
+            this.mm.Size = new System.Drawing.Size(30, 206);
             this.mm.TabIndex = 3;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
-            // 
-            // настройкиToolStripMenuItem
-            // 
-            this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.настройкиToolStripMenuItem.Text = "Настройки";
-            this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
-            // 
-            // цветаToolStripMenuItem
-            // 
-            this.цветаToolStripMenuItem.Name = "цветаToolStripMenuItem";
-            this.цветаToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.цветаToolStripMenuItem.Text = "Цвета";
-            this.цветаToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
-            // 
-            // темыToolStripMenuItem
-            // 
-            this.темыToolStripMenuItem.Name = "темыToolStripMenuItem";
-            this.темыToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.темыToolStripMenuItem.Text = "Браузер";
-            this.темыToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
-            // 
-            // проводникToolStripMenuItem
-            // 
-            this.проводникToolStripMenuItem.Name = "проводникToolStripMenuItem";
-            this.проводникToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.проводникToolStripMenuItem.Text = "Плагины";
-            this.проводникToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
-            // 
-            // мойВыборToolStripMenuItem
-            // 
-            this.мойВыборToolStripMenuItem.Name = "мойВыборToolStripMenuItem";
-            this.мойВыборToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.мойВыборToolStripMenuItem.Text = "Мой выбор";
-            this.мойВыборToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
-            // 
-            // proToolStripMenuItem
-            // 
-            this.proToolStripMenuItem.Name = "proToolStripMenuItem";
-            this.proToolStripMenuItem.Size = new System.Drawing.Size(82, 19);
-            this.proToolStripMenuItem.Text = "Pro";
-            this.proToolStripMenuItem.Click += new System.EventHandler(this.tabSelect);
             // 
             // tabControl
             // 
@@ -312,7 +260,7 @@
             // 
             // Браузер
             // 
-            this.Браузер.Controls.Add(this.treeView1);
+            this.Браузер.Controls.Add(this.formats);
             this.Браузер.Controls.Add(this.label4);
             this.Браузер.Location = new System.Drawing.Point(4, 22);
             this.Браузер.Name = "Браузер";
@@ -321,24 +269,13 @@
             this.Браузер.Text = "Браузер";
             this.Браузер.UseVisualStyleBackColor = true;
             // 
-            // Плагины
+            // formats
             // 
-            this.Плагины.Controls.Add(this.label5);
-            this.Плагины.Controls.Add(this.yolka);
-            this.Плагины.Location = new System.Drawing.Point(4, 22);
-            this.Плагины.Name = "Плагины";
-            this.Плагины.Size = new System.Drawing.Size(220, 394);
-            this.Плагины.TabIndex = 3;
-            this.Плагины.Text = "Плагины";
-            this.Плагины.UseVisualStyleBackColor = true;
-            // 
-            // yolka
-            // 
-            this.yolka.ContextMenuStrip = this.cmsPlugs;
-            this.yolka.Location = new System.Drawing.Point(11, 29);
-            this.yolka.Name = "yolka";
-            this.yolka.Size = new System.Drawing.Size(201, 201);
-            this.yolka.TabIndex = 3;
+            this.formats.ContextMenuStrip = this.cmsBrow;
+            this.formats.Location = new System.Drawing.Point(11, 29);
+            this.formats.Name = "formats";
+            this.formats.Size = new System.Drawing.Size(201, 201);
+            this.formats.TabIndex = 4;
             // 
             // cmsPlugs
             // 
@@ -405,11 +342,48 @@
             this.новаяПапкаToolStripMenuItem.Text = "Новая папка";
             this.новаяПапкаToolStripMenuItem.Click += new System.EventHandler(this.новаяПапкаToolStripMenuItem_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(109, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Список расширений";
+            // 
+            // Плагины
+            // 
+            this.Плагины.Controls.Add(this.label5);
+            this.Плагины.Controls.Add(this.yolka);
+            this.Плагины.Location = new System.Drawing.Point(4, 22);
+            this.Плагины.Name = "Плагины";
+            this.Плагины.Size = new System.Drawing.Size(235, 394);
+            this.Плагины.TabIndex = 3;
+            this.Плагины.Text = "Плагины";
+            this.Плагины.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Список плагинов";
+            // 
+            // yolka
+            // 
+            this.yolka.ContextMenuStrip = this.cmsPlugs;
+            this.yolka.Location = new System.Drawing.Point(11, 29);
+            this.yolka.Name = "yolka";
+            this.yolka.Size = new System.Drawing.Size(201, 201);
+            this.yolka.TabIndex = 3;
+            // 
             // Мойвыбор
             // 
             this.Мойвыбор.Location = new System.Drawing.Point(4, 22);
             this.Мойвыбор.Name = "Мойвыбор";
-            this.Мойвыбор.Size = new System.Drawing.Size(220, 394);
+            this.Мойвыбор.Size = new System.Drawing.Size(235, 394);
             this.Мойвыбор.TabIndex = 5;
             this.Мойвыбор.Text = "Мой выбор";
             this.Мойвыбор.UseVisualStyleBackColor = true;
@@ -423,7 +397,7 @@
             this.Pro.Controls.Add(this.label3);
             this.Pro.Location = new System.Drawing.Point(4, 22);
             this.Pro.Name = "Pro";
-            this.Pro.Size = new System.Drawing.Size(220, 394);
+            this.Pro.Size = new System.Drawing.Size(235, 394);
             this.Pro.TabIndex = 4;
             this.Pro.Text = "Pro";
             this.Pro.UseVisualStyleBackColor = true;
@@ -474,31 +448,25 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
             // 
-            // label4
+            // cmsBrow
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 13);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(109, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Список расширений";
+            this.cmsBrow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.добавитьToolStripMenuItem1,
+            this.удалитьToolStripMenuItem1});
+            this.cmsBrow.Name = "cmsBrow";
+            this.cmsBrow.Size = new System.Drawing.Size(127, 48);
             // 
-            // label5
+            // добавитьToolStripMenuItem1
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 13);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Список плагинов";
+            this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
+            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem1.Text = "Добавить";
             // 
-            // treeView1
+            // удалитьToolStripMenuItem1
             // 
-            this.treeView1.ContextMenuStrip = this.cmsPlugs;
-            this.treeView1.Location = new System.Drawing.Point(11, 29);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(201, 201);
-            this.treeView1.TabIndex = 4;
+            this.удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
+            this.удалитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.удалитьToolStripMenuItem1.Text = "Удалить";
             // 
             // Props
             // 
@@ -511,8 +479,6 @@
             this.Name = "Props";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Настройки";
-            this.mm.ResumeLayout(false);
-            this.mm.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.Настройки.ResumeLayout(false);
             this.Настройки.PerformLayout();
@@ -524,11 +490,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.Браузер.ResumeLayout(false);
             this.Браузер.PerformLayout();
+            this.cmsPlugs.ResumeLayout(false);
             this.Плагины.ResumeLayout(false);
             this.Плагины.PerformLayout();
-            this.cmsPlugs.ResumeLayout(false);
             this.Pro.ResumeLayout(false);
             this.Pro.PerformLayout();
+            this.cmsBrow.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -536,11 +503,6 @@
 
         #endregion
         private System.Windows.Forms.MenuStrip mm;
-        private System.Windows.Forms.ToolStripMenuItem цветаToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem темыToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem проводникToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem proToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage Настройки;
         private System.Windows.Forms.TabPage Цвета;
@@ -558,7 +520,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem мойВыборToolStripMenuItem;
         private System.Windows.Forms.TabPage Мойвыбор;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox ip;
@@ -575,8 +536,11 @@
         private System.Windows.Forms.ToolStripMenuItem новаяПапкаToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ToolStripMenuItem сброситьToolStripMenuItem;
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.ListBox formats;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ContextMenuStrip cmsBrow;
+        private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem1;
     }
 }
