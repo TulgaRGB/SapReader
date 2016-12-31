@@ -46,6 +46,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Браузер = new System.Windows.Forms.TabPage();
             this.formats = new System.Windows.Forms.ListBox();
+            this.cmsBrow = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.удалитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.label4 = new System.Windows.Forms.Label();
+            this.Плагины = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.yolka = new System.Windows.Forms.TreeView();
             this.cmsPlugs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сброситьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,10 +62,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.новаяПапкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label4 = new System.Windows.Forms.Label();
-            this.Плагины = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
-            this.yolka = new System.Windows.Forms.TreeView();
             this.Мойвыбор = new System.Windows.Forms.TabPage();
             this.Pro = new System.Windows.Forms.TabPage();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -66,9 +69,6 @@
             this.pass = new System.Windows.Forms.TextBox();
             this.login = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.cmsBrow = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.добавитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.удалитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
             this.Цвета.SuspendLayout();
@@ -77,10 +77,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.rb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.Браузер.SuspendLayout();
-            this.cmsPlugs.SuspendLayout();
-            this.Плагины.SuspendLayout();
-            this.Pro.SuspendLayout();
             this.cmsBrow.SuspendLayout();
+            this.Плагины.SuspendLayout();
+            this.cmsPlugs.SuspendLayout();
+            this.Pro.SuspendLayout();
             this.SuspendLayout();
             // 
             // mm
@@ -274,8 +274,67 @@
             this.formats.ContextMenuStrip = this.cmsBrow;
             this.formats.Location = new System.Drawing.Point(11, 29);
             this.formats.Name = "formats";
-            this.formats.Size = new System.Drawing.Size(201, 201);
+            this.formats.Size = new System.Drawing.Size(201, 199);
             this.formats.TabIndex = 4;
+            // 
+            // cmsBrow
+            // 
+            this.cmsBrow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.добавитьToolStripMenuItem1,
+            this.удалитьToolStripMenuItem1});
+            this.cmsBrow.Name = "cmsBrow";
+            this.cmsBrow.Size = new System.Drawing.Size(153, 70);
+            // 
+            // добавитьToolStripMenuItem1
+            // 
+            this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
+            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem1.Text = "Добавить";
+            this.добавитьToolStripMenuItem1.Click += new System.EventHandler(this.добавитьToolStripMenuItem1_Click);
+            // 
+            // удалитьToolStripMenuItem1
+            // 
+            this.удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
+            this.удалитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.удалитьToolStripMenuItem1.Text = "Удалить";
+            this.удалитьToolStripMenuItem1.Click += new System.EventHandler(this.удалитьToolStripMenuItem1_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(109, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Список расширений";
+            // 
+            // Плагины
+            // 
+            this.Плагины.Controls.Add(this.label5);
+            this.Плагины.Controls.Add(this.yolka);
+            this.Плагины.Location = new System.Drawing.Point(4, 22);
+            this.Плагины.Name = "Плагины";
+            this.Плагины.Size = new System.Drawing.Size(235, 394);
+            this.Плагины.TabIndex = 3;
+            this.Плагины.Text = "Плагины";
+            this.Плагины.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Список плагинов";
+            // 
+            // yolka
+            // 
+            this.yolka.ContextMenuStrip = this.cmsPlugs;
+            this.yolka.Location = new System.Drawing.Point(11, 29);
+            this.yolka.Name = "yolka";
+            this.yolka.Size = new System.Drawing.Size(201, 201);
+            this.yolka.TabIndex = 3;
             // 
             // cmsPlugs
             // 
@@ -341,43 +400,6 @@
             this.новаяПапкаToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.новаяПапкаToolStripMenuItem.Text = "Новая папка";
             this.новаяПапкаToolStripMenuItem.Click += new System.EventHandler(this.новаяПапкаToolStripMenuItem_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 13);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(109, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Список расширений";
-            // 
-            // Плагины
-            // 
-            this.Плагины.Controls.Add(this.label5);
-            this.Плагины.Controls.Add(this.yolka);
-            this.Плагины.Location = new System.Drawing.Point(4, 22);
-            this.Плагины.Name = "Плагины";
-            this.Плагины.Size = new System.Drawing.Size(235, 394);
-            this.Плагины.TabIndex = 3;
-            this.Плагины.Text = "Плагины";
-            this.Плагины.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 13);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Список плагинов";
-            // 
-            // yolka
-            // 
-            this.yolka.ContextMenuStrip = this.cmsPlugs;
-            this.yolka.Location = new System.Drawing.Point(11, 29);
-            this.yolka.Name = "yolka";
-            this.yolka.Size = new System.Drawing.Size(201, 201);
-            this.yolka.TabIndex = 3;
             // 
             // Мойвыбор
             // 
@@ -448,26 +470,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
             // 
-            // cmsBrow
-            // 
-            this.cmsBrow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.добавитьToolStripMenuItem1,
-            this.удалитьToolStripMenuItem1});
-            this.cmsBrow.Name = "cmsBrow";
-            this.cmsBrow.Size = new System.Drawing.Size(127, 48);
-            // 
-            // добавитьToolStripMenuItem1
-            // 
-            this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
-            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.добавитьToolStripMenuItem1.Text = "Добавить";
-            // 
-            // удалитьToolStripMenuItem1
-            // 
-            this.удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            this.удалитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.удалитьToolStripMenuItem1.Text = "Удалить";
-            // 
             // Props
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,12 +492,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.Браузер.ResumeLayout(false);
             this.Браузер.PerformLayout();
-            this.cmsPlugs.ResumeLayout(false);
+            this.cmsBrow.ResumeLayout(false);
             this.Плагины.ResumeLayout(false);
             this.Плагины.PerformLayout();
+            this.cmsPlugs.ResumeLayout(false);
             this.Pro.ResumeLayout(false);
             this.Pro.PerformLayout();
-            this.cmsBrow.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

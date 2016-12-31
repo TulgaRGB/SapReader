@@ -511,7 +511,7 @@ namespace SapReader
                 browser.Items.Add(e.Message, 0);
             }
         }
-        public RichTextBox BoxToWrite(string startText = null)
+        public RichTextBox BoxToWrite(string startText = null, string posibleWay = null)
         {
             page.Controls.Clear();
             Panel basa = new Panel
@@ -531,7 +531,8 @@ namespace SapReader
                 BackColor = basa.BackColor,
                 ForeColor = basa.ForeColor,
                 WordWrap = false,
-                Text = startText
+                Text = startText,
+                Tag = posibleWay
             };
             LineNumbers.LineNumbers_For_RichTextBox numbers = new LineNumbers.LineNumbers_For_RichTextBox()
             {
@@ -624,6 +625,12 @@ namespace SapReader
                             pl.Show();
                         }
                         break;
+                    case "FileAdd":
+                        if (page.Text.Contains(".lua"))
+                        {
+                            new Plugy(page.Controls.Find("BoxToWrite", true).First().Text);
+                        }
+                        break;
                     case "FileOpen":
                         OpenFileDialog ofd = new OpenFileDialog { Filter = "Все файлы|*.*|Шифрованные текстовые файлы|*.srtf|Файлы плагинов|*.lua", Multiselect = true };
                         if (ofd.ShowDialog() == DialogResult.OK)
@@ -637,12 +644,30 @@ namespace SapReader
                                     string key = null;
                                     if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
                                     {
-                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
+                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
                                     }
                                 }
                                 else
-                                    BoxToWrite(File.ReadAllText(fil));
+                                    BoxToWrite(File.ReadAllText(fil),fil);
                             }
+                        }
+                        break;
+                    case "FileSave":
+                        if (page.Text.Contains("."))
+                        {
+                            string fil = page.Controls.Find("BoxToWrite", true).First().Tag+"";
+                            string save = page.Controls.Find("BoxToWrite", true).First().Text;
+                            if (fil.Split('.').Last() == "srtf")
+                            {
+                                string key = null;
+                                if (LSFB.InputBox("Сохранить как " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                {
+                                    File.WriteAllBytes(fil, Sapphire.GetCodeBytes(Encoding.UTF8.GetBytes(save), key));
+                                    page.Text = new DirectoryInfo(fil).Name;
+                                }
+                            }
+                            else
+                                File.WriteAllText(fil, save);
                         }
                         break;
                     case "FileSaveAss":
@@ -664,6 +689,7 @@ namespace SapReader
                                 }
                                 else
                                     File.WriteAllText(fil, save);
+                                page.Controls.Find("BoxToWrite", true).First().Tag = fil;
                             }
                         }
                         break;
@@ -678,6 +704,10 @@ namespace SapReader
                     case "MainScr":
                         CreateBrow();
                         MainScr();
+                        break;
+                    case "PluginsFolder":
+                        CreateBrow();
+                        Go(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+"\\Plugins\\");
                         break;
                     //separator
                     case "Root":
@@ -694,6 +724,39 @@ namespace SapReader
                     case "Refr":
                         if (!CreateBrow())
                             Go(nowDir.FullName);
+                        break;
+                    //separator
+                    case "Open":
+                        if(browser.SelectedItems.Count > 0)
+                        {
+                            foreach(ListViewItem i in browser.SelectedItems)
+                            {
+                                string fil = nowDir + i.Text;
+                                System.Diagnostics.Process.Start(fil);
+                            }
+                        }
+                        break;
+                    case "OpenHere":
+                        if (browser.SelectedItems.Count > 0)
+                        {
+                            foreach (ListViewItem i in browser.SelectedItems)
+                                if(!File.GetAttributes(nowDir + i.Text).HasFlag(FileAttributes.Directory))
+                            {
+                                string fil = nowDir + i.Text;
+                                NewTab();
+                                page.Text = Path.GetFileName(fil);
+                                if (fil.Split('.').Last() == "srtf")
+                                {
+                                    string key = null;
+                                    if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                    {
+                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
+                                    }
+                                }
+                                else
+                                    BoxToWrite(File.ReadAllText(fil),fil);
+                            }
+                        }
                         break;
                     //separator
                     case "CreateFile":
@@ -818,11 +881,11 @@ namespace SapReader
                                 string key = null;
                                 if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
                                 {
-                                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
+                                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
                                 }
                             }
                             else
-                                BoxToWrite(File.ReadAllText(fil));
+                                BoxToWrite(File.ReadAllText(fil),fil);
                         }
                     }
                 }

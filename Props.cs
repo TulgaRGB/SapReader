@@ -418,5 +418,30 @@ namespace SapReader
             ip.Enabled = checkBox1.Checked;
             Main.parames["Pro.Custom"] = checkBox1.Checked + "";
         }
+
+        private void добавитьToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string add = null;
+            if(LSFB.InputBox("Новый формат","Введите расширение(я) которое(ые) необходимо открывать в редакторе (через пробел)", ref add, false) == DialogResult.OK)
+            {
+                foreach (string ext in add.Split(' '))
+                    if (!Main.parames["Browser.Formats"].Split('|').Contains(ext))
+                    {
+                        Main.parames["Browser.Formats"] += (Main.parames["Browser.Formats"] != "" ? "|" : "") + ext;
+                        formats.Items.Add(ext);
+                    }
+            }
+        }
+
+        private void удалитьToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string i = formats.SelectedItem + "";
+            if (i != "")
+            {
+                Main.parames["Browser.Formats"] = Main.parames["Browser.Formats"].Replace(i, "a");
+                Main.parames["Browser.Formats"] = Main.parames["Browser.Formats"].Replace("||", "|");
+                formats.Items.Remove(i);
+            }
+        }
     }
 }
