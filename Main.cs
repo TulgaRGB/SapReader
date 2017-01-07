@@ -43,10 +43,12 @@ namespace SapReader
             {"Browser.Formats","" }
         };
         public static FastConnection fc;
+        public Dictionary<TabPage, FastLua> Pages = new Dictionary<TabPage, FastLua>();
         public TabPage page { get { return pages.SelectedTab; } }
         public readonly string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
-        public FastLua flua;
+        private FastLua pomoika = new FastLua(null);
+        public FastLua flua { get { if (page != null) return Pages[page]; else return pomoika; } set { Pages.Add(page, value); } }
         public Main(bool first = true)
         {
             InitializeComponent();
@@ -58,7 +60,7 @@ namespace SapReader
             ReloadAllParams();
             if (first)
             {
-                FastLua.InitThis = new Type[] { typeof(LSFB), typeof(Sapphire), typeof(FastLua), typeof(Main) };
+                FastLua.InitThis = new Type[] { typeof(LSFB), typeof(Sapphire), typeof(Main) };
                 LSFB.MainForm = this; main = this;
             }
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
@@ -68,11 +70,8 @@ namespace SapReader
             cms.Renderer = new LSFB.MyRenderer();
             conLabel.SendToBack();
             NewTab();
-            flua = new FastLua(page);
             pages.Dock = DockStyle.Fill;
             flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HOME));
-            if (flua.Name != null)
-                page.Text = flua.Name;
             if (parames["Bool.MaximizeOnStart"] == "True")
                 WindowState = FormWindowState.Maximized;
             if (parames.ContainsKey("Auto.Size"))
@@ -91,13 +90,21 @@ namespace SapReader
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
             pages.DisplayStyleProvider = tmp;
         }
-        public static void Send(string message, string dlya = null)
+        public static void Pro(FastLua th, string message, string responseFunc = null)
         {
             bool granted = parames["Bool.AllowPluginConnection"] == "True";
             if (!granted)
-                granted = MessageBox.Show("Плагин просит разрешение на отправку сообщения на сервер" + (dlya != null ? " для\n" + dlya : ""), "Разрешить отправку?", MessageBoxButtons.YesNo) == DialogResult.Yes;
+                granted = MessageBox.Show("Выполнить запрос на сервер:\n" + message+"?", th.Name, MessageBoxButtons.YesNo) == DialogResult.Yes;
             if (granted)
-                fc.ClientSend(message);
+                if (responseFunc == null)
+                    fc.ClientSend(message);
+                else
+                    fc.Request(message, new Action<string>((response)=> 
+                    {
+                       NLua.LuaFunction func = th.GetFunction(responseFunc);
+                        if (func != null)
+                            func.Call(response);
+                    }));
         }
         #region pages
         public class LSTabStyleProvider : TabStyleAngledProvider
@@ -167,9 +174,8 @@ namespace SapReader
                 pages.TabPages.Add(n);
                 n.BackColor = lsfb.work.BackColor;
                 n.ForeColor = ForeColor;
-                if (flua != null)
-                    flua.Form = n;
                 pages.SelectedTab = n;
+                flua = new FastLua(page);
             }
         }
         #endregion
@@ -837,7 +843,7 @@ namespace SapReader
                         break;
                 }
             }
-            //  try { }
+             // try { }
             catch (Exception ex) { DebugMessage(ex.Message + ""); }
         }
         public void DebugMessage(object Text, string header = "Ошибка!")
@@ -931,11 +937,6 @@ namespace SapReader
             parames["Auto.Plugs"] = String.Join("|", pluginsSha.Where(s => s != "").ToArray());
             LSFB.SaveParams("SapReader", parames.Where(s => s.Key.Split('.').First() == "Auto")
                         .ToDictionary(dict => dict.Key, dict => dict.Value));
-        }
-
-        private void pages_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            flua.Form = page;
         }
     }
 }

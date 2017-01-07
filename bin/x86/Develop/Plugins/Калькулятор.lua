@@ -1,6 +1,6 @@
-Info([[<INFO name="Калькулятор" author="fast" window="True"/>]])
+this:Info([[<INFO name="Калькулятор" author="fast" window="True"/>]])
 --Form initial
-main = AddWindow()
+main = this:AddWindow()
 main:Draw([[<FORM>
   <textbox name="from" location="12,12" size="289,50" font="24" readonly="">0</textbox>
   <button location="12,60" size="73" font="36" name="b1">1</button>

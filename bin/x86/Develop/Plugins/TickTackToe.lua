@@ -1,6 +1,6 @@
-Info([[<INFO name="TickTackToe" author="fast" window="false"/>]])
+this:Info([[<INFO name="TickTackToe" author="fast" window="false"/>]])
 X = true
-Draw([[<FORM>
+this:Draw([[<FORM>
   <label location="12,12" font="24" name="turn"></label>
   <button location="12,60" size="73" font="36" name="b1"></button>
   <button location="84,60" size="73" font="36" name="b2"></button>
