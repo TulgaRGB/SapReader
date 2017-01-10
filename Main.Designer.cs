@@ -102,6 +102,7 @@
             // 
             // mm
             // 
+            this.mm.BackColor = System.Drawing.Color.Transparent;
             this.mm.Dock = System.Windows.Forms.DockStyle.None;
             this.mm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ыToolStripMenuItem,
@@ -110,9 +111,9 @@
             this.настройкиToolStripMenuItem,
             this.помощьToolStripMenuItem,
             this.proToolStripMenuItem});
-            this.mm.Location = new System.Drawing.Point(0, 0);
+            this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(416, 24);
+            this.mm.Size = new System.Drawing.Size(508, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -157,7 +158,7 @@
             // файлКлючейToolStripMenuItem
             // 
             this.файлКлючейToolStripMenuItem.Name = "файлКлючейToolStripMenuItem";
-            this.файлКлючейToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.файлКлючейToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.файлКлючейToolStripMenuItem.Text = "Файл ключей";
             this.файлКлючейToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
@@ -351,7 +352,9 @@
             // 
             this.историяToolStripMenuItem.Name = "историяToolStripMenuItem";
             this.историяToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.историяToolStripMenuItem.Tag = "History";
             this.историяToolStripMenuItem.Text = "История";
+            this.историяToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // файлыКлючейToolStripMenuItem
             // 
@@ -621,6 +624,7 @@
             // conLabel
             // 
             this.conLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.conLabel.BackColor = System.Drawing.Color.Transparent;
             this.conLabel.Location = new System.Drawing.Point(795, 0);
             this.conLabel.Name = "conLabel";
             this.conLabel.Size = new System.Drawing.Size(153, 13);

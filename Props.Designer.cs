@@ -69,6 +69,9 @@
             this.pass = new System.Windows.Forms.TextBox();
             this.login = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.Настройки.SuspendLayout();
             this.Цвета.SuspendLayout();
@@ -87,7 +90,7 @@
             // 
             this.mm.Dock = System.Windows.Forms.DockStyle.None;
             this.mm.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.mm.Location = new System.Drawing.Point(-6, 9);
+            this.mm.Location = new System.Drawing.Point(3, 0);
             this.mm.Name = "mm";
             this.mm.Size = new System.Drawing.Size(30, 206);
             this.mm.TabIndex = 3;
@@ -148,6 +151,7 @@
             this.button6.TabIndex = 0;
             this.button6.Text = "Импорт";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button4
             // 
@@ -175,6 +179,7 @@
             this.button5.TabIndex = 0;
             this.button5.Text = "Экспорт";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button3
             // 
@@ -205,10 +210,13 @@
             // Цвета
             // 
             this.Цвета.BackColor = System.Drawing.Color.Transparent;
+            this.Цвета.Controls.Add(this.button1);
+            this.Цвета.Controls.Add(this.textBox1);
             this.Цвета.Controls.Add(this.bb);
             this.Цвета.Controls.Add(this.gb);
             this.Цвета.Controls.Add(this.rb);
             this.Цвета.Controls.Add(this.pictureBox1);
+            this.Цвета.Controls.Add(this.label6);
             this.Цвета.Controls.Add(this.label1);
             this.Цвета.Location = new System.Drawing.Point(4, 22);
             this.Цвета.Name = "Цвета";
@@ -283,19 +291,19 @@
             this.добавитьToolStripMenuItem1,
             this.удалитьToolStripMenuItem1});
             this.cmsBrow.Name = "cmsBrow";
-            this.cmsBrow.Size = new System.Drawing.Size(153, 70);
+            this.cmsBrow.Size = new System.Drawing.Size(127, 48);
             // 
             // добавитьToolStripMenuItem1
             // 
             this.добавитьToolStripMenuItem1.Name = "добавитьToolStripMenuItem1";
-            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.добавитьToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
             this.добавитьToolStripMenuItem1.Text = "Добавить";
             this.добавитьToolStripMenuItem1.Click += new System.EventHandler(this.добавитьToolStripMenuItem1_Click);
             // 
             // удалитьToolStripMenuItem1
             // 
             this.удалитьToolStripMenuItem1.Name = "удалитьToolStripMenuItem1";
-            this.удалитьToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.удалитьToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
             this.удалитьToolStripMenuItem1.Text = "Удалить";
             this.удалитьToolStripMenuItem1.Click += new System.EventHandler(this.удалитьToolStripMenuItem1_Click);
             // 
@@ -470,6 +478,35 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Использовать эти данные для входа\r\nЛогин:\r\n\r\n\r\nПароль:\r\n\r\n\r\nСервер:";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(8, 340);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(128, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Фоновое изображение:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(11, 356);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(170, 20);
+            this.textBox1.TabIndex = 11;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(187, 356);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(25, 20);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Props
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -544,5 +581,8 @@
         private System.Windows.Forms.ContextMenuStrip cmsBrow;
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label6;
     }
 }

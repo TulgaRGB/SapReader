@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.IO;
 using LS;
 
@@ -21,7 +22,7 @@ namespace SapReader
             tabControl.Appearance = TabAppearance.FlatButtons;
             tabControl.ItemSize = new Size(0, 1);
             tabControl.SizeMode = TabSizeMode.Fixed;
-            mm.Renderer = new LSFB.MyRenderer();            
+            mm.Renderer = new LSFB.MyRenderer() { Transparent = true };            
             main = new LS.LSFB(this, 2, 0, 80, false );
             main.MakeControlLikeWork(yolka);
             main.MakeControlLikeWork(formats);
@@ -153,6 +154,7 @@ namespace SapReader
             foreach (string s in Main.parames["Browser.Formats"].Split('|'))
                 formats.Items.Add(s);
             #endregion
+            textBox1.Text = Main.parames["Color.Image"];
             tabSelect(mm.Items[page], null);
             Show();
         }
@@ -438,10 +440,62 @@ namespace SapReader
             string i = formats.SelectedItem + "";
             if (i != "")
             {
-                Main.parames["Browser.Formats"] = Main.parames["Browser.Formats"].Replace(i, "a");
+                Main.parames["Browser.Formats"] = Main.parames["Browser.Formats"].Replace(i, "");
                 Main.parames["Browser.Formats"] = Main.parames["Browser.Formats"].Replace("||", "|");
                 formats.Items.Remove(i);
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement main = doc.CreateElement("OPTIONS");
+            doc.AppendChild(main);
+            LSFB.CreateAttr(main, "Info.Name", "SapReader");
+            LSFB.CreateAttr(main, "Info.Version", Application.ProductVersion);
+            foreach (KeyValuePair<string,string> par in Main.parames.Where(s => s.Key.Split('.').First() != "Auto" && s.Key != "Pro.Pass")
+                        .ToDictionary(dict => dict.Key, dict => dict.Value))
+            LSFB.CreateAttr(main,par.Key,par.Value);
+            Main.main.NewTab();
+            Main.main.page.Text = "Безымянный.CONFIG";
+            Main.main.BoxToWrite(LSFB.XmlTostring(doc).Replace(" ", Environment.NewLine));
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(Main.main.page.Controls.Find("BoxToWrite", true).First().Text);
+                if (doc.FirstChild.Attributes.GetNamedItem("Info.Name").InnerText == "SapReader")
+                {
+                    foreach (XmlAttribute a in doc.FirstChild.Attributes)
+                        if (a.Name.Split('.').First() != "Info")
+                        {
+                            Main.parames[a.Name] = a.InnerText;
+                        }
+                }
+            }
+            catch(Exception ex) { Main.main.DebugMessage(ex.Message+""); }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog {Filter = "Файлы изображений|*.png;*.jpg;*.jpeg;*.bmp;*.tga" };
+            if(ofd.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = ofd.FileName;
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Main.parames["Color.Image"] = textBox1.Text;
+                LSFB.Wall = Image.FromFile(Main.parames["Color.Image"]);
+            }
+            catch { LSFB.Wall = null; }
         }
     }
 }

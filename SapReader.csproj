@@ -27,7 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyVersion>0.5.63.0</AssemblyVersion>
+    <AssemblyVersion>0.5.171.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -277,6 +277,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\DATA.lua" />
+    <None Include="Resources\HISTORY.lua" />
     <None Include="Resources\HOME.lua" />
     <None Include="Resources\NEWS.lua" />
     <None Include="Resources\PRO.lua" />

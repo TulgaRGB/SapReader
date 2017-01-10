@@ -104,6 +104,16 @@ namespace SapReader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] HISTORY {
+            get {
+                object obj = ResourceManager.GetObject("HISTORY", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] HOME {
             get {
                 object obj = ResourceManager.GetObject("HOME", resourceCulture);

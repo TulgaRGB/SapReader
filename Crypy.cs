@@ -91,6 +91,8 @@ namespace SapReader
             button2.Enabled = false;
             key = textBox1.Text;
             textBox1.PasswordChar = '•';
+            if(encrypt)
+            Main.history.Add(new List<string> {key });
             new Task(() =>
             {
                 ChangeBar(0, false);
@@ -108,6 +110,8 @@ namespace SapReader
                         {
                             File.WriteAllBytes(way, encrypt? Sapphire.GetCodeBytes(File.ReadAllBytes(way), key) : Sapphire.GetTextBytes(File.ReadAllBytes(way), key));
                             ChangeCheck(Items.IndexOf(s), CheckState.Checked);
+                            if(encrypt)
+                            Main.history.Last().Add(way);
                             CreateError(Items.IndexOf(s), "Успешно " + (encrypt? "за" : "рас") + "шифрован!" );
                             ok++;
                         }

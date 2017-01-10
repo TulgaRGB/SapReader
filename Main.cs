@@ -36,6 +36,7 @@ namespace SapReader
             {"Bool.UsePluginsNoSha","" },
             {"Color.BackColor",""},
             {"Color.ForeColor",""},
+            {"Color.Image","" },
             {"Pro.Login",""},
             {"Pro.Pass",""},
             {"Pro.Custom",""},
@@ -61,12 +62,17 @@ namespace SapReader
             if (first)
             {
                 FastLua.InitThis = new Type[] { typeof(LSFB), typeof(Sapphire), typeof(Main) };
+                try
+                {
+                    LSFB.Wall = Image.FromFile(parames["Color.Image"]);
+                }
+                catch { }
                 LSFB.MainForm = this; main = this;
             }
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
             lsfb = LSFB.AddLSFB(this, first ? 4 : 3, 24, autoscroll: true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
             Text = nazvanie;
-            mm.Renderer = new LSFB.MyRenderer();
+            mm.Renderer = new LSFB.MyRenderer() { Transparent = true};
             cms.Renderer = new LSFB.MyRenderer();
             conLabel.SendToBack();
             NewTab();
@@ -89,6 +95,14 @@ namespace SapReader
                 mm.Items.Remove(proToolStripMenuItem);
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
             pages.DisplayStyleProvider = tmp;
+        }
+        public byte[] imageToByteArray(System.Drawing.Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+                return ms.ToArray();
+            }
         }
         public static void Pro(FastLua th, string message, string responseFunc = null)
         {
@@ -131,7 +145,7 @@ namespace SapReader
                 TextColorSelected = tabControl.Parent.ForeColor;
                 fc = tabControl.FindForm().BackColor;
                 cc = tabControl.Parent.BackColor;
-                CloserColorActive = LSFB.Colorize(CloserColor);
+                CloserColorActive = LSFB.Colorize(CloserColor);                
                 TextColor = LSFB.Colorize(TextColorSelected);
                 BorderColorHot = LSFB.Colorize(tabControl.Parent.ForeColor);
                 BorderColorSelected = tabControl.Parent.ForeColor;
@@ -807,6 +821,9 @@ namespace SapReader
                             catch (Exception ex) { outp += ex.Message; }
                         }
                         MessageBox.Show(outp, "SHA-512");
+                        break;
+                    case "History":
+                        flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HISTORY));
                         break;
                     #endregion
                     #region Инструменты
