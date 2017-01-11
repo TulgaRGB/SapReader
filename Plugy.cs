@@ -21,7 +21,7 @@ namespace SapReader
         {
             InitializeComponent();
             this.xml = xml;
-            menuStrip1.Renderer = new LSFB.MyRenderer();
+            menuStrip1.Renderer = new LSFB.MyRenderer() { Transparent = true };
             main = new LSFB(this, 0, 24);
             string auth = null;
             bool scrpt;

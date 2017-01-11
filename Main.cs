@@ -755,6 +755,8 @@ namespace SapReader
                                 System.Diagnostics.Process.Start(fil);
                             }
                         }
+                        else
+                            System.Diagnostics.Process.Start(nowDir+"");
                         break;
                     case "OpenHere":
                         if (browser.SelectedItems.Count > 0)
