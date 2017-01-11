@@ -45,6 +45,7 @@ namespace SapReader
         };
         public static FastConnection fc;
         public Dictionary<TabPage, FastLua> Pages = new Dictionary<TabPage, FastLua>();
+        public Dictionary<TabPage, DirectoryInfo> Directories = new Dictionary<TabPage, DirectoryInfo>();
         public TabPage page { get { return pages.SelectedTab; } }
         public readonly string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
@@ -124,28 +125,28 @@ namespace SapReader
         public class LSTabStyleProvider : TabStyleAngledProvider
         {
             //#007ACC
-            private Color cc = Color.White;
-            private Color fc = Color.White;
+            private Color cc { get { return tabControl.Parent.BackColor; }  }
+            private Color fc { get { return tabControl.FindForm().BackColor; } }
+            public CustomTabControl tabControl;
             public LSTabStyleProvider(CustomTabControl tabControl) : base(tabControl)
             {
+                this.tabControl = tabControl;
                 ShowTabCloser = true;
-                Invalidate(tabControl);
+                Invalidate();
                 tabControl.FindForm().BackColorChanged += (object sender, EventArgs e) =>
                 {
-                    Invalidate(tabControl);
+                    Invalidate();
                 };
                 tabControl.FindForm().ForeColorChanged += (object sender, EventArgs e) =>
                 {
-                    Invalidate(tabControl);
+                    Invalidate();
                 };
             }
-            public void Invalidate(CustomTabControl tabControl)
+            public void Invalidate()
             {
                 CloserColor = tabControl.Parent.ForeColor;
                 TextColorSelected = tabControl.Parent.ForeColor;
-                fc = tabControl.FindForm().BackColor;
-                cc = tabControl.Parent.BackColor;
-                CloserColorActive = LSFB.Colorize(CloserColor);                
+                CloserColorActive = LSFB.FromHex("E04343");                
                 TextColor = LSFB.Colorize(TextColorSelected);
                 BorderColorHot = LSFB.Colorize(tabControl.Parent.ForeColor);
                 BorderColorSelected = tabControl.Parent.ForeColor;
@@ -162,22 +163,15 @@ namespace SapReader
                 Color dark = cc;
                 Color light = fc;
                 Rectangle tabBounds = this.GetTabRect(index);
-                switch (this._TabControl.Alignment)
-                {
-                    case TabAlignment.Top:
-                        fillBrush = new LinearGradientBrush(tabBounds, light, dark, LinearGradientMode.Vertical);
-                        break;
-                    case TabAlignment.Bottom:
-                        fillBrush = new LinearGradientBrush(tabBounds, dark, light, LinearGradientMode.Vertical);
-                        break;
-                    case TabAlignment.Left:
-                        fillBrush = new LinearGradientBrush(tabBounds, light, dark, LinearGradientMode.Horizontal);
-                        break;
-                    case TabAlignment.Right:
-                        fillBrush = new LinearGradientBrush(tabBounds, dark, light, LinearGradientMode.Horizontal);
-                        break;
-                }
+                fillBrush = new LinearGradientBrush(tabBounds, light, dark, LinearGradientMode.Vertical);
                 return fillBrush;
+            }
+            public override void AddTabBorder(GraphicsPath path, Rectangle tabBounds)
+            {
+                path.AddLine(tabBounds.X, tabBounds.Y + tabBounds.Height, tabBounds.X, tabBounds.Y);
+                path.AddLine(tabBounds.X, tabBounds.Y, tabBounds.X + tabBounds.Width - 15, tabBounds.Y);
+                path.AddLine(tabBounds.X + tabBounds.Width - 15, tabBounds.Y, tabBounds.X + tabBounds.Width, tabBounds.Y + tabBounds.Height);
+                path.AddLine(tabBounds.X, tabBounds.Y + tabBounds.Height, tabBounds.X + tabBounds.Width, tabBounds.Y + tabBounds.Height);
             }
         }
         public void NewTab()
@@ -498,7 +492,7 @@ namespace SapReader
                     c.Add(new ToolStripMenuItem { Text = "(Пусто)", Enabled = false });
             }
         }
-        public DirectoryInfo nowDir = null;
+        public DirectoryInfo nowDir { get { if (Directories.ContainsKey(page)) return Directories[page]; else return null; } set { Directories[page] = value;  } }
         public void Go(string way)
         {
             DirectoryInfo bu = nowDir;
