@@ -28,5 +28,11 @@ namespace SapReader
             };
             ShowDialog();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Main.fc.ClientSend("<REQUEST type='demo'/>");
+            Close();
+        }
     }
 }

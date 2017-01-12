@@ -59,6 +59,10 @@ namespace SapReader
             {
                 conLabel.Text = "Нет соединения";
             };
+            fc.OnConnect += (object sender, NetConnection c) =>
+            {
+                conLabel.Text = "Вход не выполнен";
+            };
             ReloadAllParams();
             if (first)
             {
@@ -574,6 +578,7 @@ namespace SapReader
             {
                 page.Controls.Clear();
                 ListView browser = new ListView();
+                browser.AllowDrop = true;
                 browser.Name = "browser";
                 browser.BackColor = page.BackColor;
                 browser.ForeColor = ForeColor;
@@ -636,6 +641,7 @@ namespace SapReader
                             LSFB ls = new LSFB(pl, 1);
                             FastLua fl = new FastLua(ls.work);
                             fl.DoString(page.Controls.Find("BoxToWrite", true).First().Text);
+                            if(fl.OnWindow == false)
                             pl.Show();
                         }
                         break;

@@ -100,7 +100,8 @@ namespace SapReader
                 {
                     try
                     {
-                        string way = ((Main)LSFB.MainForm).nowDir + s.Text;
+                        string way = null;
+                        Invoke((MethodInvoker) delegate { way = Main.main.nowDir + s.Text; });
                         if (File.GetAttributes(way).HasFlag(FileAttributes.Directory))
                         {
                             ChangeCheck(Items.IndexOf(s), CheckState.Indeterminate);
