@@ -30,11 +30,11 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отменаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.проверитьСертификатToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.показатьПодписьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.показатьПодписьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.отменаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -63,19 +63,19 @@
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.checkSignature);
             // 
-            // отменаToolStripMenuItem
-            // 
-            this.отменаToolStripMenuItem.Name = "отменаToolStripMenuItem";
-            this.отменаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.отменаToolStripMenuItem.Text = "Отмена";
-            this.отменаToolStripMenuItem.Click += new System.EventHandler(this.отменаToolStripMenuItem_Click);
-            // 
             // проверитьСертификатToolStripMenuItem
             // 
             this.проверитьСертификатToolStripMenuItem.Name = "проверитьСертификатToolStripMenuItem";
             this.проверитьСертификатToolStripMenuItem.Size = new System.Drawing.Size(121, 20);
             this.проверитьСертификатToolStripMenuItem.Text = "Проверить плагин";
             this.проверитьСертификатToolStripMenuItem.Click += new System.EventHandler(this.checkSignature);
+            // 
+            // показатьПодписьToolStripMenuItem
+            // 
+            this.показатьПодписьToolStripMenuItem.Name = "показатьПодписьToolStripMenuItem";
+            this.показатьПодписьToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.показатьПодписьToolStripMenuItem.Text = "Показать подпись";
+            this.показатьПодписьToolStripMenuItem.Click += new System.EventHandler(this.показатьПодписьToolStripMenuItem_Click);
             // 
             // splitContainer1
             // 
@@ -108,12 +108,12 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // показатьПодписьToolStripMenuItem
+            // отменаToolStripMenuItem
             // 
-            this.показатьПодписьToolStripMenuItem.Name = "показатьПодписьToolStripMenuItem";
-            this.показатьПодписьToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
-            this.показатьПодписьToolStripMenuItem.Text = "Показать подпись";
-            this.показатьПодписьToolStripMenuItem.Click += new System.EventHandler(this.показатьПодписьToolStripMenuItem_Click);
+            this.отменаToolStripMenuItem.Name = "отменаToolStripMenuItem";
+            this.отменаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.отменаToolStripMenuItem.Text = "Отмена";
+            this.отменаToolStripMenuItem.Click += new System.EventHandler(this.отменаToolStripMenuItem_Click);
             // 
             // Plugy
             // 
@@ -140,10 +140,10 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem отменаToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.ToolStripMenuItem проверитьСертификатToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem показатьПодписьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem отменаToolStripMenuItem;
     }
 }

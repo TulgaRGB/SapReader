@@ -23,7 +23,8 @@ namespace SapReader
             InitializeComponent();
             this.xml = xml;
             menuStrip1.Renderer = new LSFB.MyRenderer() { Transparent = true };
-            main = new LSFB(this, 0, 24);
+            main = new LSFB(this, 3, 24);
+            main.btns.First().Enabled = false;
             string auth = null;
             bool scrpt;
             if (Main.parames.ContainsKey("Bool.DontAskForScript") ? !Convert.ToBoolean(Main.parames["Bool.DontAskForScript"]) : false)
@@ -68,7 +69,7 @@ namespace SapReader
                 richTextBox1.Text = richTextBox1.Text.Replace(info["sign"], "...");
             LSFB.AddCms(richTextBox1);
             Size = LSFB.MainForm.Size;
-            ShowDialog();
+            Show();
         }
         public static List<string> ExtractFromString(
         string text, string startString, string endString)
@@ -90,10 +91,6 @@ namespace SapReader
                     exit = true;
             }
             return matched;
-        }
-        private void отменаToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
         }
         private void addPlugin(bool allowed)
         {
@@ -152,6 +149,11 @@ namespace SapReader
                 LSFB.Show(info["sign"], "Подпись плагина");
             else
                 Main.main.DebugMessage("Плагин не подписан");
+        }
+
+        private void отменаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
