@@ -17,7 +17,8 @@ namespace SapReader
         public Login(string login, string pass, string text)
         {
             InitializeComponent();
-            label1.Text = text;
+            if(text != "")
+            label2.Text = text;
             new LSFB(this,1,0,0,false);
             this.textBox1.Text = login;
             this.pass.Text = pass;

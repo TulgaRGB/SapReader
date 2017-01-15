@@ -17,6 +17,7 @@ namespace SapReader
         LSFB main;
         string xml;
         string name = null;
+        Dictionary<string, string> info = new Dictionary<string, string>();
         public Plugy(string xml)
         {
             InitializeComponent();
@@ -29,7 +30,7 @@ namespace SapReader
                 scrpt = MessageBox.Show("Запустить плагин со скриптами?\n(Скрипт будет загружен в поле)", "Добавить плагин", MessageBoxButtons.YesNo) != DialogResult.Yes;
             else
                 scrpt = Main.parames.ContainsKey("Bool.AllowScript") ? !Convert.ToBoolean(Main.parames["Bool.AllowScript"]) : true;
-            if(!scrpt)
+            if (!scrpt)
             {
                 FastLua tmp = new FastLua(splitContainer1.Panel2);
                 tmp.DoString(xml);
@@ -40,13 +41,14 @@ namespace SapReader
             {
                 try
                 {
-                    LSFB.GetInfo(ExtractFromString(xml, "Info([[", "]])").First()).TryGetValue("name", out name);
+                    info = LSFB.GetInfo(ExtractFromString(xml, "Info([[", "]])").First());
+                    info.TryGetValue("name", out name);
                 }
                 catch { }
-                foreach (string s in ExtractFromString(xml.Replace("Info([[","Draw([["), "Draw([[", "]])"))
+                foreach (string s in ExtractFromString(xml.Replace("Info([[", "Draw([["), "Draw([[", "]])"))
                 {
                     Dictionary<string, Control> cc = LSFB.DrawForm(splitContainer1.Panel2, s);
-                    foreach(KeyValuePair<string, Control> v in cc)
+                    foreach (KeyValuePair<string, Control> v in cc)
                     {
                         LSFB.AddHelp(v.Value, v.Key);
                     }
@@ -58,12 +60,14 @@ namespace SapReader
             }
             if (String.IsNullOrEmpty(name))
                 name = "Безымянный плагин";
-            Text = name +( String.IsNullOrEmpty(auth)? "" : " от " + auth);
+            Text = name + (String.IsNullOrEmpty(auth) ? "" : " от " + auth);
             richTextBox1.BackColor = main.work.BackColor;
             richTextBox1.ForeColor = ForeColor;
             richTextBox1.Text = xml;
+            if (info.ContainsKey("sign"))
+                richTextBox1.Text = richTextBox1.Text.Replace(info["sign"], "...");
             LSFB.AddCms(richTextBox1);
-            Size = LSFB.MainForm.Size;            
+            Size = LSFB.MainForm.Size;
             ShowDialog();
         }
         public static List<string> ExtractFromString(
@@ -91,14 +95,63 @@ namespace SapReader
         {
             Close();
         }
-        private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addPlugin(bool allowed)
         {
-            if (!Directory.Exists("Plugins"))
-                Directory.CreateDirectory("Plugins");
-            File.WriteAllText(@"Plugins\" + name+".lua",xml);
-            Main.pluginsSha.Add(Sapphire.GetSha512(File.ReadAllBytes(@"Plugins\" + name + ".lua")));
-            Main.main.UpdatePlugs();
-            Close();
+            if (!allowed)
+                if (MessageBox.Show("Всё равно добавить?", name, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    allowed = true;
+            if (allowed)
+            {
+                if (!Directory.Exists("Plugins"))
+                    Directory.CreateDirectory("Plugins");
+                File.WriteAllText(@"Plugins\" + name + ".lua", xml);
+                Main.pluginsSha.Add(Sapphire.GetSha512(File.ReadAllBytes(@"Plugins\" + name + ".lua")));
+                Main.main.UpdatePlugs();
+                Close();
+            }
+        }
+
+        private void checkSignature(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Main.fc.key == null)
+                    throw (new Exception());
+                string hash = Sapphire.GetShaForPass(xml.Replace(info["sign"], ""));
+                Main.fc.Request("<REQUEST type='checkSer' author='" + info["author"] + "' hash='" + hash + "' sign='" + info["sign"] + "'/>", new Action<string>((ses) =>
+                {
+                    if (((ToolStripMenuItem)sender).Text == "Добавить")
+                        try
+                        {
+                            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                            doc.LoadXml(ses);
+                            if (doc.FirstChild.Attributes.GetNamedItem("result").InnerText == "200")
+                                addPlugin(true);
+                            else
+                                addPlugin(false);
+
+                        }
+                        catch
+                        {
+                            Main.main.DebugMessage("Не удалось проверить плагин");
+                            addPlugin(false);
+                        }
+                }));
+            }
+            catch
+            {
+                Main.main.DebugMessage("Не удалось проверить плагин");
+                if (((ToolStripMenuItem)sender).Text == "Добавить")
+                    addPlugin(false);
+            }
+        }
+
+        private void показатьПодписьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (info.ContainsKey("sign"))
+                LSFB.Show(info["sign"], "Подпись плагина");
+            else
+                Main.main.DebugMessage("Плагин не подписан");
         }
     }
 }

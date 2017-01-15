@@ -95,6 +95,7 @@
             this.conLabel = new System.Windows.Forms.Label();
             this.pizda = new System.Windows.Forms.ErrorProvider(this.components);
             this.pages = new System.Windows.Forms.CustomTabControl();
+            this.подписатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.cms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pizda)).BeginInit();
@@ -113,7 +114,7 @@
             this.proToolStripMenuItem});
             this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(416, 24);
+            this.mm.Size = new System.Drawing.Size(508, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -220,7 +221,8 @@
             // 
             this.экспортToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьToolStripMenuItem1,
-            this.загрузитьToolStripMenuItem});
+            this.загрузитьToolStripMenuItem,
+            this.подписатьToolStripMenuItem});
             this.экспортToolStripMenuItem.Name = "экспортToolStripMenuItem";
             this.экспортToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.экспортToolStripMenuItem.Text = "Экспорт";
@@ -669,6 +671,14 @@
             this.pages.TabIndex = 3;
             this.pages.Tag = "";
             // 
+            // подписатьToolStripMenuItem
+            // 
+            this.подписатьToolStripMenuItem.Name = "подписатьToolStripMenuItem";
+            this.подписатьToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.подписатьToolStripMenuItem.Tag = "Sign";
+            this.подписатьToolStripMenuItem.Text = "Подписать";
+            this.подписатьToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -760,6 +770,7 @@
         private System.Windows.Forms.ToolStripMenuItem экспортToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem загрузитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem подписатьToolStripMenuItem;
     }
 }
 

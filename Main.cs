@@ -77,7 +77,7 @@ namespace SapReader
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
             lsfb = LSFB.AddLSFB(this, first ? 4 : 3, 24, autoscroll: true, help: (object sender, EventArgs e) => { new About("SapphireReader"); });
             Text = nazvanie;
-            mm.Renderer = new LSFB.MyRenderer() { Transparent = true};
+            mm.Renderer = new LSFB.MyRenderer() { Transparent = true };
             cms.Renderer = new LSFB.MyRenderer();
             conLabel.SendToBack();
             NewTab();
@@ -113,14 +113,14 @@ namespace SapReader
         {
             bool granted = parames["Bool.AllowPluginConnection"] == "True";
             if (!granted)
-                granted = MessageBox.Show("Выполнить запрос на сервер:\n" + message+"?", th.Name, MessageBoxButtons.YesNo) == DialogResult.Yes;
+                granted = MessageBox.Show("Выполнить запрос на сервер:\n" + message + "?", th.Name, MessageBoxButtons.YesNo) == DialogResult.Yes;
             if (granted)
                 if (responseFunc == null)
                     fc.ClientSend(message);
                 else
-                    fc.Request(message, new Action<string>((response)=> 
+                    fc.Request(message, new Action<string>((response) =>
                     {
-                       NLua.LuaFunction func = th.GetFunction(responseFunc);
+                        NLua.LuaFunction func = th.GetFunction(responseFunc);
                         if (func != null)
                             func.Call(response);
                     }));
@@ -129,7 +129,7 @@ namespace SapReader
         public class LSTabStyleProvider : TabStyleAngledProvider
         {
             //#007ACC
-            private Color cc { get { return tabControl.Parent.BackColor; }  }
+            private Color cc { get { return tabControl.Parent.BackColor; } }
             private Color fc { get { return tabControl.FindForm().BackColor; } }
             public CustomTabControl tabControl;
             public LSTabStyleProvider(CustomTabControl tabControl) : base(tabControl)
@@ -150,7 +150,7 @@ namespace SapReader
             {
                 CloserColor = tabControl.Parent.ForeColor;
                 TextColorSelected = tabControl.Parent.ForeColor;
-                CloserColorActive = LSFB.FromHex("E04343");                
+                CloserColorActive = LSFB.FromHex("E04343");
                 TextColor = LSFB.Colorize(TextColorSelected);
                 BorderColorHot = LSFB.Colorize(tabControl.Parent.ForeColor);
                 BorderColorSelected = tabControl.Parent.ForeColor;
@@ -278,8 +278,11 @@ namespace SapReader
                         if (response.Attributes.GetNamedItem("newName") != null)
                             conLabel.Text = response.Attributes.GetNamedItem("newName").InnerText;
                         break;
+                    case "box":
+                        LSFB.Show(response.InnerText, "Pro");
+                        break;
                     case "error":
-                        DebugMessage(response.InnerText);
+                        DebugMessage(response.InnerText, "Pro - Ошибка!");
                         break;
                     case "message":
                         DebugMessage(response.InnerText, "Pro");
@@ -496,7 +499,7 @@ namespace SapReader
                     c.Add(new ToolStripMenuItem { Text = "(Пусто)", Enabled = false });
             }
         }
-        public DirectoryInfo nowDir { get { if (Directories.ContainsKey(page)) return Directories[page]; else return null; } set { Directories[page] = value;  } }
+        public DirectoryInfo nowDir { get { if (Directories.ContainsKey(page)) return Directories[page]; else return null; } set { Directories[page] = value; } }
         public void Go(string way)
         {
             DirectoryInfo bu = nowDir;
@@ -564,7 +567,7 @@ namespace SapReader
                 Show_MarginLines = false,
                 Show_BackgroundGradient = false,
                 LineNrs_Alignment = ContentAlignment.TopLeft
-                
+
             };
             basa.Controls.Add(file);
             basa.Controls.Add(numbers);
@@ -596,7 +599,7 @@ namespace SapReader
         #endregion        
         public void MenuClick(string option)
         {
-            MenuHandler(new ToolStripMenuItem {Tag = option },null);
+            MenuHandler(new ToolStripMenuItem { Tag = option }, null);
         }
         public void MenuHandler(object sender, EventArgs e)
         {
@@ -641,8 +644,24 @@ namespace SapReader
                             LSFB ls = new LSFB(pl, 1);
                             FastLua fl = new FastLua(ls.work);
                             fl.DoString(page.Controls.Find("BoxToWrite", true).First().Text);
-                            if(fl.OnWindow == false)
-                            pl.Show();
+                            if (fl.OnWindow == false)
+                                pl.Show();
+                        }
+                        break;
+                    case "Sign":
+                        if (page.Text.Contains(".lua"))
+                        {
+                            string hash = Sapphire.GetShaForPass(page.Controls.Find("BoxToWrite", true).First().Text);
+                            string key = null;
+                            if (LSFB.InputBox("Подписание плагина", "Введите ваш ключ:", ref key) == DialogResult.OK)
+                            {
+                                string sign = Sapphire.GetCode(hash, Sapphire.GetShaForPass(key));
+                                string newSign = "";
+                                for (int i = 0; i < 6; i++)
+                                    newSign += sign.Substring(i * 50,50) + Environment.NewLine;
+                                newSign += sign.Substring(300);
+                                LSFB.Show(newSign, "Подпись для плагина");
+                            }
                         }
                         break;
                     case "FileAdd":
@@ -664,18 +683,18 @@ namespace SapReader
                                     string key = null;
                                     if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
                                     {
-                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
+                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
                                     }
                                 }
                                 else
-                                    BoxToWrite(File.ReadAllText(fil),fil);
+                                    BoxToWrite(File.ReadAllText(fil), fil);
                             }
                         }
                         break;
                     case "FileSave":
                         if (page.Text.Contains("."))
                         {
-                            string fil = page.Controls.Find("BoxToWrite", true).First().Tag+"";
+                            string fil = page.Controls.Find("BoxToWrite", true).First().Tag + "";
                             string save = page.Controls.Find("BoxToWrite", true).First().Text;
                             if (fil.Split('.').Last() == "srtf")
                             {
@@ -727,7 +746,7 @@ namespace SapReader
                         break;
                     case "PluginsFolder":
                         CreateBrow();
-                        Go(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)+"\\Plugins\\");
+                        Go(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\Plugins\\");
                         break;
                     //separator
                     case "Root":
@@ -747,37 +766,37 @@ namespace SapReader
                         break;
                     //separator
                     case "Open":
-                        if(browser.SelectedItems.Count > 0)
+                        if (browser.SelectedItems.Count > 0)
                         {
-                            foreach(ListViewItem i in browser.SelectedItems)
+                            foreach (ListViewItem i in browser.SelectedItems)
                             {
                                 string fil = nowDir + i.Text;
                                 System.Diagnostics.Process.Start(fil);
                             }
                         }
                         else
-                            System.Diagnostics.Process.Start(nowDir+"");
+                            System.Diagnostics.Process.Start(nowDir + "");
                         break;
                     case "OpenHere":
                         if (browser.SelectedItems.Count > 0)
                         {
                             foreach (ListViewItem i in browser.SelectedItems)
-                                if(!File.GetAttributes(nowDir + i.Text).HasFlag(FileAttributes.Directory))
-                            {
-                                string fil = nowDir + i.Text;
-                                NewTab();
-                                page.Text = Path.GetFileName(fil);
-                                if (fil.Split('.').Last() == "srtf")
+                                if (!File.GetAttributes(nowDir + i.Text).HasFlag(FileAttributes.Directory))
                                 {
-                                    string key = null;
-                                    if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                    string fil = nowDir + i.Text;
+                                    NewTab();
+                                    page.Text = Path.GetFileName(fil);
+                                    if (fil.Split('.').Last() == "srtf")
                                     {
-                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
+                                        string key = null;
+                                        if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                                        {
+                                            BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
+                                        }
                                     }
+                                    else
+                                        BoxToWrite(File.ReadAllText(fil), fil);
                                 }
-                                else
-                                    BoxToWrite(File.ReadAllText(fil),fil);
-                            }
                         }
                         break;
                     //separator
@@ -809,7 +828,7 @@ namespace SapReader
                             }
                             catch (Exception ex) { outp += ex.Message; }
                         }
-                        MessageBox.Show(outp, "MD5");
+                        LSFB.Show(outp, "MD5");
                         break;
                     case "SHA-512":
                         outp = "SHA-512 выбранных файлов:";
@@ -822,7 +841,7 @@ namespace SapReader
                             }
                             catch (Exception ex) { outp += ex.Message; }
                         }
-                        MessageBox.Show(outp, "SHA-512");
+                        LSFB.Show(outp, "SHA-512");
                         break;
                     case "History":
                         flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HISTORY));
@@ -862,7 +881,7 @@ namespace SapReader
                         break;
                 }
             }
-             // try { }
+            // try { }
             catch (Exception ex) { DebugMessage(ex.Message + ""); }
         }
         public void DebugMessage(object Text, string header = "Ошибка!")
@@ -906,11 +925,11 @@ namespace SapReader
                                 string key = null;
                                 if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
                                 {
-                                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)),fil);
+                                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
                                 }
                             }
                             else
-                                BoxToWrite(File.ReadAllText(fil),fil);
+                                BoxToWrite(File.ReadAllText(fil), fil);
                         }
                     }
                 }

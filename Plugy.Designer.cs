@@ -31,8 +31,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.отменаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.проверитьСертификатToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.показатьПодписьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -44,10 +46,12 @@
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьToolStripMenuItem,
-            this.отменаToolStripMenuItem});
+            this.отменаToolStripMenuItem,
+            this.проверитьСертификатToolStripMenuItem,
+            this.показатьПодписьToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(12, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(140, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(471, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Tag = "OnBorder";
             this.menuStrip1.Text = "menuStrip1";
@@ -57,7 +61,7 @@
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
             this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.добавитьToolStripMenuItem.Text = "Добавить";
-            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.checkSignature);
             // 
             // отменаToolStripMenuItem
             // 
@@ -65,6 +69,13 @@
             this.отменаToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.отменаToolStripMenuItem.Text = "Отмена";
             this.отменаToolStripMenuItem.Click += new System.EventHandler(this.отменаToolStripMenuItem_Click);
+            // 
+            // проверитьСертификатToolStripMenuItem
+            // 
+            this.проверитьСертификатToolStripMenuItem.Name = "проверитьСертификатToolStripMenuItem";
+            this.проверитьСертификатToolStripMenuItem.Size = new System.Drawing.Size(121, 20);
+            this.проверитьСертификатToolStripMenuItem.Text = "Проверить плагин";
+            this.проверитьСертификатToolStripMenuItem.Click += new System.EventHandler(this.checkSignature);
             // 
             // splitContainer1
             // 
@@ -97,6 +108,13 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
+            // показатьПодписьToolStripMenuItem
+            // 
+            this.показатьПодписьToolStripMenuItem.Name = "показатьПодписьToolStripMenuItem";
+            this.показатьПодписьToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.показатьПодписьToolStripMenuItem.Text = "Показать подпись";
+            this.показатьПодписьToolStripMenuItem.Click += new System.EventHandler(this.показатьПодписьToolStripMenuItem_Click);
+            // 
             // Plugy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -125,5 +143,7 @@
         private System.Windows.Forms.ToolStripMenuItem отменаToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ToolStripMenuItem проверитьСертификатToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem показатьПодписьToolStripMenuItem;
     }
 }
