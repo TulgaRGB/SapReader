@@ -117,15 +117,16 @@ namespace SapReader
                 string hash = Sapphire.GetShaForPass(xml.Replace(info["sign"], ""));
                 Main.fc.Request("<REQUEST type='checkSer' author='" + info["author"] + "' hash='" + hash + "' sign='" + info["sign"] + "'/>", new Action<string>((ses) =>
                 {
-                    if (((ToolStripMenuItem)sender).Text == "Добавить")
                         try
                         {
                             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
                             doc.LoadXml(ses);
+                        if (((ToolStripMenuItem)sender).Text == "Добавить")
                             if (doc.FirstChild.Attributes.GetNamedItem("result").InnerText == "200")
                                 addPlugin(true);
                             else
                                 addPlugin(false);
+                            Text = name + " - " + doc.FirstChild.InnerText; 
 
                         }
                         catch

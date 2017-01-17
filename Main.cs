@@ -946,8 +946,18 @@ namespace SapReader
                     Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = false; });
                     DebugMessage("Попытка подключения к серверу Pro", "Pro");
                     tcpClient.Connect(host, 228);
-                    Invoke((MethodInvoker)delegate { conLabel.Text = "Вход не выполнен"; });
-                    Invoke((MethodInvoker)delegate { fc.Con(parames["Pro.Ip"], 228); });
+                    Invoke((MethodInvoker)delegate { conLabel.Text = "Подключение"; });
+                    Invoke((MethodInvoker)delegate {
+                        fc = new FastConnection(ParseResponse);
+                        fc.OnDisconnect += (object sender, NetConnection c) =>
+                        {
+                            conLabel.Text = "Нет соединения";
+                        };
+                        fc.OnConnect += (object sender, NetConnection c) =>
+                        {
+                            conLabel.Text = "Вход не выполнен";
+                        };
+                        fc.Con(parames["Pro.Ip"], 228); });
                 }
                 catch
                 {
@@ -958,6 +968,8 @@ namespace SapReader
         }
         private void proToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (page == null)
+                NewTab();
             if (fc.key == null)
             {
                 if (parames["Pro.Custom"] != "True")
