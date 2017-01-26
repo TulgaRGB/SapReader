@@ -1,3 +1,4 @@
+TimeDate = luanet.import_type("System.DateTime")
 this:Info([[<INFO name="Добро пожаловать!" author="LISENKO SOFT" window="False"/>]])
 labelStart = "Для начала работы воспользуйтесь формой ниже или используйте меню в верхней части программы."
 labelAbout = [[Программа предназначена для работы в двух режимах: проводник с возможностью шифровать файлы и архиватор зашифрованных архивов.
@@ -21,7 +22,7 @@ this:Draw([[
 
 
 <label location="12,300" font="7">SapphireReader powered by Sapphire™
-LISENKO SOFT 2016 год
+LISENKO SOFT ]] .. TimeDate.Now.Year .. [[ год
 </label>
 </FORM>
 ]])

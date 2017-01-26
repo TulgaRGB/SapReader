@@ -22,6 +22,9 @@ namespace SapReader
         {
             InitializeComponent();
             Text = "Шифроване файлов - готово к шифрованию";
+            if (Main.parames.ContainsKey("Auto.NewSapphire"))
+                if (Main.parames["Auto.NewSapphire"] == "True")
+                    Text += " (Sapphire-16)";
             this.encrypt = encrypt;
             radioButton1.Checked = encrypt;
             radioButton2.Checked = !encrypt;
@@ -30,14 +33,14 @@ namespace SapReader
                 LSFB.ReadOnlyCheckBox t = new LSFB.ReadOnlyCheckBox
                 {
                     ReadOnly = true,
-                    Location = new Point(12, 6 + 23 * files.IndexOf(s)),
+                    Location = new Point(12, 12 + 23 * files.IndexOf(s)),
                     Text = s.Text,
                     AutoSize = true
-                };                
+                };
                 Items.Add(t);
             }
             main = new LSFB(this, 0, 68, 0, false);
-            Height = Items.Last().Top < Screen.PrimaryScreen.WorkingArea.Height/2 - 130? Items.Last().Top + 133 : Screen.PrimaryScreen.WorkingArea.Height / 2;
+            Height = Items.Last().Top < Screen.PrimaryScreen.WorkingArea.Height / 2 - 130 ? Items.Last().Top + main.work.Top + Items.Last().Height + 12 : Screen.PrimaryScreen.WorkingArea.Height / 2;
             pb.ForeColor = BackColor;
             main.work.AutoScroll = true;
             foreach (LSFB.ReadOnlyCheckBox c in Items)
@@ -72,13 +75,13 @@ namespace SapReader
             else
             {
                 pb.Value = i;
-                Text = "Шифроване файлов - процесс шифрования завершён" + (!done? " на " + i + "%" : ", " + (int)(ok * 100D / Items.Count) + "% файлов шифрованно");
+                Text = "Шифроване файлов - процесс шифрования завершён" + (!done ? " на " + i + "%" : ", " + (int)(ok * 100D / Items.Count) + "% файлов шифрованно");
                 if (done)
                 {
                     button2.Enabled = true;
                     button2.Text = "Готово.";
                 }
-            }            
+            }
         }
         bool encrypt = true;
         string key = "";
@@ -91,8 +94,8 @@ namespace SapReader
             button2.Enabled = false;
             key = textBox1.Text;
             textBox1.PasswordChar = '•';
-            if(encrypt)
-            Main.history.Add(new List<string> {key });
+            if (encrypt)
+                Main.history.Add(new List<string> { key });
             new Task(() =>
             {
                 ChangeBar(0, false);
@@ -101,7 +104,7 @@ namespace SapReader
                     try
                     {
                         string way = null;
-                        Invoke((MethodInvoker) delegate { way = Main.main.nowDir + s.Text; });
+                        Invoke((MethodInvoker)delegate { way = Main.main.nowDir + s.Text; });
                         if (File.GetAttributes(way).HasFlag(FileAttributes.Directory))
                         {
                             ChangeCheck(Items.IndexOf(s), CheckState.Indeterminate);
@@ -109,11 +112,20 @@ namespace SapReader
                         }
                         else
                         {
-                            File.WriteAllBytes(way, encrypt? Sapphire.GetCodeBytes(File.ReadAllBytes(way), key) : Sapphire.GetTextBytes(File.ReadAllBytes(way), key));
+                            if (Main.parames.ContainsKey("Auto.NewSapphire"))
+                            {
+                                if (Main.parames["Auto.NewSapphire"] == "True")
+                                    File.WriteAllBytes(way, encrypt ? Sapphire.NewGetCode(File.ReadAllBytes(way), key) : Sapphire.NewGetText(File.ReadAllBytes(way), key));
+                                else
+                                    File.WriteAllBytes(way, encrypt ? Sapphire.GetCodeBytes(File.ReadAllBytes(way), key) : Sapphire.GetTextBytes(File.ReadAllBytes(way), key));
+
+                            }
+                            else
+                                File.WriteAllBytes(way, encrypt ? Sapphire.GetCodeBytes(File.ReadAllBytes(way), key) : Sapphire.GetTextBytes(File.ReadAllBytes(way), key));
                             ChangeCheck(Items.IndexOf(s), CheckState.Checked);
-                            if(encrypt)
-                            Main.history.Last().Add(way);
-                            CreateError(Items.IndexOf(s), "Успешно " + (encrypt? "за" : "рас") + "шифрован!" );
+                            if (encrypt)
+                                Main.history.Last().Add(way);
+                            CreateError(Items.IndexOf(s), "Успешно " + (encrypt ? "за" : "рас") + "шифрован!");
                             ok++;
                         }
                     }
@@ -122,7 +134,7 @@ namespace SapReader
                         ChangeCheck(Items.IndexOf(s), CheckState.Indeterminate);
                         CreateError(Items.IndexOf(s), "Ошибка: " + ex.Message + "!");
                     }
-                    ChangeBar((int)(((double)Items.IndexOf(s)+1D)*100D/(double)Items.Count), false);
+                    ChangeBar((int)(((double)Items.IndexOf(s) + 1D) * 100D / (double)Items.Count), false);
                 }
                 ChangeBar(100, true);
             }).Start();
@@ -140,9 +152,9 @@ namespace SapReader
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
-                Progress_Load(null,null);
+                Progress_Load(null, null);
             }
         }
     }

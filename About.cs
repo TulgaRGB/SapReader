@@ -27,8 +27,18 @@ namespace SapReader
                 case "LSsec lite":
                     p.Text = "sosi";
                     break;
+                case "Тесты Sapphire":
+                    p.Text = "Немного цифр:\nВарианты ключей для Sapphire: 2^32 = " + Math.Pow(2, 32) + "\nДля Sapphire 2: (2^32)^4 = 16^32 = " + Math.Pow(16,32) + "\nДля Sapphire-16: 16^128 = " + Math.Pow(16,128) + "\n!!!ИЛИ!!!\n1" + Zero(154) ; 
+                    break;
             }
             ShowDialog();
+        }
+        public string Zero(int count)
+        {
+            string lel = "";
+            for (int i = 0; i < count; i++)
+                lel += "0";
+            return lel;
         }
     }
 }

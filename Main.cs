@@ -47,7 +47,7 @@ namespace SapReader
         public Dictionary<TabPage, FastLua> Pages = new Dictionary<TabPage, FastLua>();
         public Dictionary<TabPage, DirectoryInfo> Directories = new Dictionary<TabPage, DirectoryInfo>();
         public TabPage page { get { return pages.SelectedTab; } }
-        public readonly string nazvanie = "SapReader бета" + FirstTwo(Application.ProductVersion);
+        public readonly string nazvanie = "SapReader" + FirstTwo(Application.ProductVersion);
         LSFB lsfb;
         private FastLua pomoika = new FastLua(null);
         public FastLua flua { get { if (page != null) return Pages[page]; else return pomoika; } set { Pages.Add(page, value); } }
@@ -94,6 +94,13 @@ namespace SapReader
             }
             if (parames.ContainsKey("Auto.Plugs"))
                 pluginsSha = parames["Auto.Plugs"].Split('|').ToList();
+
+            if (parames.ContainsKey("Auto.NewSapphire"))
+                if (parames["Auto.NewSapphire"] == "True")
+                {
+                    sapphire2ToolStripMenuItem.Checked = false;
+                    sapphire16ToolStripMenuItem.Checked = true;
+                }
             tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             UpdatePlugs();
             if (!first)
@@ -397,6 +404,7 @@ namespace SapReader
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "request")
                         {
+                            if(parames["Pro.Pass"] != "")
                             fc.ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
                         else
@@ -658,7 +666,7 @@ namespace SapReader
                                 string sign = Sapphire.GetCode(hash, Sapphire.GetShaForPass(key));
                                 string newSign = "";
                                 for (int i = 0; i < 6; i++)
-                                    newSign += sign.Substring(i * 50,50) + Environment.NewLine;
+                                    newSign += sign.Substring(i * 50, 50) + Environment.NewLine;
                                 newSign += sign.Substring(300);
                                 LSFB.Show(newSign, "Подпись для плагина");
                             }
@@ -944,10 +952,10 @@ namespace SapReader
                 try
                 {
                     Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = false; });
-                    DebugMessage("Попытка подключения к серверу Pro", "Pro");
                     tcpClient.Connect(host, 228);
                     Invoke((MethodInvoker)delegate { conLabel.Text = "Подключение"; });
-                    Invoke((MethodInvoker)delegate {
+                    Invoke((MethodInvoker)delegate
+                    {
                         fc = new FastConnection(ParseResponse);
                         fc.OnDisconnect += (object sender, NetConnection c) =>
                         {
@@ -957,7 +965,8 @@ namespace SapReader
                         {
                             conLabel.Text = "Вход не выполнен";
                         };
-                        fc.Con(parames["Pro.Ip"], 228); });
+                        fc.Con(parames["Pro.Ip"], 228);
+                    });
                 }
                 catch
                 {
@@ -983,10 +992,33 @@ namespace SapReader
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (WindowState == FormWindowState.Normal)
+            {
                 parames["Auto.Size"] = string.Format("{0}:{1}", Width, Height);
+            }
             parames["Auto.Plugs"] = String.Join("|", pluginsSha.Where(s => s != "").ToArray());
             LSFB.SaveParams("SapReader", parames.Where(s => s.Key.Split('.').First() == "Auto")
                         .ToDictionary(dict => dict.Key, dict => dict.Value));
         }
+        #region Ya Zaebalsya
+        private void sapphire2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            parames["Auto.NewSapphire"] = "False";
+            sapphire16ToolStripMenuItem.Checked = false;
+            sapphire2ToolStripMenuItem.Checked = true;
+        }
+
+        private void sapphire16ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            parames["Auto.NewSapphire"] = "True";
+            sapphire2ToolStripMenuItem.Checked = false;
+            sapphire16ToolStripMenuItem.Checked = true;
+
+        }
+        private void тестыSapphireToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new About("Тесты Sapphire");
+        }
+        #endregion
+
     }
 }
