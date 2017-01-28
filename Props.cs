@@ -236,6 +236,7 @@ namespace SapReader
         }
         Dictionary<string, string> Bools = new Dictionary<string, string>()
         {
+            { "Подключаться к серверу при запуске","AutoConnect" },
             { "Запускать плагины со скриптами", "AllowScript" },
             { "Не спрашивать при запуске скриптов", "DontAskForScript" },
             { "Разворачивать окно при старте", "MaximizeOnStart" },

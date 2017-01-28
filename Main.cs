@@ -28,6 +28,7 @@ namespace SapReader
         public static string owner = Environment.UserName;
         public static Dictionary<string, string> parames = new Dictionary<string, string>
         {
+            {"Bool.AutoConnect","" },
             {"Bool.AllowScript",""},
             {"Bool.AllowPluginConnection","" },
             {"Bool.DontAskForScript",""},
@@ -106,7 +107,14 @@ namespace SapReader
             if (!first)
                 mm.Items.Remove(proToolStripMenuItem);
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
-            pages.DisplayStyleProvider = tmp;
+            pages.DisplayStyleProvider = tmp;            
+        }
+        private void Main_Load(object sender, EventArgs e)
+        {
+            Application.DoEvents();
+            if (parames["Bool.AutoConnect"] == "True")
+                if(Main.fc.key == null)
+                proToolStripMenuItem_Click(null,null);
         }
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
         {

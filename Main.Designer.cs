@@ -731,6 +731,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SapReader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
+            this.Shown += new System.EventHandler(this.Main_Load);
             this.mm.ResumeLayout(false);
             this.mm.PerformLayout();
             this.cms.ResumeLayout(false);

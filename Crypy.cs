@@ -84,7 +84,7 @@ namespace SapReader
             }
         }
         bool encrypt = true;
-        string key = "";
+        string key = ""; 
         private void Progress_Load(object sender, EventArgs e)
         {
             textBox1.Enabled = false;
