@@ -332,7 +332,7 @@ namespace SapReader
                 g = 255;
             return Color.FromArgb((int)(rad/100D*255),r,g,b);
         }
-        static Point DecToPol(int x, int y)
+        public static Point DecToPol(int x, int y)
         {
             Point point = new Point();
             point.X = (int)Math.Sqrt(x * x + y * y);

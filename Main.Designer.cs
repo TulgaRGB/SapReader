@@ -72,6 +72,7 @@
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.помощьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оSapReaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.тестыSapphireToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.хэшСуммаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.proToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -90,16 +91,15 @@
             this.хешированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mD5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sHA512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.шифрованиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sapphire2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sapphire16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.шифроватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.расшифроватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tray = new System.Windows.Forms.NotifyIcon(this.components);
             this.conLabel = new System.Windows.Forms.Label();
             this.pizda = new System.Windows.Forms.ErrorProvider(this.components);
             this.pages = new System.Windows.Forms.CustomTabControl();
-            this.шифрованиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sapphire2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sapphire16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.тестыSapphireToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.cms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pizda)).BeginInit();
@@ -118,7 +118,7 @@
             this.proToolStripMenuItem});
             this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(508, 24);
+            this.mm.Size = new System.Drawing.Size(416, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -461,15 +461,22 @@
             // оSapReaderToolStripMenuItem
             // 
             this.оSapReaderToolStripMenuItem.Name = "оSapReaderToolStripMenuItem";
-            this.оSapReaderToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.оSapReaderToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.оSapReaderToolStripMenuItem.Tag = "About";
             this.оSapReaderToolStripMenuItem.Text = "О SapReader";
             this.оSapReaderToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
+            // тестыSapphireToolStripMenuItem
+            // 
+            this.тестыSapphireToolStripMenuItem.Name = "тестыSapphireToolStripMenuItem";
+            this.тестыSapphireToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.тестыSapphireToolStripMenuItem.Text = "Тесты Sapphire";
+            this.тестыSapphireToolStripMenuItem.Click += new System.EventHandler(this.тестыSapphireToolStripMenuItem_Click);
+            // 
             // хэшСуммаToolStripMenuItem
             // 
             this.хэшСуммаToolStripMenuItem.Name = "хэшСуммаToolStripMenuItem";
-            this.хэшСуммаToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.хэшСуммаToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.хэшСуммаToolStripMenuItem.Tag = "InfoSum";
             this.хэшСуммаToolStripMenuItem.Text = "Хэш Сумма";
             this.хэшСуммаToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
@@ -616,6 +623,31 @@
             this.sHA512ToolStripMenuItem.Text = "SHA-512";
             this.sHA512ToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
+            // шифрованиеToolStripMenuItem
+            // 
+            this.шифрованиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sapphire2ToolStripMenuItem,
+            this.sapphire16ToolStripMenuItem});
+            this.шифрованиеToolStripMenuItem.Name = "шифрованиеToolStripMenuItem";
+            this.шифрованиеToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.шифрованиеToolStripMenuItem.Text = "Шифрование";
+            // 
+            // sapphire2ToolStripMenuItem
+            // 
+            this.sapphire2ToolStripMenuItem.Checked = true;
+            this.sapphire2ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sapphire2ToolStripMenuItem.Name = "sapphire2ToolStripMenuItem";
+            this.sapphire2ToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.sapphire2ToolStripMenuItem.Text = "Sapphire 2";
+            this.sapphire2ToolStripMenuItem.Click += new System.EventHandler(this.sapphire2ToolStripMenuItem_Click);
+            // 
+            // sapphire16ToolStripMenuItem
+            // 
+            this.sapphire16ToolStripMenuItem.Name = "sapphire16ToolStripMenuItem";
+            this.sapphire16ToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.sapphire16ToolStripMenuItem.Text = "Sapphire-16";
+            this.sapphire16ToolStripMenuItem.Click += new System.EventHandler(this.sapphire16ToolStripMenuItem_Click);
+            // 
             // шифроватьToolStripMenuItem1
             // 
             this.шифроватьToolStripMenuItem1.Name = "шифроватьToolStripMenuItem1";
@@ -685,40 +717,9 @@
             this.pages.TabIndex = 3;
             this.pages.Tag = "";
             // 
-            // шифрованиеToolStripMenuItem
-            // 
-            this.шифрованиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sapphire2ToolStripMenuItem,
-            this.sapphire16ToolStripMenuItem});
-            this.шифрованиеToolStripMenuItem.Name = "шифрованиеToolStripMenuItem";
-            this.шифрованиеToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.шифрованиеToolStripMenuItem.Text = "Шифрование";
-            // 
-            // sapphire2ToolStripMenuItem
-            // 
-            this.sapphire2ToolStripMenuItem.Checked = true;
-            this.sapphire2ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sapphire2ToolStripMenuItem.Name = "sapphire2ToolStripMenuItem";
-            this.sapphire2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sapphire2ToolStripMenuItem.Text = "Sapphire 2";
-            this.sapphire2ToolStripMenuItem.Click += new System.EventHandler(this.sapphire2ToolStripMenuItem_Click);
-            // 
-            // sapphire16ToolStripMenuItem
-            // 
-            this.sapphire16ToolStripMenuItem.Name = "sapphire16ToolStripMenuItem";
-            this.sapphire16ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sapphire16ToolStripMenuItem.Text = "Sapphire-16";
-            this.sapphire16ToolStripMenuItem.Click += new System.EventHandler(this.sapphire16ToolStripMenuItem_Click);
-            // 
-            // тестыSapphireToolStripMenuItem
-            // 
-            this.тестыSapphireToolStripMenuItem.Name = "тестыSapphireToolStripMenuItem";
-            this.тестыSapphireToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.тестыSapphireToolStripMenuItem.Text = "Тесты Sapphire";
-            this.тестыSapphireToolStripMenuItem.Click += new System.EventHandler(this.тестыSapphireToolStripMenuItem_Click);
-            // 
             // Main
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
@@ -732,6 +733,9 @@
             this.Text = "SapReader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Shown += new System.EventHandler(this.Main_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Main_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Main_DragEnter);
+            this.DragLeave += new System.EventHandler(this.Main_DragLeave);
             this.mm.ResumeLayout(false);
             this.mm.PerformLayout();
             this.cms.ResumeLayout(false);

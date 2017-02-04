@@ -107,14 +107,20 @@ namespace SapReader
             if (!first)
                 mm.Items.Remove(proToolStripMenuItem);
             TabStyleProvider tmp = new LSTabStyleProvider(pages);
-            pages.DisplayStyleProvider = tmp;            
+            pages.DisplayStyleProvider = tmp;
+
+            if (drag == null)
+            {
+                drag = new Drag(this);
+                DragOver += drag.Main_DragOver;
+            }
         }
         private void Main_Load(object sender, EventArgs e)
         {
             Application.DoEvents();
             if (parames["Bool.AutoConnect"] == "True")
-                if(Main.fc.key == null)
-                proToolStripMenuItem_Click(null,null);
+                if (Main.fc.key == null)
+                    proToolStripMenuItem_Click(null, null);
         }
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
         {
@@ -412,8 +418,8 @@ namespace SapReader
                         else
                             if (response.Attributes.GetNamedItem("result").InnerText == "request")
                         {
-                            if(parames["Pro.Pass"] != "")
-                            fc.ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
+                            if (parames["Pro.Pass"] != "")
+                                fc.ClientSend("<REQUEST type=\"login\" login=\"" + parames["Pro.Login"] + "\" pass=\"" + Sapphire.GetMd5Hash(parames["Pro.Pass"]) + "\" />");
                         }
                         else
                         {
@@ -692,18 +698,7 @@ namespace SapReader
                         {
                             foreach (string fil in ofd.FileNames)
                             {
-                                NewTab();
-                                page.Text = Path.GetFileName(fil);
-                                if (fil.Split('.').Last() == "srtf")
-                                {
-                                    string key = null;
-                                    if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
-                                    {
-                                        BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
-                                    }
-                                }
-                                else
-                                    BoxToWrite(File.ReadAllText(fil), fil);
+                                OpenFile(fil);
                             }
                         }
                         break;
@@ -800,18 +795,7 @@ namespace SapReader
                                 if (!File.GetAttributes(nowDir + i.Text).HasFlag(FileAttributes.Directory))
                                 {
                                     string fil = nowDir + i.Text;
-                                    NewTab();
-                                    page.Text = Path.GetFileName(fil);
-                                    if (fil.Split('.').Last() == "srtf")
-                                    {
-                                        string key = null;
-                                        if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
-                                        {
-                                            BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
-                                        }
-                                    }
-                                    else
-                                        BoxToWrite(File.ReadAllText(fil), fil);
+                                    OpenFile(fil);
                                 }
                         }
                         break;
@@ -904,11 +888,34 @@ namespace SapReader
         {
             tray.ShowBalloonTip(1000, header, Text + "", ToolTipIcon.None);
         }
+        public void OpenFile(string fil)
+        {
+            NewTab();
+            page.Text = Path.GetFileName(fil);
+            if (fil.Split('.').Last() == "srtf")
+            {
+                string key = null;
+                if (LSFB.InputBox("Открыть " + new DirectoryInfo(fil).Name, "Введите ключ шифрования:", ref key) == DialogResult.OK)
+                {
+                    BoxToWrite(Encoding.UTF8.GetString(Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)), fil);
+                }
+            }
+            else if (new List<string>() { "jpg","png","bmp" }.Contains(fil.Split('.').Last()))
+            {
+                page.BackgroundImage = Image.FromFile(fil);
+                page.BackgroundImageLayout = ImageLayout.Center;
+            }
+            else
+                BoxToWrite(File.ReadAllText(fil), fil);
+        }
         public void Encrypt(ListView.SelectedListViewItemCollection files, bool encrypt)
         {
             if (files.Count > 0)
             {
-                Crypy prog = new Crypy(files, encrypt);
+                List<string> tmp = new List<string>();
+                foreach (ListViewItem item in files)
+                    tmp.Add(item.Text);
+                Crypy prog = new Crypy(tmp, encrypt);
                 prog.ShowDialog();
             }
         }
@@ -1027,6 +1034,65 @@ namespace SapReader
             new About("Тесты Sapphire");
         }
         #endregion
+        public Drag drag = null;
+        private void Main_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Link;
+            drag.Show();
+            Enabled = false;
+        }
+
+        private void Main_DragLeave(object sender, EventArgs e)
+        {
+            Enabled = true;
+            drag.Hide();
+        }
+
+        private void Main_DragDrop(object sender, DragEventArgs e)
+        {
+            Enabled = true;
+            drag.Hide();
+
+            if (drag.State != Drag.state.none)
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                switch (drag.State)
+                {
+
+                    case Drag.state.open:
+                        foreach (string fil in files)
+                            try
+                            {
+                                if (!File.GetAttributes(fil).HasFlag(FileAttributes.Directory))
+                                {
+                                    OpenFile(fil);
+                                }
+                                else
+                                {
+                                    NewTab();
+                                    page.Text = Path.GetDirectoryName(fil);
+                                    CreateBrow();
+                                    Go(fil + "\\");
+                                }
+                            }
+                            catch (Exception ex) { DebugMessage(ex.Message); }
+                        break;
+                    case Drag.state.encrypt:
+                        List<string> tmp = new List<string>();
+
+                        foreach (string s in files)
+                            tmp.Add(Path.GetFileName(s));
+                        new Crypy(tmp, true) { altDir = Path.GetDirectoryName(files.First()) + "\\" }.ShowDialog();
+                        break;
+                    case Drag.state.decrypt:
+
+                        break;
+                }
+                drag.State = Drag.state.none;
+            }
+            else
+                SystemSounds.Exclamation.Play();
+        }
 
     }
 }

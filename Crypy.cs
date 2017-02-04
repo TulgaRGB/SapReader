@@ -17,8 +17,9 @@ namespace SapReader
         // 6 1
         LSFB main;
         int ok = 0;
+        public string altDir = null;
         public List<LSFB.ReadOnlyCheckBox> Items = new List<LSFB.ReadOnlyCheckBox>();
-        public Crypy(ListView.SelectedListViewItemCollection files, bool encrypt)
+        public Crypy(List<string> files, bool encrypt)
         {
             InitializeComponent();
             Text = "Шифроване файлов - готово к шифрованию";
@@ -28,13 +29,13 @@ namespace SapReader
             this.encrypt = encrypt;
             radioButton1.Checked = encrypt;
             radioButton2.Checked = !encrypt;
-            foreach (ListViewItem s in files)
+            foreach (string s in files)
             {
                 LSFB.ReadOnlyCheckBox t = new LSFB.ReadOnlyCheckBox
                 {
                     ReadOnly = true,
                     Location = new Point(12, 12 + 23 * files.IndexOf(s)),
-                    Text = s.Text,
+                    Text = s,
                     AutoSize = true
                 };
                 Items.Add(t);
@@ -103,8 +104,11 @@ namespace SapReader
                 {
                     try
                     {
-                        string way = null;
-                        Invoke((MethodInvoker)delegate { way = Main.main.nowDir + s.Text; });
+                        string way = altDir;
+                        if (way == null)
+                            Invoke((MethodInvoker)delegate { way = Main.main.nowDir + s.Text; });
+                        else
+                            way += s.Text;
                         if (File.GetAttributes(way).HasFlag(FileAttributes.Directory))
                         {
                             ChangeCheck(Items.IndexOf(s), CheckState.Indeterminate);
