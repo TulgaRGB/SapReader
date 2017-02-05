@@ -15,3 +15,4 @@ D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.Main.resou
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\NLua.dll
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\KopiLua.dll
 D:\Users\fast\Documents\VS\SapReader\SapReader\bin\x86\Main\JacksonSoft.CustomTabControl.dll
+D:\Users\fast\Documents\VS\SapReader\SapReader\obj\x86\Main\SapReader.Drag.resources

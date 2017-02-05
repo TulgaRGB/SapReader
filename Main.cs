@@ -28,13 +28,13 @@ namespace SapReader
         public static string owner = Environment.UserName;
         public static Dictionary<string, string> parames = new Dictionary<string, string>
         {
-            {"Bool.AutoConnect","" },
-            {"Bool.AllowScript",""},
-            {"Bool.AllowPluginConnection","" },
-            {"Bool.DontAskForScript",""},
-            {"Bool.MaximizeOnStart",""},
-            {"Bool.UseNotValidPlugins",""},
-            {"Bool.UsePluginsNoSha","" },
+            {"Bool.AutoConnect","False" },
+            {"Bool.AllowScript","False"},
+            {"Bool.AllowPluginConnection","False" },
+            {"Bool.DontAskForScript","False"},
+            {"Bool.MaximizeOnStart","False"},
+            {"Bool.UseNotValidPlugins","False"},
+            {"Bool.UsePluginsNoSha","False" },
             {"Color.BackColor",""},
             {"Color.ForeColor",""},
             {"Color.Image","" },
@@ -96,11 +96,22 @@ namespace SapReader
             if (parames.ContainsKey("Auto.Plugs"))
                 pluginsSha = parames["Auto.Plugs"].Split('|').ToList();
 
+            if (!parames.ContainsKey("Auto.NewSapphire"))
+                parames["Auto.NewSapphire"] = "False";
             if (parames.ContainsKey("Auto.NewSapphire"))
                 if (parames["Auto.NewSapphire"] == "True")
                 {
                     sapphire2ToolStripMenuItem.Checked = false;
                     sapphire16ToolStripMenuItem.Checked = true;
+                }
+
+            if (!parames.ContainsKey("Auto.NewHash"))
+                parames["Auto.NewHash"] = "False";
+            if (parames.ContainsKey("Auto.NewHash"))
+                if (parames["Auto.NewHash"] == "True")
+                {
+                    mD5ToolStripMenuItem.Checked = false;
+                    sHA512ToolStripMenuItem.Checked = true;
                 }
             tray.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             UpdatePlugs();
@@ -817,31 +828,29 @@ namespace SapReader
                     case "Decrypt":
                         Encrypt(browser.SelectedItems, false);
                         break;
-                    case "MD5":
-                        string outp = "MD5 выбранных файлов:";
+                    case "Hash":
+                        string type = parames["Auto.NewHash"] == "True" ? "SHA-512" : "MD5";
+                        string outp = type + " выбранных файлов:";
                         foreach (ListViewItem item in browser.SelectedItems)
                         {
                             outp += Environment.NewLine + item.Text + " - ";
                             try
                             {
-                                outp += Sapphire.GetMd5HashBytes(File.ReadAllBytes(nowDir + item.Text));
+                                outp += parames["Auto.NewHash"] == "True" ? Sapphire.GetSha512(File.ReadAllBytes(nowDir + item.Text)) : Sapphire.GetMd5HashBytes(File.ReadAllBytes(nowDir + item.Text));
                             }
                             catch (Exception ex) { outp += ex.Message; }
                         }
-                        LSFB.Show(outp, "MD5");
+                        LSFB.Show(outp, type);
+                        break;
+                    case "MD5":
+                        parames["Auto.NewHash"] = "False";
+                        mD5ToolStripMenuItem.Checked = true;
+                        sHA512ToolStripMenuItem.Checked = false;
                         break;
                     case "SHA-512":
-                        outp = "SHA-512 выбранных файлов:";
-                        foreach (ListViewItem item in browser.SelectedItems)
-                        {
-                            outp += Environment.NewLine + item.Text + " - ";
-                            try
-                            {
-                                outp += Sapphire.GetSha512(File.ReadAllBytes(nowDir + item.Text));
-                            }
-                            catch (Exception ex) { outp += ex.Message; }
-                        }
-                        LSFB.Show(outp, "SHA-512");
+                        parames["Auto.NewHash"] = "True";
+                        mD5ToolStripMenuItem.Checked = false;
+                        sHA512ToolStripMenuItem.Checked = true;
                         break;
                     case "History":
                         flua.DoString(Encoding.UTF8.GetString(Properties.Resources.HISTORY));
@@ -1037,20 +1046,19 @@ namespace SapReader
         public Drag drag = null;
         private void Main_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Link;
+            e.Effect = DragDropEffects.All;
             drag.Show();
-            Enabled = false;
+            BringToFront();
+            Activate();
         }
 
         private void Main_DragLeave(object sender, EventArgs e)
         {
-            Enabled = true;
             drag.Hide();
         }
 
         private void Main_DragDrop(object sender, DragEventArgs e)
         {
-            Enabled = true;
             drag.Hide();
 
             if (drag.State != Drag.state.none)
@@ -1085,7 +1093,51 @@ namespace SapReader
                         new Crypy(tmp, true) { altDir = Path.GetDirectoryName(files.First()) + "\\" }.ShowDialog();
                         break;
                     case Drag.state.decrypt:
+                        tmp = new List<string>();
 
+                        foreach (string s in files)
+                            tmp.Add(Path.GetFileName(s));
+                        new Crypy(tmp, false) { altDir = Path.GetDirectoryName(files.First()) + "\\" }.ShowDialog();
+                        break;
+                    case Drag.state.decopen:
+                        string key = null;
+                        if (LSFB.InputBox("Расшифровать сюда","Введите ключ:", ref key) == DialogResult.OK)
+                        {
+                            try
+                            {
+                                string fil = files.First();
+                                NewTab();
+                                page.Text = Path.GetFileName(fil);
+                                if (new List<string>() { "jpg", "png", "bmp" }.Contains(fil.Split('.').Last()))
+                                {
+                                    byte[] img = parames["Auto.NewSapphire"] == "True" ? Sapphire.NewGetText(File.ReadAllBytes(fil), key) : Sapphire.GetTextBytes(File.ReadAllBytes(fil), key);
+                                    using (var ms = new MemoryStream(img))
+                                        try
+                                        {
+                                            page.BackgroundImage = Image.FromStream(ms);
+                                        }
+                                        catch (Exception ex) { throw new Exception("Не удалось открыть изображение:\n" + ex.Message); }
+                                    page.BackgroundImageLayout = ImageLayout.Center;
+                                }
+                                else
+                                    BoxToWrite(Encoding.UTF8.GetString(parames["Auto.NewSapphire"] == "True" ? Sapphire.NewGetText(File.ReadAllBytes(fil), key) : Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
+                            }
+                            catch (Exception ex) { DebugMessage(ex.Message); }
+                            }
+                        break;
+                    case Drag.state.sum:
+                        string type = parames["Auto.NewHash"] == "True" ? "SHA-512" : "MD5";
+                        string outp = type + " выбранных файлов:";
+                        foreach (string item in files)
+                        {
+                            outp += Environment.NewLine + Path.GetFileName(item) + " - ";
+                            try
+                            {
+                                outp += parames["Auto.NewHash"] == "True" ? Sapphire.GetSha512(File.ReadAllBytes(item)) : Sapphire.GetMd5HashBytes(File.ReadAllBytes(item));
+                            }
+                            catch (Exception ex) { outp += ex.Message; }
+                        }
+                        LSFB.Show(outp, type);
                         break;
                 }
                 drag.State = Drag.state.none;

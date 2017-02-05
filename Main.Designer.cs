@@ -88,18 +88,20 @@
             this.переименоватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.хешированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mD5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sHA512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.шифрованиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sapphire2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sapphire16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.шифроватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.расшифроватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tray = new System.Windows.Forms.NotifyIcon(this.components);
             this.conLabel = new System.Windows.Forms.Label();
             this.pizda = new System.Windows.Forms.ErrorProvider(this.components);
             this.pages = new System.Windows.Forms.CustomTabControl();
+            this.криптографияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.шифрованиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sapphire2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sapphire16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.хешированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mD5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sHA512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.хешсуммаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mm.SuspendLayout();
             this.cms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pizda)).BeginInit();
@@ -113,12 +115,13 @@
             this.ыToolStripMenuItem,
             this.проводникToolStripMenuItem,
             this.инструментыToolStripMenuItem,
+            this.криптографияToolStripMenuItem,
             this.настройкиToolStripMenuItem,
             this.помощьToolStripMenuItem,
             this.proToolStripMenuItem});
             this.mm.Location = new System.Drawing.Point(12, 0);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(416, 24);
+            this.mm.Size = new System.Drawing.Size(607, 24);
             this.mm.TabIndex = 0;
             this.mm.Tag = "OnBorder";
             this.mm.Text = "menuStrip1";
@@ -501,12 +504,11 @@
             this.переименоватьToolStripMenuItem1,
             this.удалитьToolStripMenuItem1,
             this.toolStripSeparator6,
-            this.хешированиеToolStripMenuItem,
-            this.шифрованиеToolStripMenuItem,
             this.шифроватьToolStripMenuItem1,
-            this.расшифроватьToolStripMenuItem1});
+            this.расшифроватьToolStripMenuItem1,
+            this.хешсуммаToolStripMenuItem});
             this.cms.Name = "cms";
-            this.cms.Size = new System.Drawing.Size(190, 264);
+            this.cms.Size = new System.Drawing.Size(190, 242);
             this.cms.Tag = "";
             this.cms.Click += new System.EventHandler(this.MenuHandler);
             // 
@@ -598,56 +600,6 @@
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(186, 6);
             // 
-            // хешированиеToolStripMenuItem
-            // 
-            this.хешированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mD5ToolStripMenuItem,
-            this.sHA512ToolStripMenuItem});
-            this.хешированиеToolStripMenuItem.Name = "хешированиеToolStripMenuItem";
-            this.хешированиеToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.хешированиеToolStripMenuItem.Text = "Хеширование";
-            // 
-            // mD5ToolStripMenuItem
-            // 
-            this.mD5ToolStripMenuItem.Name = "mD5ToolStripMenuItem";
-            this.mD5ToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.mD5ToolStripMenuItem.Tag = "MD5";
-            this.mD5ToolStripMenuItem.Text = "MD5";
-            this.mD5ToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
-            // 
-            // sHA512ToolStripMenuItem
-            // 
-            this.sHA512ToolStripMenuItem.Name = "sHA512ToolStripMenuItem";
-            this.sHA512ToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.sHA512ToolStripMenuItem.Tag = "SHA-512";
-            this.sHA512ToolStripMenuItem.Text = "SHA-512";
-            this.sHA512ToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
-            // 
-            // шифрованиеToolStripMenuItem
-            // 
-            this.шифрованиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sapphire2ToolStripMenuItem,
-            this.sapphire16ToolStripMenuItem});
-            this.шифрованиеToolStripMenuItem.Name = "шифрованиеToolStripMenuItem";
-            this.шифрованиеToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.шифрованиеToolStripMenuItem.Text = "Шифрование";
-            // 
-            // sapphire2ToolStripMenuItem
-            // 
-            this.sapphire2ToolStripMenuItem.Checked = true;
-            this.sapphire2ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sapphire2ToolStripMenuItem.Name = "sapphire2ToolStripMenuItem";
-            this.sapphire2ToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.sapphire2ToolStripMenuItem.Text = "Sapphire 2";
-            this.sapphire2ToolStripMenuItem.Click += new System.EventHandler(this.sapphire2ToolStripMenuItem_Click);
-            // 
-            // sapphire16ToolStripMenuItem
-            // 
-            this.sapphire16ToolStripMenuItem.Name = "sapphire16ToolStripMenuItem";
-            this.sapphire16ToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.sapphire16ToolStripMenuItem.Text = "Sapphire-16";
-            this.sapphire16ToolStripMenuItem.Click += new System.EventHandler(this.sapphire16ToolStripMenuItem_Click);
-            // 
             // шифроватьToolStripMenuItem1
             // 
             this.шифроватьToolStripMenuItem1.Name = "шифроватьToolStripMenuItem1";
@@ -716,6 +668,75 @@
             this.pages.Size = new System.Drawing.Size(936, 501);
             this.pages.TabIndex = 3;
             this.pages.Tag = "";
+            // 
+            // криптографияToolStripMenuItem
+            // 
+            this.криптографияToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.шифрованиеToolStripMenuItem,
+            this.хешированиеToolStripMenuItem});
+            this.криптографияToolStripMenuItem.Name = "криптографияToolStripMenuItem";
+            this.криптографияToolStripMenuItem.Size = new System.Drawing.Size(99, 20);
+            this.криптографияToolStripMenuItem.Text = "Криптография";
+            // 
+            // шифрованиеToolStripMenuItem
+            // 
+            this.шифрованиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sapphire2ToolStripMenuItem,
+            this.sapphire16ToolStripMenuItem});
+            this.шифрованиеToolStripMenuItem.Name = "шифрованиеToolStripMenuItem";
+            this.шифрованиеToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.шифрованиеToolStripMenuItem.Text = "Шифрование";
+            // 
+            // sapphire2ToolStripMenuItem
+            // 
+            this.sapphire2ToolStripMenuItem.Checked = true;
+            this.sapphire2ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sapphire2ToolStripMenuItem.Name = "sapphire2ToolStripMenuItem";
+            this.sapphire2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sapphire2ToolStripMenuItem.Text = "Sapphire 2";
+            this.sapphire2ToolStripMenuItem.Click += new System.EventHandler(this.sapphire2ToolStripMenuItem_Click);
+            // 
+            // sapphire16ToolStripMenuItem
+            // 
+            this.sapphire16ToolStripMenuItem.Name = "sapphire16ToolStripMenuItem";
+            this.sapphire16ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sapphire16ToolStripMenuItem.Text = "Sapphire-16";
+            this.sapphire16ToolStripMenuItem.Click += new System.EventHandler(this.sapphire16ToolStripMenuItem_Click);
+            // 
+            // хешированиеToolStripMenuItem
+            // 
+            this.хешированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mD5ToolStripMenuItem,
+            this.sHA512ToolStripMenuItem});
+            this.хешированиеToolStripMenuItem.Name = "хешированиеToolStripMenuItem";
+            this.хешированиеToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.хешированиеToolStripMenuItem.Text = "Хеширование";
+            // 
+            // mD5ToolStripMenuItem
+            // 
+            this.mD5ToolStripMenuItem.Checked = true;
+            this.mD5ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mD5ToolStripMenuItem.Name = "mD5ToolStripMenuItem";
+            this.mD5ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mD5ToolStripMenuItem.Tag = "MD5";
+            this.mD5ToolStripMenuItem.Text = "MD5";
+            this.mD5ToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
+            // 
+            // sHA512ToolStripMenuItem
+            // 
+            this.sHA512ToolStripMenuItem.Name = "sHA512ToolStripMenuItem";
+            this.sHA512ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sHA512ToolStripMenuItem.Tag = "SHA-512";
+            this.sHA512ToolStripMenuItem.Text = "SHA-512";
+            this.sHA512ToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
+            // 
+            // хешсуммаToolStripMenuItem
+            // 
+            this.хешсуммаToolStripMenuItem.Name = "хешсуммаToolStripMenuItem";
+            this.хешсуммаToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.хешсуммаToolStripMenuItem.Tag = "Hash";
+            this.хешсуммаToolStripMenuItem.Text = "Хеш-сумма";
+            this.хешсуммаToolStripMenuItem.Click += new System.EventHandler(this.MenuHandler);
             // 
             // Main
             // 
@@ -788,9 +809,6 @@
         private System.Windows.Forms.ToolStripMenuItem настроитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem обновитьToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem хешированиеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mD5ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sHA512ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem главнаяСтраницаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem архивToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem файлКлючейToolStripMenuItem;
@@ -814,10 +832,15 @@
         private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem загрузитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem подписатьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem тестыSapphireToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem криптографияToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem шифрованиеToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sapphire2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sapphire16ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem тестыSapphireToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem хешированиеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mD5ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sHA512ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem хешсуммаToolStripMenuItem;
     }
 }
 

@@ -26,6 +26,8 @@ namespace SapReader
             if (Main.parames.ContainsKey("Auto.NewSapphire"))
                 if (Main.parames["Auto.NewSapphire"] == "True")
                     Text += " (Sapphire-16)";
+                else
+                    Text += " (Sapphire 2)";
             this.encrypt = encrypt;
             radioButton1.Checked = encrypt;
             radioButton2.Checked = !encrypt;

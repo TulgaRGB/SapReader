@@ -17,22 +17,30 @@ namespace SapReader
         Form parent;
         public enum state
         {
-            none, encrypt, decrypt, open
+            none, encrypt, decrypt,decopen, open, sum, cloud
         }
-        List<string> headers = new List<string>() { "Шифровать", "Расшифровать cюда", "Открыть"};
+        List<string> headers = new List<string>() { "Зашифровать", "Расшифровать", "Отрыть расшифровав", "Открыть", "Хеш сумма", "Добавить в облако" };
         public Drag(Form parent)
         {
             InitializeComponent();
+            TopMost = true;
             this.parent = parent;
             BackColor = Color.Red;
             ForeColor = parent.ForeColor;
+            foreach (string s in headers)
+            {
+                Label b = new Label { Size = new Size(90, 90), FlatStyle = FlatStyle.Flat, BackColor = parent.BackColor, Text = s, Font = LSFB.sizer(7), AutoSize = false, TextAlign = ContentAlignment.MiddleCenter };
+                flowLayoutPanel1.Controls.Add(b);
+                if (headers.IndexOf(s) % 3 == 2)
+                {
+                    Label b2 = new Label { Size = new Size(282, 6), FlatStyle = FlatStyle.Flat, AutoSize = false };
+                    flowLayoutPanel1.Controls.Add(b2);
+
+                }
+            }
+            Height = (headers.Count / 3 + 1) * 100;
             Top = parent.Top + parent.Height / 2 - Height / 2;
             Left = parent.Left + parent.Width / 2 - Width / 2;
-            foreach(string s in headers)
-            {
-                Label b = new Label {Size = new Size(90,90), FlatStyle = FlatStyle.Flat, BackColor  = parent.BackColor, Text = s, Font = LSFB.sizer(7), AutoSize = false, TextAlign = ContentAlignment.MiddleCenter };
-                flowLayoutPanel1.Controls.Add(b);
-            }
         }
 
         public enum GWL
@@ -72,21 +80,23 @@ namespace SapReader
         public void Main_DragOver(object sender, DragEventArgs e)
         {
             foreach (Label b in flowLayoutPanel1.Controls)
-            {
-                b.BackColor = parent.BackColor;
-            }
+                if (b.Text != "")
+                {
+                    b.BackColor = parent.BackColor;
+                }
             int left = e.X - Left;
             int top = e.Y - Top;
             if (left < Width && left > 0 && top > 0 && top < Height)
             {
-                foreach(Label b in flowLayoutPanel1.Controls)
-                {
-                    if (b.Bounds.Contains(left,top))
+                foreach (Label b in flowLayoutPanel1.Controls)
+                    if (b.Text != "")
                     {
-                        State = (state)(headers.IndexOf(b.Text)+1);
-                        b.BackColor = LSFB.Colorize(parent.BackColor);
+                        if (b.Bounds.Contains(left, top))
+                        {
+                            State = (state)(headers.IndexOf(b.Text) + 1);
+                            b.BackColor = LSFB.Colorize(parent.BackColor);
+                        }
                     }
-                }
             }
             else
             {
