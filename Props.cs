@@ -22,13 +22,13 @@ namespace SapReader
             tabControl.Appearance = TabAppearance.FlatButtons;
             tabControl.ItemSize = new Size(0, 1);
             tabControl.SizeMode = TabSizeMode.Fixed;
-            mm.Renderer = new LSFB.MyRenderer() { Transparent = true };            
-            main = new LS.LSFB(this, 2, 0, 80, false );
+            mm.Renderer = new LSFB.MyRenderer() { Transparent = true };
+            main = new LS.LSFB(this, 2, 0, 80, false);
             main.MakeControlLikeWork(yolka);
             main.MakeControlLikeWork(formats);
             foreach (TabPage p in tabControl.TabPages)
             {
-               main.MakeControlLikeWork(p);
+                main.MakeControlLikeWork(p);
                 p.AutoScroll = true;
                 mm.Items.Add(p.Text);
                 mm.Items[mm.Items.Count - 1].Click += tabSelect;
@@ -37,7 +37,7 @@ namespace SapReader
             cmsPlugs.Renderer = new LSFB.MyRenderer();
             cmsBrow.Renderer = new LSFB.MyRenderer();
             #region Colors
-            Image image = new Bitmap(201,201);
+            Image image = new Bitmap(201, 201);
             using (Graphics g = Graphics.FromImage(image))
             {
                 g.FillEllipse(Brushes.White, 0, 0, 201, 201);
@@ -49,7 +49,7 @@ namespace SapReader
                         if (c.A > 0)
                         {
                             Point pol = DecToPol(x, y);
-                            Color rgb = HSV(pol.Y, pol.X,100);
+                            Color rgb = HSV(pol.Y, pol.X, 100);
                             g.FillRectangle(new SolidBrush(rgb), x + 100, y + 100, 1, 1);
                         }
                     }
@@ -84,11 +84,11 @@ namespace SapReader
                 int u = (int)(BackColor.R / 255D * 201);
                 int d = (int)(ForeColor.R / 255D * 201);
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-                string text = BackColor.R+" " + ForeColor.R;
+                string text = BackColor.R + " " + ForeColor.R;
                 SizeF textSize = e.Graphics.MeasureString(text, LSFB.sizer(8));
                 PointF locationToDraw = new PointF();
                 locationToDraw.X = (rb.Width / 2) - (textSize.Width / 2);
-                locationToDraw.Y = (rb.Height/ 2) - (textSize.Height / 2);
+                locationToDraw.Y = (rb.Height / 2) - (textSize.Height / 2);
                 e.Graphics.DrawString(text, LSFB.sizer(8), Brushes.White, locationToDraw);
             };
             gb.Paint += (object sender, PaintEventArgs e) =>
@@ -130,21 +130,21 @@ namespace SapReader
             #endregion
             #region Bools
             foreach (string k in Bools.Keys)
-                {
+            {
                 bool ch = false;
                 try
                 {
-                    ch = Convert.ToBoolean(Main.parames["Bool."+Bools[k]]);
+                    ch = Convert.ToBoolean(Main.parames["Bool." + Bools[k]]);
                 }
                 catch { }
-                    Мойвыбор.Controls.Add(new CheckBox { Text = k, AutoSize = true, Location = new Point(12, 12 + 23 * Мойвыбор.Controls.Count), Checked = ch, FlatStyle = FlatStyle.Flat });
-                }
+                Мойвыбор.Controls.Add(new CheckBox { Text = k, AutoSize = true, Location = new Point(12, 12 + 23 * Мойвыбор.Controls.Count), Checked = ch, FlatStyle = FlatStyle.Flat });
+            }
             #endregion
             #region Pros
-                checkBox1.Checked = Main.parames["Pro.Custom"] == "True";
-                login.Text = Main.parames["Pro.Login"];
-                pass.Text = Main.parames["Pro.Pass"];
-                ip.Text = Main.parames["Pro.Ip"];
+            checkBox1.Checked = Main.parames["Pro.Custom"] == "True";
+            login.Text = Main.parames["Pro.Login"];
+            pass.Text = Main.parames["Pro.Pass"];
+            ip.Text = Main.parames["Pro.Ip"];
             ip.Enabled = checkBox1.Checked;
             #endregion
             #region Yolka            
@@ -231,11 +231,12 @@ namespace SapReader
                     }
                 }
             }
-            if(n == null)
+            if (n == null)
                 yolka.ExpandAll();
         }
         Dictionary<string, string> Bools = new Dictionary<string, string>()
         {
+            { "Автозапуск при старте Windows","AutoStart" },
             { "Подключаться к серверу при запуске","AutoConnect" },
             { "Запускать плагины со скриптами", "AllowScript" },
             { "Не спрашивать при запуске скриптов", "DontAskForScript" },
@@ -246,7 +247,7 @@ namespace SapReader
         };
         void pick(object sender, MouseEventArgs e)
         {
-                Color pxl = ((Bitmap)(pictureBox1.Image)).GetPixel(e.X > 200? 200: e.X < 0? 0 : e.X, e.Y > 200? 200: e.Y < 0? 0 : e.Y);
+            Color pxl = ((Bitmap)(pictureBox1.Image)).GetPixel(e.X > 200 ? 200 : e.X < 0 ? 0 : e.X, e.Y > 200 ? 200 : e.Y < 0 ? 0 : e.Y);
             if (pxl.A == 255)
                 if (e.Button == MouseButtons.Left)
                 {
@@ -262,18 +263,18 @@ namespace SapReader
                     LSFB.MainForm.ForeColor = pxl;
                     Main.parames["Color.ForeColor"] = LSFB.ToHex(pxl);
                 }
-                
+
         }
         void RGB(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
                 string name = ((PictureBox)sender).Name;
-                int[] p = {-1,-1,-1 };
+                int[] p = { -1, -1, -1 };
                 switch (name)
                 {
                     case "rb":
-                        p[0] = (int)(e.X/201D*255) > 255? 255: (int)(e.X / 201D * 255) < 0? 0: (int)(e.X / 201D * 255);
+                        p[0] = (int)(e.X / 201D * 255) > 255 ? 255 : (int)(e.X / 201D * 255) < 0 ? 0 : (int)(e.X / 201D * 255);
                         break;
                     case "gb":
                         p[1] = (int)(e.X / 201D * 255) > 255 ? 255 : (int)(e.X / 201D * 255) < 0 ? 0 : (int)(e.X / 201D * 255);
@@ -287,7 +288,7 @@ namespace SapReader
                     for (int i = 0; i < 3; i++)
                         if (p[i] == -1)
                             p[i] = i < 1 ? LSFB.MainForm.BackColor.R : i > 1 ? LSFB.MainForm.BackColor.B : LSFB.MainForm.BackColor.G;
-                    LSFB.MainForm.BackColor = Color.FromArgb(255,p[0],p[1],p[2]);
+                    LSFB.MainForm.BackColor = Color.FromArgb(255, p[0], p[1], p[2]);
                     Color tmp = LSFB.MainForm.ForeColor;
                     LSFB.MainForm.ForeColor = LSFB.MainForm.BackColor;
                     LSFB.MainForm.ForeColor = tmp;
@@ -310,42 +311,42 @@ namespace SapReader
             int r = 0;
             int g = 0;
             int b = 0;
-            if(deg < -59 && deg > -121)
+            if (deg < -59 && deg > -121)
             {
-                r =  (int)((1 + ((60 + deg)/60D))*255D);
+                r = (int)((1 + ((60 + deg) / 60D)) * 255D);
             }
             if (deg < -119)
                 g = (int)((1 - ((180D + deg) / 60)) * 255D);
-            if(deg > 119)
-                b = (int)((1 -((180D - deg) / 60)) * 255D);
-            if(deg> 60 && deg <  121)
+            if (deg > 119)
+                b = (int)((1 - ((180D - deg) / 60)) * 255D);
+            if (deg > 60 && deg < 121)
                 r = (int)(((120D - deg) / 60) * 255D);
             if (deg < 61 && deg > 0)
                 g = (int)(deg / 60D * 255D);
             if (deg < 0 && deg > -60)
-                b = - (int)(deg/60D * 255D);
+                b = -(int)(deg / 60D * 255D);
             if (deg < 61 && deg > -61)
                 r = 255;
             if (deg < -59)
                 b = 255;
             if (deg > 59)
                 g = 255;
-            return Color.FromArgb((int)(rad/100D*255),r,g,b);
+            return Color.FromArgb((int)(rad / 100D * 255), r, g, b);
         }
         public static Point DecToPol(int x, int y)
         {
             Point point = new Point();
             point.X = (int)Math.Sqrt(x * x + y * y);
-            point.Y =(int)(Math.Atan2(y, x) * 180 / Math.PI);
+            point.Y = (int)(Math.Atan2(y, x) * 180 / Math.PI);
             return point;
         }
 
         private void tabSelect(object sender, EventArgs e)
         {
             ToolStripMenuItem th = (ToolStripMenuItem)sender;
-            if(mm.Items.IndexOf(th) < tabControl.TabCount)
-            tabControl.SelectTab(mm.Items.IndexOf(th));
-            Text = "Настройки" + (th.Text != "Настройки"? " - " + th.Text:"");
+            if (mm.Items.IndexOf(th) < tabControl.TabCount)
+                tabControl.SelectTab(mm.Items.IndexOf(th));
+            Text = "Настройки" + (th.Text != "Настройки" ? " - " + th.Text : "");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -359,9 +360,13 @@ namespace SapReader
             Main.parames["Pro.Ip"] = ip.Text;
             Main.parames["Pro.Custom"] = checkBox1.Checked + "";
             foreach (CheckBox c in Мойвыбор.Controls)
+            {
+                if (Bools[c.Text] == "AutoStart")
+                    LSFB.AutoRun("SapReader", c.Checked);
                 Main.parames["Bool." + Bools[c.Text]] = c.Checked + "";
-                Main.parames["Pro.Pass"] = pass.Text;
-            if (!LSFB.SaveParams("SapReader", Main.parames))((Main)LSFB.MainForm).DebugMessage("Настройки не были сохранены!");
+            }
+            Main.parames["Pro.Pass"] = pass.Text;
+            if (!LSFB.SaveParams("SapReader", Main.parames)) ((Main)LSFB.MainForm).DebugMessage("Настройки не были сохранены!");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -384,34 +389,34 @@ namespace SapReader
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode now = yolka.SelectedNode;
-            string way = @"Plugins\"+ now.FullPath;
+            string way = @"Plugins\" + now.FullPath;
             try
             {
                 if (now.Text.Contains('.'))
-            {
+                {
                     File.Delete(way);
-            }
-            else
-            {
+                }
+                else
+                {
                     Directory.Delete(way);
+                }
+                обновитьToolStripMenuItem_Click(null, null);
             }
-            обновитьToolStripMenuItem_Click(null,null);
-            }
-                catch (Exception ex) { Main.main.DebugMessage(ex.Message); }
+            catch (Exception ex) { Main.main.DebugMessage(ex.Message); }
         }
 
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Main.main.MenuHandler(new ToolStripMenuItem {Tag = "Add" },null);
+            Main.main.MenuHandler(new ToolStripMenuItem { Tag = "Add" }, null);
         }
 
         private void новаяПапкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string text = null;
-            if(LSFB.InputBox(Text,"Введите название папки:",ref text, false) == DialogResult.OK)
+            if (LSFB.InputBox(Text, "Введите название папки:", ref text, false) == DialogResult.OK)
             {
                 Directory.CreateDirectory(@"Plugins\" + text);
-                обновитьToolStripMenuItem_Click(null,null);
+                обновитьToolStripMenuItem_Click(null, null);
             }
         }
         #endregion
@@ -425,7 +430,7 @@ namespace SapReader
         private void добавитьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             string add = null;
-            if(LSFB.InputBox("Новый формат","Введите расширение(я) которое(ые) необходимо открывать в редакторе (через пробел)", ref add, false) == DialogResult.OK)
+            if (LSFB.InputBox("Новый формат", "Введите расширение(я) которое(ые) необходимо открывать в редакторе (через пробел)", ref add, false) == DialogResult.OK)
             {
                 foreach (string ext in add.Split(' '))
                     if (!Main.parames["Browser.Formats"].Split('|').Contains(ext))
@@ -454,9 +459,9 @@ namespace SapReader
             doc.AppendChild(main);
             LSFB.CreateAttr(main, "Info.Name", "SapReader");
             LSFB.CreateAttr(main, "Info.Version", Application.ProductVersion);
-            foreach (KeyValuePair<string,string> par in Main.parames.Where(s => s.Key.Split('.').First() != "Auto" && s.Key != "Pro.Pass")
+            foreach (KeyValuePair<string, string> par in Main.parames.Where(s => s.Key.Split('.').First() != "Auto" && s.Key != "Pro.Pass")
                         .ToDictionary(dict => dict.Key, dict => dict.Value))
-            LSFB.CreateAttr(main,par.Key,par.Value);
+                LSFB.CreateAttr(main, par.Key, par.Value);
             Main.main.NewTab();
             Main.main.page.Text = "Безымянный.CONFIG";
             Main.main.BoxToWrite(LSFB.XmlTostring(doc).Replace(" ", Environment.NewLine));
@@ -477,13 +482,13 @@ namespace SapReader
                         }
                 }
             }
-            catch(Exception ex) { Main.main.DebugMessage(ex.Message+""); }
+            catch (Exception ex) { Main.main.DebugMessage(ex.Message + ""); }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog {Filter = "Файлы изображений|*.png;*.jpg;*.jpeg;*.bmp;*.tga" };
-            if(ofd.ShowDialog() == DialogResult.OK)
+            OpenFileDialog ofd = new OpenFileDialog { Filter = "Файлы изображений|*.png;*.jpg;*.jpeg;*.bmp;*.tga" };
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = ofd.FileName;
             }

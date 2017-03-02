@@ -20,7 +20,7 @@ using System.Drawing.Drawing2D;
 
 namespace SapReader
 {
-    public partial class Main : Form
+    public partial class Main : LSFB.Window
     {
         public static Main main;
         public static List<string> pluginsSha = new List<string>();
@@ -29,6 +29,7 @@ namespace SapReader
         public static Dictionary<string, string> parames = new Dictionary<string, string>
         {
             {"Bool.AutoConnect","False" },
+            {"Bool.AutoStart","False" },
             {"Bool.AllowScript","False"},
             {"Bool.AllowPluginConnection","False" },
             {"Bool.DontAskForScript","False"},
@@ -1046,6 +1047,7 @@ namespace SapReader
         public Drag drag = null;
         private void Main_DragEnter(object sender, DragEventArgs e)
         {
+            NewTab();
             e.Effect = DragDropEffects.All;
             drag.Show();
             BringToFront();

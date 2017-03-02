@@ -27,7 +27,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <AssemblyVersion>1.2.28.0</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -180,6 +180,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\LS\FastConnection.cs">
+      <Link>FastConnection.cs</Link>
+    </Compile>
     <Compile Include="..\..\LS\FastLua.cs">
       <Link>FastLua.cs</Link>
     </Compile>
@@ -192,9 +195,6 @@
     <Compile Include="..\..\LS_Private\linenum_rtf.cs">
       <Link>linenum_rtf.cs</Link>
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\..\LS_Private\NetConnection.cs">
-      <Link>NetConnection.cs</Link>
     </Compile>
     <Compile Include="About.cs">
       <SubType>Form</SubType>
