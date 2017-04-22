@@ -457,11 +457,11 @@ namespace SapReader
             XmlDocument doc = new XmlDocument();
             XmlElement main = doc.CreateElement("OPTIONS");
             doc.AppendChild(main);
-            LSFB.CreateAttr(main, "Info.Name", "SapReader");
-            LSFB.CreateAttr(main, "Info.Version", Application.ProductVersion);
+            main.SNI("Info.Name", "SapReader");
+            main.SNI("Info.Version", Application.ProductVersion);
             foreach (KeyValuePair<string, string> par in Main.parames.Where(s => s.Key.Split('.').First() != "Auto" && s.Key != "Pro.Pass")
                         .ToDictionary(dict => dict.Key, dict => dict.Value))
-                LSFB.CreateAttr(main, par.Key, par.Value);
+                main.SNI(par.Key, par.Value);
             Main.main.NewTab();
             Main.main.page.Text = "Безымянный.CONFIG";
             Main.main.BoxToWrite(LSFB.XmlTostring(doc).Replace(" ", Environment.NewLine));

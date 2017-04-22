@@ -44,7 +44,7 @@ namespace SapReader
             {"Pro.Ip",""},
             {"Browser.Formats","" }
         };
-        public static FastConnection fc;
+        public static Cyan fc;
         public Dictionary<TabPage, FastLua> Pages = new Dictionary<TabPage, FastLua>();
         public Dictionary<TabPage, DirectoryInfo> Directories = new Dictionary<TabPage, DirectoryInfo>();
         public TabPage page { get { return pages.SelectedTab; } }
@@ -55,12 +55,12 @@ namespace SapReader
         public Main(bool first = true)
         {
             InitializeComponent();
-            fc = new FastConnection(ParseResponse);
-            fc.OnDisconnect += (object sender, NetConnection c) =>
+            fc = new Cyan(ParseResponse);
+            fc.OnDisconnect += () =>
             {
                 conLabel.Text = "Нет соединения";
             };
-            fc.OnConnect += (object sender, NetConnection c) =>
+            fc.OnConnect += () =>
             {
                 conLabel.Text = "Вход не выполнен";
             };
@@ -130,7 +130,7 @@ namespace SapReader
         {
             Application.DoEvents();
             if (parames["Bool.AutoConnect"] == "True")
-                if (Main.fc.key == null)
+                if (Main.fc.Key == null)
                     proToolStripMenuItem_Click(null, null);
         }
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
@@ -980,16 +980,16 @@ namespace SapReader
                     Invoke((MethodInvoker)delegate { conLabel.Text = "Подключение"; });
                     Invoke((MethodInvoker)delegate
                     {
-                        fc = new FastConnection(ParseResponse);
-                        fc.OnDisconnect += (object sender, NetConnection c) =>
+                        fc = new Cyan(ParseResponse);
+                        fc.OnDisconnect += () =>
                         {
                             conLabel.Text = "Нет соединения";
                         };
-                        fc.OnConnect += (object sender, NetConnection c) =>
+                        fc.OnConnect += () =>
                         {
                             conLabel.Text = "Вход не выполнен";
                         };
-                        fc.Con(parames["Pro.Ip"], 228);
+                        fc.Connect(parames["Pro.Ip"], 228);
                     });
                 }
                 catch
@@ -1003,7 +1003,7 @@ namespace SapReader
         {
             if (page == null)
                 NewTab();
-            if (fc.key == null)
+            if (fc.Key == null)
             {
                 if (parames["Pro.Custom"] != "True")
                     parames["Pro.Ip"] = Properties.Resources.Host;
@@ -1147,5 +1147,12 @@ namespace SapReader
                 SystemSounds.Exclamation.Play();
         }
 
+    }
+    public static class Lel
+    {
+        public static void ClientSend(this Cyan c, string text)
+        {
+            c.Request(text);
+        }
     }
 }

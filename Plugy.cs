@@ -112,7 +112,7 @@ namespace SapReader
         {
             try
             {
-                if (Main.fc.key == null)
+                if (Main.fc.Key == null)
                     throw (new Exception());
                 string hash = Sapphire.GetShaForPass(xml.Replace(info["sign"], ""));
                 Main.fc.Request("<REQUEST type='checkSer' author='" + info["author"] + "' hash='" + hash + "' sign='" + info["sign"] + "'/>", new Action<string>((ses) =>
