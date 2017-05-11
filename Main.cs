@@ -35,8 +35,8 @@ namespace SapReader
             {"Bool.MaximizeOnStart","False"},
             {"Bool.UseNotValidPlugins","False"},
             {"Bool.UsePluginsNoSha","False" },
-            {"Color.BackColor",""},
-            {"Color.ForeColor",""},
+            {"Color.BackColor","2E2E30"},
+            {"Color.ForeColor","FFFFFF"},
             {"Color.Image","" },
             {"Pro.Login",""},
             {"Pro.Pass",""},
@@ -72,7 +72,7 @@ namespace SapReader
                 {
                     LSFB.Wall = Image.FromFile(parames["Color.Image"]);
                 }
-                catch { }
+                catch(Exception ex) { Log.Write(ex); }
                 LSFB.MainForm = this; main = this;
             }
             Size = new Size(Screen.PrimaryScreen.WorkingArea.Width / 2, Screen.PrimaryScreen.WorkingArea.Height / 2);
@@ -125,7 +125,15 @@ namespace SapReader
                 drag = new Drag(this);
                 DragOver += drag.Main_DragOver;
             }
+
+            pages.SelectedIndexChanged += Pages_SelectedIndexChanged;
         }
+
+        private void Pages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            At.Single.ClearAttrs();
+        }
+
         private void Main_Load(object sender, EventArgs e)
         {
             Application.DoEvents();
@@ -338,7 +346,7 @@ namespace SapReader
                             {
                                 new Plugy(response.InnerText.Replace("lt;", "<").Replace("gt;", ">"));
                             }
-                            catch (Exception ex) { DebugMessage(ex.Message); }
+                            catch (Exception ex) { DebugMessage(ex.Message); Log.Write(ex); }
                         break;
                     case "forms":
                         LSDB formsDB = new LSDB();
@@ -619,6 +627,7 @@ namespace SapReader
                 browser.BackColor = page.BackColor;
                 browser.ForeColor = ForeColor;
                 browser.MouseDoubleClick += browser_MouseDoubleClick;
+                browser.SelectedIndexChanged += Browser_SelectedIndexChanged;
                 browser.ContextMenuStrip = cms;
                 browser.ForeColor = ForeColor;
                 browser.Dock = DockStyle.Fill;
@@ -629,7 +638,20 @@ namespace SapReader
             }
             return false;
         }
-        #endregion        
+
+        private void Browser_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView browser = (ListView)page.Controls.Find("browser", false).First();
+            if (browser.SelectedItems.Count != 1)
+                At.Single.ClearAttrs();
+            else
+                try
+                {
+                    At.Single.SetAttrs(nowDir + browser.SelectedItems[0].Text);
+                }
+                catch (Exception ex) { Log.Write(ex); };
+        }
+        #endregion
         public void MenuClick(string option)
         {
             MenuHandler(new ToolStripMenuItem { Tag = option }, null);
@@ -891,11 +913,12 @@ namespace SapReader
                 }
             }
             // try { }
-            catch (Exception ex) { DebugMessage(ex.Message + ""); }
+            catch (Exception ex) { DebugMessage(ex.Message + ""); Log.Write(ex); }
         }
         public void DebugMessage(object Text, string header = "Ошибка!")
         {
             tray.ShowBalloonTip(1000, header, Text + "", ToolTipIcon.None);
+            Log.Write(Text);
         }
         public void OpenFile(string fil)
         {
@@ -965,7 +988,7 @@ namespace SapReader
                         }
                     }
                 }
-                catch { SystemSounds.Exclamation.Play(); }
+                catch(Exception ex) { SystemSounds.Exclamation.Play(); Log.Write(ex); }
             }
         }
         public void AccessToWebService(string host)
@@ -992,9 +1015,9 @@ namespace SapReader
                         fc.Connect(parames["Pro.Ip"], 228);
                     });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    DebugMessage("Не удалось подключится к серверу Pro");
+                    DebugMessage("Не удалось подключится к серверу Pro"); Log.Write(ex);
                 }
                 Invoke((MethodInvoker)delegate { proToolStripMenuItem.Enabled = true; });
             }).Start();
@@ -1084,7 +1107,7 @@ namespace SapReader
                                     Go(fil + "\\");
                                 }
                             }
-                            catch (Exception ex) { DebugMessage(ex.Message); }
+                            catch (Exception ex) { DebugMessage(ex.Message); Log.Write(ex); }
                         break;
                     case Drag.state.encrypt:
                         List<string> tmp = new List<string>();
@@ -1117,13 +1140,13 @@ namespace SapReader
                                         {
                                             page.BackgroundImage = Image.FromStream(ms);
                                         }
-                                        catch (Exception ex) { throw new Exception("Не удалось открыть изображение:\n" + ex.Message); }
+                                        catch (Exception ex) { throw new Exception("Не удалось открыть изображение:\n" + ex.Message);  }
                                     page.BackgroundImageLayout = ImageLayout.Center;
                                 }
                                 else
                                     BoxToWrite(Encoding.UTF8.GetString(parames["Auto.NewSapphire"] == "True" ? Sapphire.NewGetText(File.ReadAllBytes(fil), key) : Sapphire.GetTextBytes(File.ReadAllBytes(fil), key)));
                             }
-                            catch (Exception ex) { DebugMessage(ex.Message); }
+                            catch (Exception ex) { DebugMessage(ex.Message); Log.Write(ex); }
                             }
                         break;
                     case Drag.state.sum:
@@ -1136,7 +1159,7 @@ namespace SapReader
                             {
                                 outp += parames["Auto.NewHash"] == "True" ? Sapphire.GetSha512(File.ReadAllBytes(item)) : Sapphire.GetMd5HashBytes(File.ReadAllBytes(item));
                             }
-                            catch (Exception ex) { outp += ex.Message; }
+                            catch (Exception ex) { outp += ex.Message; Log.Write(ex); }
                         }
                         LSFB.Show(outp, type);
                         break;
@@ -1147,6 +1170,16 @@ namespace SapReader
                 SystemSounds.Exclamation.Play();
         }
 
+        private void показатьЛогToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Log.Read, "Системный лог");
+        }
+
+        private void атрибутыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            At.Single.Show();
+            At.Single.BringToFront();
+        }
     }
     public static class Lel
     {
@@ -1154,5 +1187,28 @@ namespace SapReader
         {
             c.Request(text);
         }
+    }
+    public static class Log
+    {
+        public static string Read
+        {
+            get
+            {
+                return log;
+            }
+        }
+        public static void Write(object text)
+        {
+            Write("[ИФНО] " + text);
+        }
+        private static string log = DateTime.Now + " [ИНФО] Sapreader успешно работает!";
+        private static void Write(string text)
+        {
+            log += Environment.NewLine + DateTime.Now + " " + text;
+        }
+        public static void Write(Exception ex)
+        {
+            Write("[ОШИБ] " + ex.Message);
+        }        
     }
 }
