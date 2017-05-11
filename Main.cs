@@ -1045,7 +1045,7 @@ namespace SapReader
             parames["Auto.Plugs"] = String.Join("|", pluginsSha.Where(s => s != "").ToArray());
             LSFB.SaveParams("SapReader", parames.Where(s => s.Key.Split('.').First() == "Auto")
                         .ToDictionary(dict => dict.Key, dict => dict.Value));
-            File.WriteAllText( DateTime.Now.Date +  ".log", Log.Read);
+            File.WriteAllText( DateTime.Now.Date.ToShortDateString().Replace("/","_") +  ".log", Log.Read);
         }
         #region Ya Zaebalsya
         private void sapphire2ToolStripMenuItem_Click(object sender, EventArgs e)
